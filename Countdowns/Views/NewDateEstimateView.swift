@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 struct NewDateEstimateView: View {
     
-    let event: Event
+    @Bindable var event: Event
     
-    @EnvironmentObject var eventsData: EventsData
     @Environment(\.dismiss) var dismiss
     
     @State var dateEstimate = Date.now
@@ -27,23 +29,26 @@ struct NewDateEstimateView: View {
             }
         }
         .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") {
+                    dismiss()
+                }
+            }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    if let index = eventsData.events.firstIndex(of: event) {
-                        event.date = dateEstimate
-                        event.dateIsEstimate = true
-                        eventsData.save()
-                        dismiss()
-                    }
+                    event.date = dateEstimate
+                    event.dateIsEstimate = true
+                    #if canImport(WidgetKit)
+                    WidgetCenter.shared.reloadAllTimelines()
+                    #endif
+                    dismiss()
                 }
             }
         }
-        .navigationTitle("\(event.title) Estimate")
+        .navigationTitle("\(event.title ?? "") Estimate")
     }
 }
 
-struct NewDateEstimateView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewDateEstimateView(event: Event(id: "", dataSource: nil, title: "Event", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: nil, dateIsEstimate: false))
-    }
+#Preview {
+    NewDateEstimateView(event: Event(dataSource: nil, title: "Event", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: nil, dateIsEstimate: false))
 }

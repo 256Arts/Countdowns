@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 struct NewMovieSourceView: View {
     
-    @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var eventsData: EventsData
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    @Query private var events: [Event]
     
     @State var searchString = ""
     @State var results: [Media] = []
@@ -39,18 +44,20 @@ struct NewMovieSourceView: View {
                 
                 Spacer()
                 
-                if !eventsData.events.contains(where: { $0.id == String(media.id) }) {
+                if !events.contains(where: { $0.dataSource == media.dataSource }) {
                     Button("ADD") {
-                        let icon: ImageResource = {
+                        let icon: IconResource = {
                             if let url = media.posterURL {
                                 return .remote(url)
                             } else {
                                 return .symbolIcon(name: media.isMovie ? "film" : "tv")
                             }
                         }()
-                        let dataSource: Event.DataSource = media.isMovie ? .movie(id: media.id) : .tvShow(id: media.id)
-                        eventsData.events.append(
-                            Event(id: String(media.id), dataSource: dataSource, title: media.title, colorHEX: nil, icon: icon, date: media.releaseDate, dateIsEstimate: false))
+                        modelContext.insert(
+                            Event(dataSource: media.dataSource, title: media.title, colorHEX: nil, icon: icon, date: media.releaseDate, dateIsEstimate: false))
+                        #if canImport(WidgetKit)
+                        WidgetCenter.shared.reloadAllTimelines()
+                        #endif
                         dismiss()
                     }
                     .buttonStyle(.borderedProminent)
@@ -59,10 +66,21 @@ struct NewMovieSourceView: View {
                 }
             }
         }
-        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search movies/tv")
         .navigationTitle("New Movie/TV Event")
+        .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button("Done") {
+                    dismiss()
+                }
+            }
+        }
+        #if os(macOS)
+        .searchable(text: $searchString, prompt: "Search movies/tv")
+        #else
+        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search movies/tv")
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: searchString) { newValue in
+        #endif
+        .onChange(of: searchString) { _, newValue in
             Task {
                 results = try await MediaDatabase.shared.search(newValue)
             }
@@ -70,8 +88,6 @@ struct NewMovieSourceView: View {
     }
 }
 
-struct NewMovieSourceView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewMovieSourceView()
-    }
+#Preview {
+    NewMovieSourceView()
 }

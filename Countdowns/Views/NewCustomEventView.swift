@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 struct NewCustomEventView: View {
     
-    @EnvironmentObject var eventsData: EventsData
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
     @State var title = ""
@@ -18,7 +21,7 @@ struct NewCustomEventView: View {
     @State var repeatYearly = false
     @State var endRepeat = false
     @State var repeatEndDate: Date = .now
-    @State var color = Color.accentColor
+//    @State var color = Color.accentColor
     @State var symbol = Symbol.defaultSymbol
     
     var body: some View {
@@ -48,16 +51,19 @@ struct NewCustomEventView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Add") {
-                    let day = Calendar.current.dateComponents([.month, .day], from: date)
+                    let day = Calendar.autoupdatingCurrent.dateComponents([.month, .day], from: date)
                     let dataSource: Event.DataSource? = {
                         let end: Date? = endRepeat ? repeatEndDate : nil
                         return repeatYearly ? .recurrence(month: day.month!, day: day.day!, end: end) : nil
                     }()
-                    let event = Event(id: UUID().uuidString, dataSource: dataSource, title: title, colorHEX: nil, icon: .symbolIcon(name: symbol.rawValue), date: date, dateIsEstimate: false)
+                    let event = Event(dataSource: dataSource, title: title, colorHEX: nil, icon: .symbolIcon(name: symbol.rawValue), date: date, dateIsEstimate: false)
                     Task {
                         await event.fetch()
                     }
-                    eventsData.events.append(event)
+                    modelContext.insert(event)
+                    #if canImport(WidgetKit)
+                    WidgetCenter.shared.reloadAllTimelines()
+                    #endif
                     dismiss()
                 }
                 .disabled(title.isEmpty)
@@ -67,8 +73,6 @@ struct NewCustomEventView: View {
     }
 }
 
-struct NewCustomEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewCustomEventView()
-    }
+#Preview {
+    NewCustomEventView()
 }

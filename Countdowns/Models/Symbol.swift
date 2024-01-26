@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Symbol: String, Equatable, Hashable, CaseIterable, Identifiable, Codable {
+enum Symbol: String, Equatable, Hashable, CaseIterable, Identifiable {
     // Generic
     case calendar
     case music = "music.note"

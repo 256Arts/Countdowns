@@ -14,6 +14,10 @@ struct Media: Identifiable {
     let isMovie: Bool
     let posterURL: URL?
     var releaseDate: Date?
+    
+    var dataSource: Event.DataSource {
+        isMovie ? .movie(id: id) : .tvShow(id: id)
+    }
 }
 
 final class MediaDatabase {

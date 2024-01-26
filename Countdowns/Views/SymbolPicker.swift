@@ -12,9 +12,13 @@ struct SymbolPicker: View {
     #if os(macOS)
     let itemSize: CGFloat = 30
     let symbolFontSize: CGFloat = 14
+    let itemBackground: NSColor = .controlBackgroundColor
+    let selectedItemOutline: NSColor = .tertiaryLabelColor
     #else
     let itemSize: CGFloat = 40
     let symbolFontSize: CGFloat = 18
+    let itemBackground: UIColor = .tertiarySystemGroupedBackground
+    let selectedItemOutline: UIColor = .tertiaryLabel
     #endif
     
     @Binding var selected: Symbol
@@ -24,14 +28,14 @@ struct SymbolPicker: View {
             ForEach(Symbol.allCases) { symbol in
                 ZStack {
                     Circle()
-                        .fill(Color(UIColor.tertiarySystemGroupedBackground))
+                        .fill(Color(itemBackground))
                     Image(systemName: symbol.rawValue)
                 }
                 .frame(height: itemSize)
                 .overlay {
                     if symbol == selected {
                         Circle()
-                            .stroke(Color(UIColor.tertiaryLabel), lineWidth: 2.5)
+                            .stroke(Color(selectedItemOutline), lineWidth: 2.5)
                             .padding(-5)
                     }
                 }
@@ -48,8 +52,6 @@ struct SymbolPicker: View {
     }
 }
 
-struct SymbolPicker_Previews: PreviewProvider {
-    static var previews: some View {
-        SymbolPicker(selected: .constant(Symbol.defaultSymbol))
-    }
+#Preview {
+    SymbolPicker(selected: .constant(Symbol.defaultSymbol))
 }

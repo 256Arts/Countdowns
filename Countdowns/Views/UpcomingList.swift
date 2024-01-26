@@ -6,74 +6,82 @@
 //
 
 import SwiftUI
+import SwiftData
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 
 struct UpcomingList: View {
     
-    @EnvironmentObject var eventsData: EventsData
+    @Environment(\.modelContext) private var modelContext
+    @Query private var allEvents: [Event]
+    
     @State var searchString = ""
+    @State var showingHelp = false
     @State var showingNewCommonEvent = false
     @State var showingNewMovieTVEvent = false
     @State var showingNewDateEvent = false
     @State var showingEventSources = false
+    @State var fullScreenEvent: Event?
     
     var results: [Event] {
         if searchString.isEmpty {
-            return eventsData.upcomingEvents
+            return allEvents.upcoming
         } else {
-            return eventsData.upcomingEvents.filter({ $0.title.localizedCaseInsensitiveContains(searchString) })
+            return allEvents.upcoming.filter({ $0.title?.localizedCaseInsensitiveContains(searchString) ?? false })
         }
+    }
+    var hasEventsWithMissingDates: Bool {
+        allEvents.contains(where: { $0.date == nil })
     }
     
     var body: some View {
         List(results) { event in
-            NavigationLink(value: event) {
-                HStack {
-                    Text(event.daysUntilString)
-                        .lineLimit(1)
-                        .allowsTightening(true)
-                        .minimumScaleFactor(0.5)
-                        .font(.title)
-                        .frame(width: 80)
-                    
-                    switch event.icon {
-                    case .symbolIcon(name: let name):
-                        Image(systemName: name)
-                            .symbolVariant(.fill)
-                            .foregroundStyle(Color.accentColor.gradient)
-                    case .remote(let url):
-                        AsyncImage(url: url) { image in
-                            image.resizable()
-                        } placeholder: {
-                            Color.secondary
-                        }
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(6)
-                        .frame(width: 40, height: 60)
-                    case .preloaded:
-                        EmptyView()
+            Group {
+                if event.isEditable {
+                    NavigationLink(value: event) {
+                        EventRow(event: event)
                     }
-                    
-                    VStack(alignment: .leading) {
-                        Text(event.title)
-                            .lineLimit(1)
-                            .font(.title2)
-                        Text(event.date!, style: .date)
-                            .foregroundColor(.secondary)
-                    }
+                } else {
+                    EventRow(event: event)
                 }
             }
             .contextMenu {
-                Button(role: .destructive) {
-                    if let index = eventsData.events.firstIndex(where: { $0.id == event.id }) {
-                        eventsData.events.remove(at: index)
-                    }
+                Button {
+                    fullScreenEvent = event
                 } label: {
-                    Label("Delete Event Source", systemImage: "trash")
+                    Label("View Fullscreen", systemImage: "arrow.up.backward.and.arrow.down.forward")
+                }
+                Button(role: .destructive) {
+                    modelContext.delete(event)
+                    #if canImport(WidgetKit)
+                    WidgetCenter.shared.reloadAllTimelines()
+                    #endif
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
+            .swipeActions {
+                Button(role: .destructive) {
+                    modelContext.delete(event)
+                    #if canImport(WidgetKit)
+                    WidgetCenter.shared.reloadAllTimelines()
+                    #endif
+                } label: {
+                    Label("Delete", systemImage: "trash")
                 }
             }
         }
         .toolbar {
-            ToolbarItem {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    showingHelp = true
+                } label: {
+                    Image(systemName: "questionmark.circle")
+                }
+                .buttonBorderShape(.circle)
+            }
+            ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
                         showingNewCommonEvent = true
@@ -93,24 +101,35 @@ struct UpcomingList: View {
                 } label: {
                     Image(systemName: "plus.circle.fill")
                 }
+                .buttonBorderShape(.circle)
             }
-            ToolbarItem(placement: .bottomBar) {
-                Button("Events Missing Dates") {
-                    showingEventSources = true
+            #if !os(macOS)
+            if hasEventsWithMissingDates {
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Events Missing Dates") {
+                        showingEventSources = true
+                    }
                 }
             }
+            #endif
         }
+        #if os(visionOS)
+        .navigationTitle("Events")
+        #else
         .navigationTitle("Upcoming Events")
+        #endif
         .navigationDestination(for: Event.self) { event in
-            EventView(event: event)
+            EditCustomEventView(event: event)
         }
         .searchable(text: $searchString, prompt: "Search")
-        .refreshable {
-            await eventsData.refresh()
+        .sheet(isPresented: $showingHelp) {
+            NavigationStack {
+                HelpView()
+            }
         }
         .sheet(isPresented: $showingNewCommonEvent) {
             NavigationStack {
-                DiscoverView()
+                CommonEventsList()
             }
         }
         .sheet(isPresented: $showingNewMovieTVEvent) {
@@ -128,14 +147,18 @@ struct UpcomingList: View {
                 EventsMissingDatesList()
             }
         }
-        .task {
-            await eventsData.refresh()
+        #if os(macOS)
+        .sheet(item: $fullScreenEvent) { event in
+            FullScreenEventView(event: event)
         }
+        #else
+        .fullScreenCover(item: $fullScreenEvent) { event in
+            FullScreenEventView(event: event)
+        }
+        #endif
     }
 }
 
-struct EventPublishersList_Previews: PreviewProvider {
-    static var previews: some View {
-        UpcomingList()
-    }
+#Preview {
+    UpcomingList()
 }

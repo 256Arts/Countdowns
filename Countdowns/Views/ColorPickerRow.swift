@@ -48,8 +48,6 @@ extension Color: Identifiable {
     public var id: String { description }
 }
 
-struct ColorPickerRow_Previews: PreviewProvider {
-    static var previews: some View {
-        ColorPickerRow(selected: .constant(.blue))
-    }
+#Preview {
+    ColorPickerRow(selected: .constant(.blue))
 }

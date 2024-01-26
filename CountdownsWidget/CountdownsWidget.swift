@@ -7,14 +7,18 @@
 
 import WidgetKit
 import SwiftUI
+import SwiftData
 
 struct Provider: TimelineProvider {
     
+    private let modelContext = ModelContext(try! ModelContainer(for: Event.self, configurations: .init(cloudKitDatabase: .private("iCloud.com.256arts.countdowns"))))
+    
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: .now, events: [
-            Event(id: "1", dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false),
-            Event(id: "2", dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false),
-            Event(id: "3", dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false)
+        let tomorow = Calendar.autoupdatingCurrent.date(byAdding: .day, value: 1, to: .now)
+        return SimpleEntry(date: .now, events: [
+            Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false),
+            Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false),
+            Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false)
         ], relevance: nil)
     }
     
@@ -28,17 +32,10 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         Task {
             let events = await fetchEvents()
-            let tomorow = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: 1, to: .now)!)
-            let relenanceScore: Float = {
-                if let firstEvent = events.first, let daysUntil = firstEvent.daysUntil {
-                    // 0 days away = 30 score
-                    // 1 day away = 29 score
-                    // 30+ days away = 1 score
-                    return min(1, Float(30 - daysUntil))
-                }
-                return 0
-            }()
-            let entry = SimpleEntry(date: .now, events: events, relevance: .init(score: relenanceScore, duration: tomorow.timeIntervalSinceNow))
+            let calendar = Calendar.autoupdatingCurrent
+            let tomorow = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: .now)!)
+            let relevanceScore = Float(events.first?.relevanceScore ?? 0)
+            let entry = SimpleEntry(date: .now, events: events, relevance: .init(score: relevanceScore, duration: tomorow.timeIntervalSinceNow))
             
             let timeline = Timeline(entries: [entry], policy: .after(tomorow))
             completion(timeline)
@@ -47,9 +44,7 @@ struct Provider: TimelineProvider {
     
     func fetchEvents() async -> [Event] {
         do {
-            let eventsData = try await CloudController.shared.fetchEventsData() ?? EventsData(fileVersion: 0)
-            await eventsData.refresh()
-            let events = Array(eventsData.upcomingEvents.prefix(6))
+            let events = Array(try modelContext.fetch(FetchDescriptor<Event>()).upcoming.prefix(6))
             
             if let firstEvent = events.first, firstEvent.daysUntil == 0 {
                 try await firstEvent.preloadImage(large: true)
@@ -82,32 +77,123 @@ struct SimpleEntry: TimelineEntry {
 
 struct CountdownsWidgetEntryView: View {
     
+    #if canImport(UIKit)
+    let containerBackgroundColor = Color(uiColor: .systemGroupedBackground)
+    #else
+    let containerBackgroundColor = Color(nsColor: .windowBackgroundColor)
+    #endif
+    
     var entry: Provider.Entry
     
     @Environment(\.widgetFamily) var family
 
     var body: some View {
         Group {
-            if entry.events.isEmpty {
-                Text("No Countdowns")
-                    .foregroundColor(.secondary)
-            } else if entry.events.first?.daysUntil == 0 {
-                CountdownWidgetFeaturedEvent(event: entry.events.first!)
-            } else {
-                GeometryReader { geometry in
-                    VStack(spacing: family == .systemMedium ? 0 : 8) {
-                        ForEach(entry.events.indices) { index in
-                            CountdownWidgetEventCard(event: entry.events[index])
-                                .scaleEffect(rowScale(index: index))
-                                .frame(height: CountdownWidgetEventCard.height * rowScale(index: index))
-                                .zIndex(Double(10 - index))
+            switch family {
+            #if !os(macOS)
+            case .accessoryInline:
+                if let event = entry.events.first {
+                    let days = event.daysUntil == 0 ? "🎉" : "\(event.daysUntilString)d •"
+                    Text("\(days) \(event.title ?? "")")
+                        .widgetAccentable()
+                } else {
+                    Text("No Countdowns")
+                        .foregroundColor(.secondary)
+                }
+            case .accessoryCircular:
+                VStack {
+                    if let event = entry.events.first {
+                        Text(event.daysUntil == 0 ? "🎉" : "\(event.daysUntilString)d")
+                            .font(.title)
+                        Text(event.title ?? "")
+                            .widgetAccentable()
+                    } else {
+                        Text("No Countdowns")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .lineLimit(1)
+                .containerBackground(containerBackgroundColor, for: .widget)
+            case .accessoryRectangular:
+                Grid(alignment: .leading) {
+                    if entry.events.isEmpty {
+                        Text("No Countdowns")
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(Array(entry.events.prefix(3))) { event in
+                            GridRow {
+                                Text("\(event.daysUntilString)d")
+                                    .gridColumnAlignment(.trailing)
+                                Text(event.title ?? "")
+                                    .lineLimit(1)
+                                    .widgetAccentable()
+                            }
                         }
                     }
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxHeight: .infinity, alignment: .top)
                 }
-                .padding(8)
-                .background(Color(uiColor: .systemGroupedBackground))
+                .containerBackground(containerBackgroundColor, for: .widget)
+            #endif
+            #if !os(watchOS)
+            case .systemSmall:
+                Group {
+                    if let event = entry.events.first {
+                        VStack(alignment: .leading) {
+                            HStack(alignment: .firstTextBaseline) {
+                                Text(event.daysUntil == 0 ? "Today" : event.daysUntilString)
+                                    .font(.system(size: 46))
+                                if event.daysUntil != 0 {
+                                    Text("days")
+                                        .font(.system(size: 20))
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            
+                            Text(event.title ?? "")
+                                .font(.system(size: 28))
+                                .lineLimit(2)
+                        }
+                        .frame(idealWidth: .infinity, maxWidth: .infinity, idealHeight: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .overlay(alignment: .topTrailing) {
+                            if case .symbolIcon(let name) = event.icon {
+                                Image(systemName: name)
+                                    .imageScale(.large)
+                                    .symbolVariant(.fill)
+                                    .foregroundStyle(Color.accentColor.gradient)
+                            }
+                        }
+                    } else {
+                        Text("No Countdowns")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .containerBackground(containerBackgroundColor, for: .widget)
+            #endif
+            default:
+                #if os(watchOS)
+                EmptyView()
+                #else
+                if entry.events.isEmpty {
+                    Text("No Countdowns")
+                        .foregroundColor(.secondary)
+                        .containerBackground(containerBackgroundColor, for: .widget)
+                } else if entry.events.first?.daysUntil == 0 {
+                    CountdownWidgetFeaturedEvent(event: entry.events.first!)
+                } else {
+                    GeometryReader { geometry in
+                        VStack(spacing: family == .systemMedium ? 0 : 8) {
+                            ForEach(entry.events.indices) { index in
+                                CountdownWidgetEventCard(event: entry.events[index])
+                                    .scaleEffect(rowScale(index: index))
+                                    .frame(height: CountdownWidgetEventCard.height * rowScale(index: index))
+                                    .zIndex(Double(10 - index))
+                            }
+                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                    }
+                    .containerBackground(containerBackgroundColor, for: .widget)
+                }
+                #endif
             }
         }
         .accentColor(Color("AccentColor"))
@@ -146,9 +232,14 @@ struct CountdownsWidgetEntryView: View {
 
 struct CountdownWidgetEventCard: View {
     
-    static let height: CGFloat = 52
+    static let height: CGFloat = 56
     
     let event: Event
+    #if canImport(UIKit)
+    let backgroundColor = Color(uiColor: .secondarySystemGroupedBackground)
+    #else
+    let backgroundColor = Color(nsColor: .quaternarySystemFill)
+    #endif
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -165,20 +256,30 @@ struct CountdownWidgetEventCard: View {
                 Image(systemName: name)
                     .symbolVariant(.fill)
                     .foregroundStyle(Color.accentColor.gradient)
-            case .remote:
+            case .remote, nil:
                 EmptyView()
             case .preloaded(let data):
+                #if canImport(UIKit)
                 if let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(5)
-                        .frame(maxWidth: 31, maxHeight: 47)
+                        .frame(maxWidth: 35, maxHeight: 52)
                 }
+                #else
+                if let nsImage = NSImage(data: data) {
+                    Image(nsImage: nsImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .cornerRadius(5)
+                        .frame(maxWidth: 35, maxHeight: 52)
+                }
+                #endif
             }
             
             VStack(alignment: .leading) {
-                Text(event.title)
+                Text(event.title ?? "")
                     .font(.headline)
                 if let date = event.date {
                     Text(date, style: .date)
@@ -192,7 +293,7 @@ struct CountdownWidgetEventCard: View {
         .padding(.horizontal, 6)
         .frame(idealWidth: .infinity, maxWidth: .infinity)
         .frame(height: Self.height)
-        .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 12))
+        .background(backgroundColor, in: RoundedRectangle(cornerRadius: 12))
         .shadow(color: Color(white: 0.0, opacity: colorScheme == .light ? 0.17 : 0.36), radius: 4)
     }
 }
@@ -202,6 +303,7 @@ struct CountdownWidgetFeaturedEvent: View {
     let event: Event
     
     @Environment(\.widgetFamily) var family
+    @Environment(\.colorScheme) var systemColorScheme
     
     var body: some View {
         HStack(spacing: 0) {
@@ -212,18 +314,16 @@ struct CountdownWidgetFeaturedEvent: View {
                     .foregroundStyle(Color.accentColor.gradient)
                     .font(.system(size: 100))
                     .padding()
-            case .remote:
+            case .remote, nil:
                 EmptyView()
-            case .preloaded(let data):
-                if let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(family == .systemMedium ? 0 : 5)
-                }
+            case .preloaded:
+                backgroundImage?
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .cornerRadius(family == .systemMedium ? 0 : 5)
             }
             VStack(spacing: 10) {
-                Text(event.title)
+                Text(event.title ?? "")
                     .font(.system(size: 24, weight: .medium))
                 Text("Today")
                     .font(.title2)
@@ -233,41 +333,102 @@ struct CountdownWidgetFeaturedEvent: View {
             .padding()
             .frame(idealWidth: .infinity, maxWidth: .infinity)
         }
-        .background {
+        .containerBackground(for: .widget) {
             ZStack {
-                switch event.icon {
-                case .preloaded(let data):
-                    if let uiImage = UIImage(data: data) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                default:
-                    EmptyView()
-                }
+                backgroundImage?
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                
                 Rectangle().fill(Material.regular)
             }
         }
-        .environment(\.colorScheme, .dark)
+        .environment(\.colorScheme, backgroundImage == nil ? systemColorScheme : .dark)
+    }
+    
+    private var backgroundImage: Image? {
+        if case .preloaded(let data) = event.icon {
+            #if canImport(UIKit)
+            if let uiImage = UIImage(data: data) {
+                return Image(uiImage: uiImage)
+            } else {
+                return nil
+            }
+            #else
+            if let nsImage = NSImage(data: data) {
+                return Image(nsImage: nsImage)
+            } else {
+                return nil
+            }
+            #endif
+        }
+        return nil
     }
 }
 
 struct CountdownsWidget: Widget {
     let kind: String = "CountdownsWidget"
+    
+    var families: [WidgetFamily] {
+        #if os(watchOS)
+        [.accessoryInline, .accessoryCircular, .accessoryRectangular]
+        #elseif os(iOS)
+        [.accessoryInline, .accessoryCircular, .accessoryRectangular, .systemSmall, .systemMedium, .systemLarge]
+        #else
+        [.systemSmall, .systemMedium, .systemLarge]
+        #endif
+    }
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             CountdownsWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
-        .supportedFamilies([.systemMedium, .systemLarge])
+        .configurationDisplayName("Upcoming Events")
+        .description("A list of upcoming events.")
+        .supportedFamilies(families)
     }
 }
 
-struct CountdownsWidget_Previews: PreviewProvider {
-    static var previews: some View {
-        CountdownsWidgetEntryView(entry: SimpleEntry(date: .now, events: [], relevance: nil))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
-    }
+#if DEBUG
+let previewEvents = [
+    Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "star"), date: .now.addingTimeInterval(999999), dateIsEstimate: false),
+    Event(dataSource: nil, title: "Super Big Long Celebration Party", colorHEX: nil, icon: .symbolIcon(name: "star"), date: .now.addingTimeInterval(9999999), dateIsEstimate: false)
+]
+
+#if !os(macOS)
+#Preview("Inline", as: WidgetFamily.accessoryInline) {
+    CountdownsWidget()
+} timeline: {
+    SimpleEntry(date: .now, events: previewEvents, relevance: nil)
 }
+
+#Preview("Circle", as: WidgetFamily.accessoryCircular) {
+    CountdownsWidget()
+} timeline: {
+    SimpleEntry(date: .now, events: previewEvents, relevance: nil)
+}
+
+#Preview("Rect", as: WidgetFamily.accessoryRectangular) {
+    CountdownsWidget()
+} timeline: {
+    SimpleEntry(date: .now, events: previewEvents, relevance: nil)
+}
+#endif
+
+#Preview("Small", as: WidgetFamily.systemSmall) {
+    CountdownsWidget()
+} timeline: {
+    SimpleEntry(date: .now, events: previewEvents, relevance: nil)
+}
+
+#Preview("Medium", as: WidgetFamily.systemMedium) {
+    CountdownsWidget()
+} timeline: {
+    SimpleEntry(date: .now, events: previewEvents, relevance: nil)
+}
+
+#Preview("Large", as: WidgetFamily.systemLarge) {
+    CountdownsWidget()
+} timeline: {
+    SimpleEntry(date: .now, events: previewEvents, relevance: nil)
+}
+#endif

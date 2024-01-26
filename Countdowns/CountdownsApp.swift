@@ -6,40 +6,34 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct CountdownsApp: App {
-    
-    @ObservedObject var cloudController: CloudController = .shared
     
     @State var selectedEvent: Event?
     
     var body: some Scene {
         WindowGroup {
-            if let eventsData = cloudController.eventsData {
-                NavigationSplitView {
-                    UpcomingList()
-                } detail: {
-                    NavigationStack {
-                        if let selectedEvent {
-                            EventView(event: selectedEvent)
-                        } else {
-                            Text("No Content Selected")
-                                .font(.title)
-                                .foregroundColor(.secondary)
-                        }
+            NavigationSplitView {
+                UpcomingList()
+            } detail: {
+                NavigationStack {
+                    if let selectedEvent {
+                        FullScreenEventView(event: selectedEvent)
+                    } else {
+                        Text("No Content Selected")
+                            .font(.title)
+                            .foregroundColor(.secondary)
                     }
                 }
-                .environmentObject(eventsData)
-            } else if cloudController.decodeError != nil {
-                VStack {
-                    Image(systemName: "exclamationmark.triangle")
-                    Text("Failed to load data.")
-                }
-            } else {
-                ProgressView()
-                    .controlSize(.large)
             }
         }
+        .modelContainer(for: Event.self)
+        #if os(macOS)
+        .defaultSize(width: 650, height: 400)
+        #else
+        .defaultSize(width: 700, height: 600)
+        #endif
     }
 }
