@@ -20,24 +20,13 @@ struct EditCustomEventView: View {
     @State var repeatYearly = false
     @State var endRepeat = false
     @State var repeatEndDate: Date = .now
-//    @State var color = Color.accentColor
-    @State var symbol = Symbol.defaultSymbol
+    @State var symbol: Symbol?
     
     @State var showingDeleteConfirmation = false
     
     init(event: Event) {
         self.event = event
-        self.symbol = Symbol(rawValue: event.iconURL ?? "") ?? .defaultSymbol
-        
-        if case .recurrence(month: _, day: _, end: repeatEndDate) = event.dataSource {
-            self.repeatYearly = true
-            self.endRepeat = true
-            self.repeatEndDate = repeatEndDate
-        } else if case .recurrence(month: _, day: _, end: _) = event.dataSource {
-            self.repeatYearly = true
-            self.endRepeat = false
-            self.repeatEndDate = .now
-        }
+        self.symbol = Symbol(rawValue: event.iconURL ?? "")
     }
     
     var body: some View {
@@ -64,9 +53,9 @@ struct EditCustomEventView: View {
                     DatePicker("End Date", selection: $repeatEndDate, displayedComponents: .date)
                 }
             }
-//            Section {
-//                ColorPickerRow(selected: $color)
-//            }
+            Section {
+                ColorPickerRow(selected: $event.colorName)
+            }
             Section {
                 SymbolPicker(selected: $symbol)
             }
@@ -87,6 +76,17 @@ struct EditCustomEventView: View {
                 #endif
             }
         })
+        .onAppear {
+            if case .recurrence(month: _, day: _, end: nil) = event.dataSource {
+                self.repeatYearly = true
+                self.endRepeat = false
+                self.repeatEndDate = .now
+            } else if case .recurrence(month: _, day: _, end: repeatEndDate) = event.dataSource {
+                self.repeatYearly = true
+                self.endRepeat = true
+                self.repeatEndDate = repeatEndDate
+            }
+        }
         .onDisappear {
             let day = Calendar.autoupdatingCurrent.dateComponents([.month, .day], from: event.date ?? .now)
             let dataSource: Event.DataSource? = {
@@ -94,6 +94,10 @@ struct EditCustomEventView: View {
                 return repeatYearly ? .recurrence(month: day.month!, day: day.day!, end: end) : nil
             }()
             event.dataSource = dataSource
+            // Ensure we don't override a preset (unselectable) symbol
+            if let symbol {
+                event.icon = .symbolIcon(name: symbol.rawValue)
+            }
             Task {
                 await event.fetch()
             }
@@ -105,5 +109,5 @@ struct EditCustomEventView: View {
 }
 
 #Preview {
-    EditCustomEventView(event: Event(dataSource: nil, title: "Content", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false))
+    EditCustomEventView(event: Event(dataSource: nil, title: "Content", colorName: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false))
 }

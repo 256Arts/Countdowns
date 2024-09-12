@@ -122,6 +122,9 @@ struct UpcomingList: View {
             EditCustomEventView(event: event)
         }
         .searchable(text: $searchString, prompt: "Search")
+        .refreshable {
+            await refreshEvents()
+        }
         .sheet(isPresented: $showingHelp) {
             NavigationStack {
                 HelpView()
@@ -156,6 +159,20 @@ struct UpcomingList: View {
             FullScreenEventView(event: event)
         }
         #endif
+//        .task {
+//            await refreshEvents()
+//        }
+    }
+    
+    func refreshEvents() async {
+        await withTaskGroup(of: Void.self) { taskGroup in
+            for event in allEvents {
+                taskGroup.addTask {
+                    await event.fetch()
+                }
+            }
+            await taskGroup.waitForAll()
+        }
     }
 }
 

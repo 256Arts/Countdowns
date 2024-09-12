@@ -21,8 +21,8 @@ struct NewCustomEventView: View {
     @State var repeatYearly = false
     @State var endRepeat = false
     @State var repeatEndDate: Date = .now
-//    @State var color = Color.accentColor
-    @State var symbol = Symbol.defaultSymbol
+    @State var colorName: ColorName?
+    @State var symbol: Symbol? = .defaultSymbol
     
     var body: some View {
         Form {
@@ -36,9 +36,9 @@ struct NewCustomEventView: View {
                     DatePicker("End Date", selection: $repeatEndDate, displayedComponents: .date)
                 }
             }
-//            Section {
-//                ColorPickerRow(selected: $color)
-//            }
+            Section {
+                ColorPickerRow(selected: $colorName)
+            }
             Section {
                 SymbolPicker(selected: $symbol)
             }
@@ -56,7 +56,14 @@ struct NewCustomEventView: View {
                         let end: Date? = endRepeat ? repeatEndDate : nil
                         return repeatYearly ? .recurrence(month: day.month!, day: day.day!, end: end) : nil
                     }()
-                    let event = Event(dataSource: dataSource, title: title, colorHEX: nil, icon: .symbolIcon(name: symbol.rawValue), date: date, dateIsEstimate: false)
+                    let icon: IconResource? = {
+                        if let symbol {
+                            return .symbolIcon(name: symbol.rawValue)
+                        } else {
+                            return nil
+                        }
+                    }()
+                    let event = Event(dataSource: dataSource, title: title, colorName: colorName, icon: icon, date: date, dateIsEstimate: false)
                     Task {
                         await event.fetch()
                     }

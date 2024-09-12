@@ -28,7 +28,7 @@ struct EventRow: View {
             case .symbolIcon(name: let name):
                 Image(systemName: name)
                     .symbolVariant(.fill)
-                    .foregroundStyle(Color.accentColor.gradient)
+                    .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
                     .imageScale(.large)
                     .frame(minWidth: 32)
             case .remote(let url):
@@ -56,5 +56,5 @@ struct EventRow: View {
 }
 
 #Preview {
-    EventRow(event: Event(dataSource: nil, title: "Content", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false))
+    EventRow(event: Event(dataSource: nil, title: "Content", colorName: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false))
 }

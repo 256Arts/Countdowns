@@ -14,38 +14,32 @@ struct ColorPickerRow: View {
     #else
     let itemSize: CGFloat = 40
     #endif
-    
-    let allColors: [Color] = [.red, .orange, .yellow, .green, .teal, .blue, .indigo, .pink, .purple, .brown, .gray]
 
-    @Binding var selected: Color
+    @Binding var selected: ColorName?
     
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: itemSize + 4, maximum: itemSize + 6))], spacing: 12) {
-            ForEach(allColors) { color in
+            ForEach(ColorName.allCases) { colorName in
                 ZStack {
                     Circle()
-                        .fill(color)
+                        .fill(colorName.color)
                 }
                 .frame(height: itemSize)
                 .overlay {
-                    if color == selected {
+                    if colorName == selected {
                         Circle()
                             .stroke(Color.secondary, lineWidth: 2.5)
                             .padding(-5)
                     }
                 }
                 .onTapGesture {
-                    selected = color
+                    selected = colorName
                 }
             }
         }
         .padding(.horizontal, -4)
         .padding(.vertical, 12)
     }
-}
-
-extension Color: Identifiable {
-    public var id: String { description }
 }
 
 #Preview {

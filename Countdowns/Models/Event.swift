@@ -20,34 +20,26 @@ final class Event: Equatable {
     
     var dataSource: DataSource?
     var title: String? //= ""
-    var colorHEX: String?
+    var colorName: ColorName?
     var iconURL: String?
     
     var date: Date?
     var dateIsEstimate: Bool? //= false
     
-    init(dataSource: DataSource?, title: String, colorHEX: String?, icon: IconResource, date: Date?, dateIsEstimate: Bool?) {
+    init(dataSource: DataSource?, title: String, colorName: ColorName?, icon: IconResource?, date: Date?, dateIsEstimate: Bool?) {
         self.dataSource = dataSource
         self.title = title
-        self.colorHEX = colorHEX
+        self.colorName = colorName
         self.date = date
         self.dateIsEstimate = dateIsEstimate
-        
-        switch icon {
-        case .preloaded(let data):
-            preloadedIconData = data
-        case .remote(let url):
-            iconURL = url.absoluteString
-        case .symbolIcon(name: let name):
-            iconURL = name
-        }
+        self.icon = icon
     }
     
     /// DO NOT USE - For SwiftData only (is this needed?)
-    init(dataSource: DataSource?, title: String, colorHEX: String?, iconURL: String?, date: Date?, dateIsEstimate: Bool?) {
+    init(dataSource: DataSource?, title: String, colorName: ColorName?, iconURL: String?, date: Date?, dateIsEstimate: Bool?) {
         self.dataSource = dataSource
         self.title = title
-        self.colorHEX = colorHEX
+        self.colorName = colorName
         self.iconURL = iconURL
         self.date = date
         self.dateIsEstimate = dateIsEstimate
@@ -58,14 +50,29 @@ final class Event: Equatable {
     
     @Transient
     var icon: IconResource? {
-        if let preloadedIconData {
-            return .preloaded(preloadedIconData)
-        } else {
-            let urlString = iconURL ?? Symbol.defaultSymbol.rawValue
-            if urlString.contains("/"), let url = URL(string: urlString) {
-                return .remote(url)
+        get {
+            if let preloadedIconData {
+                return .preloaded(preloadedIconData)
             } else {
-                return .symbolIcon(name: urlString)
+                let urlString = iconURL ?? Symbol.defaultSymbol.rawValue
+                if urlString.contains("/"), let url = URL(string: urlString) {
+                    return .remote(url)
+                } else {
+                    return .symbolIcon(name: urlString)
+                }
+            }
+        }
+        set {
+            switch newValue {
+            case .preloaded(let data):
+                preloadedIconData = data
+            case .remote(let url):
+                iconURL = url.absoluteString
+            case .symbolIcon(name: let name):
+                iconURL = name
+            case nil:
+                preloadedIconData = nil
+                iconURL = nil
             }
         }
     }

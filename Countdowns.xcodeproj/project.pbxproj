@@ -46,6 +46,12 @@
 		1BF3864A2AC51A7700245931 /* UpcomingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF386492AC51A7700245931 /* UpcomingList.swift */; };
 		1BF3864C2AC51BBF00245931 /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 1BF3864B2AC51BBF00245931 /* TMDb */; };
 		1BF837352B6325DF00C13149 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF837342B6325DF00C13149 /* HelpView.swift */; };
+		1BF958E52C74D504002B4927 /* ColorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF958E42C74D501002B4927 /* ColorName.swift */; };
+		1BF958E62C74D504002B4927 /* ColorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF958E42C74D501002B4927 /* ColorName.swift */; };
+		1BF958E72C74D504002B4927 /* ColorName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF958E42C74D501002B4927 /* ColorName.swift */; };
+		1BF958E92C74EAFB002B4927 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF958E82C74EAF9002B4927 /* Secrets.swift */; };
+		1BF958EA2C74EAFB002B4927 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF958E82C74EAF9002B4927 /* Secrets.swift */; };
+		1BF958EB2C74EAFB002B4927 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF958E82C74EAF9002B4927 /* Secrets.swift */; };
 		1BFC6A332AD337E70037B4DF /* EditCustomEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFC6A322AD337E70037B4DF /* EditCustomEventView.swift */; };
 		1BFC6A352AD33CA50037B4DF /* EventRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFC6A342AD33CA50037B4DF /* EventRow.swift */; };
 /* End PBXBuildFile section */
@@ -127,6 +133,8 @@
 		1BF3864D2AC51D0300245931 /* Countdowns Watch Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Countdowns Watch Watch App.entitlements"; sourceTree = "<group>"; };
 		1BF3864E2AC51D1D00245931 /* Countdowns-Watch-Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Countdowns-Watch-Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1BF837342B6325DF00C13149 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		1BF958E42C74D501002B4927 /* ColorName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorName.swift; sourceTree = "<group>"; };
+		1BF958E82C74EAF9002B4927 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		1BFC6A322AD337E70037B4DF /* EditCustomEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCustomEventView.swift; sourceTree = "<group>"; };
 		1BFC6A342AD33CA50037B4DF /* EventRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -211,6 +219,8 @@
 				1B3BF5DA289569B500E87899 /* Event.swift */,
 				1B435A6F296FC5400077A10A /* IconResource.swift */,
 				1B5CF02E29B18322006ED8A0 /* Symbol.swift */,
+				1BF958E42C74D501002B4927 /* ColorName.swift */,
+				1BF958E82C74EAF9002B4927 /* Secrets.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -420,6 +430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BF958EA2C74EAFB002B4927 /* Secrets.swift in Sources */,
 				1B435A70296FC5400077A10A /* IconResource.swift in Sources */,
 				1B5A1A8329D3720500FC28E5 /* ColorPickerRow.swift in Sources */,
 				1B3BF5DD28956BDD00E87899 /* UpcomingList.swift in Sources */,
@@ -435,6 +446,7 @@
 				1B869AA32941A91A005E65F0 /* MediaDatabase.swift in Sources */,
 				1B869A8B293F0BDC005E65F0 /* NewCustomEventView.swift in Sources */,
 				1B5CF02F29B18322006ED8A0 /* Symbol.swift in Sources */,
+				1BF958E72C74D504002B4927 /* ColorName.swift in Sources */,
 				1B869AA12941A8DD005E65F0 /* NewMovieSourceView.swift in Sources */,
 				1BB063BF2973625200B5C947 /* EventsMissingDatesList.swift in Sources */,
 			);
@@ -445,11 +457,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B435A71296FC5B90077A10A /* IconResource.swift in Sources */,
+				1BF958E92C74EAFB002B4927 /* Secrets.swift in Sources */,
 				1B68970029371D24004E6730 /* CountdownsWidgetBundle.swift in Sources */,
 				1B869A9F2941A294005E65F0 /* Event.swift in Sources */,
 				1B5CF03029B1854D006ED8A0 /* Symbol.swift in Sources */,
 				1B68970229371D24004E6730 /* CountdownsWidget.swift in Sources */,
 				1B435A6C296F2DB30077A10A /* MediaDatabase.swift in Sources */,
+				1BF958E52C74D504002B4927 /* ColorName.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,11 +472,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BF386452AC51A1600245931 /* Event.swift in Sources */,
+				1BF958EB2C74EAFB002B4927 /* Secrets.swift in Sources */,
 				1BF386472AC51A3C00245931 /* IconResource.swift in Sources */,
 				1BF386362AC519E400245931 /* Countdowns_WatchApp.swift in Sources */,
 				1BF386462AC51A3900245931 /* MediaDatabase.swift in Sources */,
 				1BF386482AC51A3E00245931 /* Symbol.swift in Sources */,
 				1BF3864A2AC51A7700245931 /* UpcomingList.swift in Sources */,
+				1BF958E62C74D504002B4927 /* ColorName.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,6 +562,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
@@ -603,6 +620,7 @@
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
@@ -624,6 +642,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Countdowns/Preview Content\"";
 				DEVELOPMENT_TEAM = VA3SY54YU8;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -642,7 +661,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -652,6 +671,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				TVOS_DEPLOYMENT_TARGET = 18.0;
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
 		};
@@ -671,6 +692,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Countdowns/Preview Content\"";
 				DEVELOPMENT_TEAM = VA3SY54YU8;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -689,7 +711,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -699,6 +721,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				TVOS_DEPLOYMENT_TARGET = 18.0;
+				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};

@@ -30,7 +30,7 @@ struct FullScreenEventView: View {
                 HStack {
                     Image(systemName: name)
                         .symbolVariant(.fill)
-                        .foregroundStyle(Color.accentColor.gradient)
+                        .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
                     
                     Text(event.title ?? "")
                 }
@@ -87,16 +87,21 @@ struct FullScreenEventView: View {
                 .aspectRatio(contentMode: .fill)
                 .overlay(Material.thin)
                 .ignoresSafeArea()
-            } else {
-                #if !os(visionOS)
-                Color.black.ignoresSafeArea()
-                #endif
             }
+        }
+        .presentationBackground {
+            #if !os(visionOS)
+            ZStack {
+                event.colorName?.color
+                Color.black.opacity(0.75)
+            }
+            .ignoresSafeArea()
+            #endif
         }
         .environment(\.colorScheme, .dark)
     }
 }
 
 #Preview {
-    FullScreenEventView(event: Event(dataSource: nil, title: "Content", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false))
+    FullScreenEventView(event: Event(dataSource: nil, title: "Content", colorName: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false))
 }

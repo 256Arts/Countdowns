@@ -54,7 +54,7 @@ struct NewMovieSourceView: View {
                             }
                         }()
                         modelContext.insert(
-                            Event(dataSource: media.dataSource, title: media.title, colorHEX: nil, icon: icon, date: media.releaseDate, dateIsEstimate: false))
+                            Event(dataSource: media.dataSource, title: media.title, colorName: nil, icon: icon, date: media.releaseDate, dateIsEstimate: false))
                         #if canImport(WidgetKit)
                         WidgetCenter.shared.reloadAllTimelines()
                         #endif

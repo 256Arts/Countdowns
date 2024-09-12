@@ -14,18 +14,18 @@ import WidgetKit
 struct CommonEventsList: View {
     
     let allEvents = [
-        Event(dataSource: .recurrence(month: 1, day: 1, end: nil), title: "New Years", colorHEX: nil, icon: .symbolIcon(name: "sparkles"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 1, day: 25, end: nil), title: "Coldest Day", colorHEX: nil, icon: .symbolIcon(name: "thermometer.snowflake"), date: nil, dateIsEstimate: true),
-        Event(dataSource: .recurrence(month: 2, day: 14, end: nil), title: "Valentine's Day", colorHEX: nil, icon: .symbolIcon(name: "heart"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 2, day: 29, end: nil), title: "Leap Day", colorHEX: nil, icon: .symbolIcon(name: "arrowshape.bounce.forward"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 3, day: 10, end: nil), title: "MARIO Day", colorHEX: nil, icon: .symbolIcon(name: "questionmark.square"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 5, day: 4, end: nil), title: "Star Wars Day", colorHEX: nil, icon: .symbolIcon(name: "sparkles"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 6, day: 21, end: nil), title: "June Solstice", colorHEX: nil, icon: .symbolIcon(name: "sun.and.horizon"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 7, day: 4, end: nil), title: "4th of July", colorHEX: nil, icon: .symbolIcon(name: "4.square"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 7, day: 11, end: nil), title: "Hottest Day", colorHEX: nil, icon: .symbolIcon(name: "thermometer.sun"), date: nil, dateIsEstimate: true),
-        Event(dataSource: .recurrence(month: 10, day: 31, end: nil), title: "Halloween", colorHEX: nil, icon: .symbolIcon(name: "theatermasks"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 12, day: 21, end: nil), title: "December Solstice", colorHEX: nil, icon: .symbolIcon(name: "sun.and.horizon"), date: nil, dateIsEstimate: false),
-        Event(dataSource: .recurrence(month: 12, day: 25, end: nil), title: "Christmas", colorHEX: nil, icon: .symbolIcon(name: "snowflake"), date: nil, dateIsEstimate: false)
+        Event(dataSource: .recurrence(month: 1, day: 1, end: nil), title: "New Years", colorName: .yellow, icon: .symbolIcon(name: "sparkles"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 1, day: 25, end: nil), title: "Coldest Day", colorName: .blue, icon: .symbolIcon(name: "thermometer.snowflake"), date: nil, dateIsEstimate: true),
+        Event(dataSource: .recurrence(month: 2, day: 14, end: nil), title: "Valentine's Day", colorName: .red, icon: .symbolIcon(name: "heart"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 2, day: 29, end: nil), title: "Leap Day", colorName: .purple, icon: .symbolIcon(name: "arrowshape.bounce.forward"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 3, day: 10, end: nil), title: "MARIO Day", colorName: .red, icon: .symbolIcon(name: "questionmark.square"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 5, day: 4, end: nil), title: "Star Wars Day", colorName: .yellow, icon: .symbolIcon(name: "sparkles"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 6, day: 21, end: nil), title: "June Solstice", colorName: .green, icon: .symbolIcon(name: "sun.and.horizon"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 7, day: 4, end: nil), title: "4th of July", colorName: .blue, icon: .symbolIcon(name: "4.square"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 7, day: 11, end: nil), title: "Hottest Day", colorName: .orange, icon: .symbolIcon(name: "thermometer.sun"), date: nil, dateIsEstimate: true),
+        Event(dataSource: .recurrence(month: 10, day: 31, end: nil), title: "Halloween", colorName: .purple, icon: .symbolIcon(name: "theatermasks"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 12, day: 21, end: nil), title: "December Solstice", colorName: .blue, icon: .symbolIcon(name: "sun.and.horizon"), date: nil, dateIsEstimate: false),
+        Event(dataSource: .recurrence(month: 12, day: 25, end: nil), title: "Christmas", colorName: .green, icon: .symbolIcon(name: "snowflake"), date: nil, dateIsEstimate: false)
     ]
     var results: [Event] {
         if searchString.isEmpty {

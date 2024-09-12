@@ -21,7 +21,7 @@ struct SymbolPicker: View {
     let selectedItemOutline: UIColor = .tertiaryLabel
     #endif
     
-    @Binding var selected: Symbol
+    @Binding var selected: Symbol?
     
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: itemSize + 4, maximum: itemSize + 6))], spacing: 12) {

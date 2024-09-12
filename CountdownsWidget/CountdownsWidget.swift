@@ -16,9 +16,9 @@ struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
         let tomorow = Calendar.autoupdatingCurrent.date(byAdding: .day, value: 1, to: .now)
         return SimpleEntry(date: .now, events: [
-            Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false),
-            Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false),
-            Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false)
+            Event(dataSource: nil, title: "Birthday", colorName: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false),
+            Event(dataSource: nil, title: "Birthday", colorName: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false),
+            Event(dataSource: nil, title: "Birthday", colorName: nil, icon: .symbolIcon(name: "circle"), date: tomorow, dateIsEstimate: false)
         ], relevance: nil)
     }
     
@@ -77,15 +77,22 @@ struct SimpleEntry: TimelineEntry {
 
 struct CountdownsWidgetEntryView: View {
     
-    #if canImport(UIKit)
-    let containerBackgroundColor = Color(uiColor: .systemGroupedBackground)
+    #if os(watchOS)
+    let containerBackgroundLightColor = Color.black
+    #elseif canImport(UIKit)
+    let containerBackgroundLightColor = Color(uiColor: .systemGroupedBackground)
     #else
-    let containerBackgroundColor = Color(nsColor: .windowBackgroundColor)
+    let containerBackgroundLightColor = Color(nsColor: .windowBackgroundColor)
     #endif
+    
+    var containerBackgroundColor: Color {
+        colorScheme == .light ? containerBackgroundLightColor : .black
+    }
     
     var entry: Provider.Entry
     
     @Environment(\.widgetFamily) var family
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         Group {
@@ -158,7 +165,7 @@ struct CountdownsWidgetEntryView: View {
                                 Image(systemName: name)
                                     .imageScale(.large)
                                     .symbolVariant(.fill)
-                                    .foregroundStyle(Color.accentColor.gradient)
+                                    .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
                             }
                         }
                     } else {
@@ -199,6 +206,7 @@ struct CountdownsWidgetEntryView: View {
         .accentColor(Color("AccentColor"))
     }
     
+    #if !os(watchOS)
     func rowScale(index: Int) -> CGFloat {
         if family == .systemMedium {
             switch index {
@@ -228,8 +236,10 @@ struct CountdownsWidgetEntryView: View {
             }
         }
     }
+    #endif
 }
 
+#if !os(watchOS)
 struct CountdownWidgetEventCard: View {
     
     static let height: CGFloat = 56
@@ -255,7 +265,7 @@ struct CountdownWidgetEventCard: View {
             case .symbolIcon(name: let name):
                 Image(systemName: name)
                     .symbolVariant(.fill)
-                    .foregroundStyle(Color.accentColor.gradient)
+                    .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
             case .remote, nil:
                 EmptyView()
             case .preloaded(let data):
@@ -311,7 +321,7 @@ struct CountdownWidgetFeaturedEvent: View {
             case .symbolIcon(name: let name):
                 Image(systemName: name)
                     .symbolVariant(.fill)
-                    .foregroundStyle(Color.accentColor.gradient)
+                    .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
                     .font(.system(size: 100))
                     .padding()
             case .remote, nil:
@@ -364,6 +374,7 @@ struct CountdownWidgetFeaturedEvent: View {
         return nil
     }
 }
+#endif
 
 struct CountdownsWidget: Widget {
     let kind: String = "CountdownsWidget"
@@ -390,8 +401,8 @@ struct CountdownsWidget: Widget {
 
 #if DEBUG
 let previewEvents = [
-    Event(dataSource: nil, title: "Birthday", colorHEX: nil, icon: .symbolIcon(name: "star"), date: .now.addingTimeInterval(999999), dateIsEstimate: false),
-    Event(dataSource: nil, title: "Super Big Long Celebration Party", colorHEX: nil, icon: .symbolIcon(name: "star"), date: .now.addingTimeInterval(9999999), dateIsEstimate: false)
+    Event(dataSource: nil, title: "Birthday", colorName: nil, icon: .symbolIcon(name: "star"), date: .now.addingTimeInterval(999999), dateIsEstimate: false),
+    Event(dataSource: nil, title: "Super Big Long Celebration Party", colorName: nil, icon: .symbolIcon(name: "star"), date: .now.addingTimeInterval(9999999), dateIsEstimate: false)
 ]
 
 #if !os(macOS)
@@ -414,6 +425,7 @@ let previewEvents = [
 }
 #endif
 
+#if !os(watchOS)
 #Preview("Small", as: WidgetFamily.systemSmall) {
     CountdownsWidget()
 } timeline: {
@@ -431,4 +443,5 @@ let previewEvents = [
 } timeline: {
     SimpleEntry(date: .now, events: previewEvents, relevance: nil)
 }
+#endif
 #endif

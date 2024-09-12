@@ -50,5 +50,5 @@ struct NewDateEstimateView: View {
 }
 
 #Preview {
-    NewDateEstimateView(event: Event(dataSource: nil, title: "Event", colorHEX: nil, icon: .symbolIcon(name: "circle"), date: nil, dateIsEstimate: false))
+    NewDateEstimateView(event: Event(dataSource: nil, title: "Event", colorName: nil, icon: .symbolIcon(name: "circle"), date: nil, dateIsEstimate: false))
 }

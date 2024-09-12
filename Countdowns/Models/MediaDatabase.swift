@@ -24,7 +24,7 @@ final class MediaDatabase {
     
     static let shared = MediaDatabase()
     
-    private let api = TMDbAPI(apiKey: "0ff81004cf53396fd20157671a5bd0ab")
+    private let api = TMDbAPI(apiKey: Secrets.tmdbAPIKey)
     
     func search(_ string: String) async throws -> [Media] {
         guard !string.isEmpty else { return [] }
@@ -32,7 +32,7 @@ final class MediaDatabase {
         return try await api.search.searchAll(query: string, page: nil).results.compactMap {
             switch $0 {
             case .movie(let movie):
-                guard movie.releaseDate?.timeIntervalSince(.now) ?? 1 > 0 else { return nil }
+                guard movie.releaseDate?.timeIntervalSinceNow ?? 1 > 0 else { return nil }
                 
                 return Media(id: movie.id, title: movie.title, isMovie: true, posterURL: posterURL(path: movie.posterPath), releaseDate: movie.releaseDate)
             case .tvShow(let tvShow):
@@ -50,7 +50,7 @@ final class MediaDatabase {
     
     func fetchTVShowReleaseDate(id: Int) async throws -> (Date?, URL?) {
         let tvShow = try await api.tvShows.details(forTVShow: id)
-        let date = tvShow.seasons?.max(by: { $0.seasonNumber < $1.seasonNumber })?.airDate
+        let date = tvShow.seasons?.compactMap({ $0.airDate }).filter({ $0.timeIntervalSinceNow > 0 }).min()
         return (date, posterURL(path: tvShow.posterPath))
     }
     
