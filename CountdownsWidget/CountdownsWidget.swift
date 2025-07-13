@@ -86,7 +86,7 @@ struct CountdownsWidgetEntryView: View {
     #endif
     
     var containerBackgroundColor: Color {
-        colorScheme == .light ? containerBackgroundLightColor : .black
+        colorScheme == .light ? containerBackgroundLightColor : .init(white: 0, opacity: 0.5)
     }
     
     var entry: Provider.Entry
@@ -252,6 +252,7 @@ struct CountdownWidgetEventCard: View {
     #endif
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.widgetRenderingMode) var widgetRenderingMode
     
     var body: some View {
         HStack {
@@ -264,6 +265,7 @@ struct CountdownWidgetEventCard: View {
             switch event.icon {
             case .symbolIcon(name: let name):
                 Image(systemName: name)
+                    .widgetAccentedRenderingMode(.accentedDesaturated)
                     .symbolVariant(.fill)
                     .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
             case .remote, nil:
@@ -273,6 +275,7 @@ struct CountdownWidgetEventCard: View {
                 if let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
                         .resizable()
+                        .widgetAccentedRenderingMode(.accentedDesaturated)
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(5)
                         .frame(maxWidth: 35, maxHeight: 52)
@@ -281,6 +284,7 @@ struct CountdownWidgetEventCard: View {
                 if let nsImage = NSImage(data: data) {
                     Image(nsImage: nsImage)
                         .resizable()
+                        .widgetAccentedRenderingMode(.accentedDesaturated)
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(5)
                         .frame(maxWidth: 35, maxHeight: 52)
@@ -294,6 +298,7 @@ struct CountdownWidgetEventCard: View {
                 if let date = event.date {
                     Text(date, style: .date)
                         .foregroundColor(.secondary)
+                        .widgetAccentable()
                 }
             }
             
@@ -303,7 +308,9 @@ struct CountdownWidgetEventCard: View {
         .padding(.horizontal, 6)
         .frame(idealWidth: .infinity, maxWidth: .infinity)
         .frame(height: Self.height)
-        .background(backgroundColor, in: RoundedRectangle(cornerRadius: 12))
+        .background(
+            backgroundColor.opacity(widgetRenderingMode == .accented ? 0.2 : 1),
+            in: RoundedRectangle(cornerRadius: 12))
         .shadow(color: Color(white: 0.0, opacity: colorScheme == .light ? 0.17 : 0.36), radius: 4)
     }
 }

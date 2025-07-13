@@ -50,7 +50,9 @@ struct EditCustomEventView: View {
                 Toggle("Repeat yearly", isOn: $repeatYearly)
                 if repeatYearly {
                     Toggle("End Repeat", isOn: $endRepeat)
-                    DatePicker("End Date", selection: $repeatEndDate, displayedComponents: .date)
+                    if endRepeat {
+                        DatePicker("End Date", selection: $repeatEndDate, displayedComponents: .date)
+                    }
                 }
             }
             Section {

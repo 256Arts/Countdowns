@@ -145,9 +145,9 @@ final class Event: Equatable {
     var isEditable: Bool {
         switch dataSource {
         case .movie, .tvShow:
-            return false
+            false
         default:
-            return true
+            true
         }
     }
     

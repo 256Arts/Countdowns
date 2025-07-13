@@ -29,11 +29,31 @@ struct CountdownsApp: App {
                 }
             }
         }
+        #if targetEnvironment(simulator) || (DEBUG && targetEnvironment(macCatalyst))
+        .modelContainer(previewContainer)
+        #else
         .modelContainer(for: Event.self)
+        #endif
         #if os(macOS)
         .defaultSize(width: 650, height: 400)
         #else
         .defaultSize(width: 700, height: 600)
         #endif
     }
+    
+    #if DEBUG
+    let previewContainer: ModelContainer = {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        let container = try! ModelContainer(for: Event.self, configurations: config)
+
+        for event in CommonEventsList().allEvents.filter({ !$0.dateIsEstimate! }) {
+            container.mainContext.insert(event)
+            Task {
+                await event.fetch()
+            }
+        }
+        
+        return container
+    }()
+    #endif
 }

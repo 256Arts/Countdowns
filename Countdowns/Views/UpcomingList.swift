@@ -17,7 +17,6 @@ struct UpcomingList: View {
     @Query private var allEvents: [Event]
     
     @State var searchString = ""
-    @State var showingHelp = false
     @State var showingNewCommonEvent = false
     @State var showingNewMovieTVEvent = false
     @State var showingNewDateEvent = false
@@ -26,9 +25,9 @@ struct UpcomingList: View {
     
     var results: [Event] {
         if searchString.isEmpty {
-            return allEvents.upcoming
+            allEvents.upcoming
         } else {
-            return allEvents.upcoming.filter({ $0.title?.localizedCaseInsensitiveContains(searchString) ?? false })
+            allEvents.upcoming.filter({ $0.title?.localizedCaseInsensitiveContains(searchString) ?? false })
         }
     }
     var hasEventsWithMissingDates: Bool {
@@ -47,68 +46,59 @@ struct UpcomingList: View {
                 }
             }
             .contextMenu {
-                Button {
+                Button("View Fullscreen", systemImage: "arrow.up.backward.and.arrow.down.forward") {
                     fullScreenEvent = event
-                } label: {
-                    Label("View Fullscreen", systemImage: "arrow.up.backward.and.arrow.down.forward")
                 }
-                Button(role: .destructive) {
+                Button("Delete", systemImage: "trash", role: .destructive) {
                     modelContext.delete(event)
                     #if canImport(WidgetKit)
                     WidgetCenter.shared.reloadAllTimelines()
                     #endif
-                } label: {
-                    Label("Delete", systemImage: "trash")
                 }
             }
             .swipeActions {
-                Button(role: .destructive) {
+                Button("Delete", systemImage: "trash", role: .destructive) {
                     modelContext.delete(event)
                     #if canImport(WidgetKit)
                     WidgetCenter.shared.reloadAllTimelines()
                     #endif
-                } label: {
-                    Label("Delete", systemImage: "trash")
                 }
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    showingHelp = true
-                } label: {
-                    Image(systemName: "questionmark.circle")
-                }
-                .buttonBorderShape(.circle)
-            }
             ToolbarItem(placement: .primaryAction) {
-                Menu {
-                    Button {
+                Menu("Add", systemImage: "plus") {
+                    Button("Common Event", systemImage: "star") {
                         showingNewCommonEvent = true
-                    } label: {
-                        Label("Common Event", systemImage: "star")
                     }
-                    Button {
+                    Button("Movie/TV Release", systemImage: "film") {
                         showingNewMovieTVEvent = true
-                    } label: {
-                        Label("Movie/TV Release", systemImage: "film")
                     }
-                    Button {
+                    Button("Custom", systemImage: "square.and.pencil") {
                         showingNewDateEvent = true
-                    } label: {
-                        Label("Custom", systemImage: "square.and.pencil")
                     }
-                } label: {
-                    Image(systemName: "plus.circle.fill")
                 }
-                .buttonBorderShape(.circle)
             }
+            
+            ToolbarItemGroup(placement: .secondaryAction) {
+                Link(destination: URL(string: "https://www.256arts.com/")!) {
+                    Label("Developer Website", systemImage: "safari")
+                }
+                Link(destination: URL(string: "https://www.256arts.com/joincommunity/")!) {
+                    Label("Join Community", systemImage: "bubble.left.and.bubble.right")
+                }
+                Link(destination: URL(string: "https://github.com/256Arts/Countdowns")!) {
+                    Label("Contribute on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
+                }
+            }
+            
             #if !os(macOS)
             if hasEventsWithMissingDates {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Events Missing Dates") {
                         showingEventSources = true
                     }
+                    .controlSize(.small)
                 }
             }
             #endif
@@ -124,11 +114,6 @@ struct UpcomingList: View {
         .searchable(text: $searchString, prompt: "Search")
         .refreshable {
             await refreshEvents()
-        }
-        .sheet(isPresented: $showingHelp) {
-            NavigationStack {
-                HelpView()
-            }
         }
         .sheet(isPresented: $showingNewCommonEvent) {
             NavigationStack {

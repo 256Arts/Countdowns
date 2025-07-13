@@ -29,16 +29,12 @@ struct EventsMissingDatesList: View {
                     ForEach(eventsMissingDates) { event in
                         Text(event.title ?? "")
                             .contextMenu {
-                                Button {
+                                Button("Add Estimate", systemImage: "calendar.badge.plus") {
                                     sourceForNewEstimate = event
-                                } label: {
-                                    Label("Add Estimate", systemImage: "calendar.badge.plus")
                                 }
                                 
-                                Button(role: .destructive) {
+                                Button("Delete", systemImage: "trash", role: .destructive) {
                                     modelContext.delete(event)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
                                 }
                             }
                     }
@@ -52,14 +48,14 @@ struct EventsMissingDatesList: View {
         .toolbar {
             EditButton()
         }
+        #endif
         .toolbar {
-            ToolbarItem(placement: .navigation) {
-                Button("Done") {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done", systemImage: "checkmark") {
                     dismiss()
                 }
             }
         }
-        #endif
         .navigationTitle("Events Missing Dates")
         .sheet(item: $sourceForNewEstimate) { event in
             NavigationStack {
