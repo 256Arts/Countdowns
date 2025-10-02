@@ -80,19 +80,11 @@ struct UpcomingList: View {
                 }
             }
             
+            #if !os(macOS)
             ToolbarItemGroup(placement: .secondaryAction) {
-                Link(destination: URL(string: "https://www.256arts.com/")!) {
-                    Label("Developer Website", systemImage: "safari")
-                }
-                Link(destination: URL(string: "https://www.256arts.com/joincommunity/")!) {
-                    Label("Join Community", systemImage: "bubble.left.and.bubble.right")
-                }
-                Link(destination: URL(string: "https://github.com/256Arts/Countdowns")!) {
-                    Label("Contribute on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
-                }
+                CountdownsApp.links()
             }
             
-            #if !os(macOS)
             if hasEventsWithMissingDates {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Events Missing Dates") {
@@ -137,11 +129,15 @@ struct UpcomingList: View {
         }
         #if os(macOS)
         .sheet(item: $fullScreenEvent) { event in
-            FullScreenEventView(event: event)
+            NavigationStack {
+                FullScreenEventView(event: event)
+            }
         }
         #else
         .fullScreenCover(item: $fullScreenEvent) { event in
-            FullScreenEventView(event: event)
+            NavigationStack {
+                FullScreenEventView(event: event)
+            }
         }
         #endif
 //        .task {

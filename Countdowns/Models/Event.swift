@@ -167,13 +167,11 @@ final class Event: Equatable {
             
             let year: Int = {
                 let today = Calendar.autoupdatingCurrent.dateComponents([.year, .month, .day], from: .now)
-                var year: Int = {
-                    if today.month! < month || (today.month == month && today.day! < day) {
-                        return today.year!
-                    } else {
-                        return today.year! + 1
-                    }
-                }()
+                var year: Int = if today.month! < month || (today.month == month && today.day! < day) {
+                    today.year!
+                } else {
+                    today.year! + 1
+                }
                 if month == 2, day == 29 {
                     // Leap day
                     while year % 4 != 0 && (year % 100 == 0 || year % 400 != 0) {

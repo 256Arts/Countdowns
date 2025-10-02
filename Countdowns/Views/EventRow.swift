@@ -18,7 +18,7 @@ struct EventRow: View {
                 .allowsTightening(true)
                 .minimumScaleFactor(0.5)
                 .font(.title)
-                #if os(visionOS) || targetEnvironment(macCatalyst)
+                #if os(visionOS) || os(macOS)
                 .frame(width: 50)
                 #else
                 .frame(width: 80)
@@ -39,7 +39,11 @@ struct EventRow: View {
                 }
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(6)
+                #if os(macOS)
+                .frame(width: 24, height: 36)
+                #else
                 .frame(width: 40, height: 60)
+                #endif
             case .preloaded, nil:
                 EmptyView()
             }

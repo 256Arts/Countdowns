@@ -81,7 +81,7 @@ struct CommonEventsList: View {
         .navigationTitle("Common Events")
         .searchable(text: $searchString, prompt: "Search")
         .toolbar {
-            ToolbarItem(placement: .navigation) {
+            ToolbarItem(placement: .confirmationAction) {
                 Button("Done", systemImage: "checkmark") {
                     dismiss()
                 }

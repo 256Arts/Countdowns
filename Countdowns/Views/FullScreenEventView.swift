@@ -16,14 +16,8 @@ struct FullScreenEventView: View {
     
     var body: some View {
         VStack {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "xmark")
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
-            .frame(idealWidth: .infinity, maxWidth: .infinity, alignment: .trailing)
+            Spacer()
+                .frame(height: 40)
             
             switch event.icon {
             case .symbolIcon(name: let name):
@@ -97,6 +91,11 @@ struct FullScreenEventView: View {
             }
             .ignoresSafeArea()
             #endif
+        }
+        .toolbar {
+            Button("Close", systemImage: "xmark") {
+                dismiss()
+            }
         }
         .environment(\.colorScheme, .dark)
     }

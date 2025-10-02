@@ -68,8 +68,8 @@ struct NewMovieSourceView: View {
         }
         .navigationTitle("New Movie/TV Event")
         .toolbar {
-            ToolbarItem(placement: .navigation) {
-                Button("Done") {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done", systemImage: "checkmark") {
                     dismiss()
                 }
             }

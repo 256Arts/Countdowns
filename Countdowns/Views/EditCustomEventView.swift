@@ -30,13 +30,14 @@ struct EditCustomEventView: View {
     }
     
     var body: some View {
-        Form {
+        List {
             Section {
                 TextField("Title", text: Binding(get: {
                     event.title ?? ""
                 }, set: { newValue in
                     event.title = newValue
                 }))
+                .font(.largeTitle)
                 DatePicker("Date", selection: Binding(get: {
                     event.date ?? .now
                 }, set: { newValue in
@@ -68,7 +69,9 @@ struct EditCustomEventView: View {
             }
         }
         .navigationTitle("Edit Event")
+        #if !os(macOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
         .confirmationDialog("Delete Event?", isPresented: $showingDeleteConfirmation, actions: {
             Button("Delete", role: .destructive) {
                 modelContext.delete(event)
