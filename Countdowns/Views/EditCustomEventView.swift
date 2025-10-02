@@ -68,9 +68,17 @@ struct EditCustomEventView: View {
                 }
             }
         }
-        .navigationTitle("Edit Event")
         #if !os(macOS)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Details")
+        .toolbarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("Done", systemImage: "checkmark") {
+                    dismiss()
+                }
+                .disabled(event.title?.isEmpty == true)
+            }
+        }
         #endif
         .confirmationDialog("Delete Event?", isPresented: $showingDeleteConfirmation, actions: {
             Button("Delete", role: .destructive) {
@@ -116,3 +124,4 @@ struct EditCustomEventView: View {
 #Preview {
     EditCustomEventView(event: Event(dataSource: nil, title: "Content", colorName: nil, icon: .symbolIcon(name: "circle"), date: .now, dateIsEstimate: false))
 }
+

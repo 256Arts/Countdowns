@@ -53,7 +53,7 @@ struct CommonEventsList: View {
                 
                 Spacer()
                 
-                Button("Save", systemImage: events.contains(event) ? "checkmark" : "plus") {
+                Button(events.contains(event) ? "Added" : "Add", systemImage: events.contains(event) ? "checkmark" : "plus") {
                     let existingEvents = events.filter({ $0 == event })
                     if existingEvents.isEmpty {
                         Task { @MainActor in
@@ -73,8 +73,6 @@ struct CommonEventsList: View {
                     }
                 }
                 .buttonStyle(.bordered)
-                .buttonBorderShape(.capsule)
-                .fontWeight(.bold)
                 .contentTransition(.symbolEffect(.replace))
             }
         }

@@ -12,6 +12,8 @@ struct FullScreenEventView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    @State private var showingEditor = false
+    
     @Bindable var event: Event
     
     var body: some View {
@@ -40,7 +42,7 @@ struct FullScreenEventView: View {
                 }
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(20)
-                .frame(width: 300, height: 450)
+                .frame(minWidth: 200, idealWidth: 300, minHeight: 300, idealHeight: 450)
             case .preloaded, nil:
                 EmptyView()
             }
@@ -78,26 +80,39 @@ struct FullScreenEventView: View {
                 } placeholder: {
                     EmptyView()
                 }
-                .aspectRatio(contentMode: .fill)
+                .scaledToFill()
                 .overlay(Material.thin)
                 .ignoresSafeArea()
+            } else {
+                #if !os(visionOS)
+                ZStack {
+                    event.colorName?.color
+                    Color.black.opacity(0.75)
+                }
+                .ignoresSafeArea()
+                #endif
             }
-        }
-        .presentationBackground {
-            #if !os(visionOS)
-            ZStack {
-                event.colorName?.color
-                Color.black.opacity(0.75)
-            }
-            .ignoresSafeArea()
-            #endif
         }
         .toolbar {
-            Button("Close", systemImage: "xmark") {
-                dismiss()
+            if event.isEditable {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Edit") {
+                        showingEditor = true
+                    }
+                }
             }
         }
-        .environment(\.colorScheme, .dark)
+        .preferredColorScheme(.dark)
+        .popover(isPresented: $showingEditor, attachmentAnchor: .rect(.bounds), arrowEdge: .trailing) {
+            #if os(macOS)
+            EditCustomEventView(event: event)
+                .frame(idealHeight: 400)
+            #else
+            NavigationStack {
+                EditCustomEventView(event: event)
+            }
+            #endif
+        }
     }
 }
 

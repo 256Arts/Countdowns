@@ -40,7 +40,7 @@ struct CountdownsApp: App {
         .modelContainer(for: Event.self)
         #endif
         #if os(macOS)
-        .defaultSize(width: 650, height: 400)
+        .defaultSize(width: 500, height: 300)
         #else
         .defaultSize(width: 700, height: 600)
         #endif

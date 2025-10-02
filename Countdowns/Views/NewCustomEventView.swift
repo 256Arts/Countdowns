@@ -25,9 +25,10 @@ struct NewCustomEventView: View {
     @State var symbol: Symbol? = .defaultSymbol
     
     var body: some View {
-        Form {
+        List {
             Section {
                 TextField("Title", text: $title)
+                    .font(.largeTitle)
                 DatePicker("Date", selection: $date, displayedComponents: .date)
                 Toggle("Estimated", isOn: $isEstimate)
                 Toggle("Repeat yearly", isOn: $repeatYearly)
@@ -47,12 +48,12 @@ struct NewCustomEventView: View {
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+                Button("Cancel", systemImage: "xmark") {
                     dismiss()
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Add") {
+                Button("Add", systemImage: "checkmark") {
                     let day = Calendar.autoupdatingCurrent.dateComponents([.month, .day], from: date)
                     let dataSource: Event.DataSource? = {
                         let end: Date? = endRepeat ? repeatEndDate : nil

@@ -45,7 +45,7 @@ struct NewMovieSourceView: View {
                 Spacer()
                 
                 if !events.contains(where: { $0.dataSource == media.dataSource }) {
-                    Button("ADD") {
+                    Button("Add") {
                         let icon: IconResource = {
                             if let url = media.posterURL {
                                 return .remote(url)
@@ -78,8 +78,8 @@ struct NewMovieSourceView: View {
         .searchable(text: $searchString, prompt: "Search movies/tv")
         #else
         .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search movies/tv")
-        .navigationBarTitleDisplayMode(.inline)
         #endif
+        .toolbarTitleDisplayMode(.inline)
         .onChange(of: searchString) { _, newValue in
             Task {
                 results = try await MediaDatabase.shared.search(newValue)

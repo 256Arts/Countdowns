@@ -50,8 +50,8 @@ struct EventsMissingDatesList: View {
         }
         #endif
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Done", systemImage: "checkmark") {
+            ToolbarItem(placement: .navigation) {
+                Button("Close", systemImage: "xmark") {
                     dismiss()
                 }
             }

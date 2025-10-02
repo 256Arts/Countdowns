@@ -21,7 +21,6 @@ struct UpcomingList: View {
     @State var showingNewMovieTVEvent = false
     @State var showingNewDateEvent = false
     @State var showingEventSources = false
-    @State var fullScreenEvent: Event?
     
     var results: [Event] {
         if searchString.isEmpty {
@@ -36,19 +35,10 @@ struct UpcomingList: View {
     
     var body: some View {
         List(results) { event in
-            Group {
-                if event.isEditable {
-                    NavigationLink(value: event) {
-                        EventRow(event: event)
-                    }
-                } else {
-                    EventRow(event: event)
-                }
+            NavigationLink(value: event) {
+                EventRow(event: event)
             }
             .contextMenu {
-                Button("View Fullscreen", systemImage: "arrow.up.backward.and.arrow.down.forward") {
-                    fullScreenEvent = event
-                }
                 Button("Delete", systemImage: "trash", role: .destructive) {
                     modelContext.delete(event)
                     #if canImport(WidgetKit)
@@ -101,7 +91,7 @@ struct UpcomingList: View {
         .navigationTitle("Upcoming Events")
         #endif
         .navigationDestination(for: Event.self) { event in
-            EditCustomEventView(event: event)
+            FullScreenEventView(event: event)
         }
         .searchable(text: $searchString, prompt: "Search")
         .refreshable {
@@ -111,38 +101,37 @@ struct UpcomingList: View {
             NavigationStack {
                 CommonEventsList()
             }
+            #if os(macOS)
+            .frame(idealHeight: 400)
+            #endif
         }
         .sheet(isPresented: $showingNewMovieTVEvent) {
             NavigationStack {
                 NewMovieSourceView()
             }
+            #if os(macOS)
+            .frame(idealHeight: 400)
+            #endif
         }
         .sheet(isPresented: $showingNewDateEvent) {
             NavigationStack {
                 NewCustomEventView()
             }
+            #if os(macOS)
+            .frame(idealHeight: 400)
+            #endif
         }
         .sheet(isPresented: $showingEventSources) {
             NavigationStack {
                 EventsMissingDatesList()
             }
+            #if os(macOS)
+            .frame(idealHeight: 400)
+            #endif
         }
-        #if os(macOS)
-        .sheet(item: $fullScreenEvent) { event in
-            NavigationStack {
-                FullScreenEventView(event: event)
-            }
+        .task {
+            await refreshEvents()
         }
-        #else
-        .fullScreenCover(item: $fullScreenEvent) { event in
-            NavigationStack {
-                FullScreenEventView(event: event)
-            }
-        }
-        #endif
-//        .task {
-//            await refreshEvents()
-//        }
     }
     
     func refreshEvents() async {
