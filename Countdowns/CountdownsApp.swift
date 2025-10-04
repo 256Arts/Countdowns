@@ -11,6 +11,10 @@ import SwiftData
 @main
 struct CountdownsApp: App {
     
+    init() {
+        UserDefaults.standard.register()
+    }
+    
     @State var selectedEvent: Event?
     
     var body: some Scene {

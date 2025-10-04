@@ -11,9 +11,7 @@
 		1B435A6E296F2E970077A10A /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 1B435A6D296F2E970077A10A /* TMDb */; };
 		1B6896FC29371D24004E6730 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B6896E029371BF0004E6730 /* WidgetKit.framework */; };
 		1B6896FD29371D24004E6730 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B6896E229371BF0004E6730 /* SwiftUI.framework */; };
-		1B68970829371D25004E6730 /* CountdownsWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		1BF386402AC519E500245931 /* Countdowns Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 1BF386332AC519E400245931 /* Countdowns Watch Watch App.app */; platformFilters = (ios, maccatalyst, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		1BF3864C2AC51BBF00245931 /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 1BF3864B2AC51BBF00245931 /* TMDb */; };
+		1B68970829371D25004E6730 /* CountdownsWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,13 +21,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 1B6896FA29371D24004E6730;
 			remoteInfo = CountdownsWidgetExtension;
-		};
-		1BF3863E2AC519E500245931 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1B3BF5C0289567C300E87899 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1BF386322AC519E400245931;
-			remoteInfo = "Countdowns Watch Watch App";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -48,14 +39,12 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolder = Product;
 			files = (
-				1BF386402AC519E500245931 /* Countdowns Watch Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1B36237B293A7D120077527D /* CountdownsWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CountdownsWidgetExtension.entitlements; sourceTree = "<group>"; };
 		1B3BF5C8289567C300E87899 /* Countdowns.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Countdowns.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B6896E029371BF0004E6730 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		1B6896E229371BF0004E6730 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -80,6 +69,7 @@
 				Models/MediaDatabase.swift,
 				Models/Secrets.swift,
 				Models/Symbol.swift,
+				Models/UserDefaults.swift,
 			);
 			target = 1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */;
 		};
@@ -90,9 +80,8 @@
 				Models/ColorName.swift,
 				Models/Event.swift,
 				Models/IconResource.swift,
-				Models/MediaDatabase.swift,
-				Models/Secrets.swift,
 				Models/Symbol.swift,
+				Models/UserDefaults.swift,
 			);
 			target = 1BF386322AC519E400245931 /* Countdowns Watch Watch App */;
 		};
@@ -159,7 +148,6 @@
 		1BF386302AC519E400245931 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
-				1BF3864C2AC51BBF00245931 /* TMDb in Frameworks */,
 			);
 		};
 /* End PBXFrameworksBuildPhase section */
@@ -168,7 +156,6 @@
 		1B3BF5BF289567C300E87899 = {
 			isa = PBXGroup;
 			children = (
-				1B36237B293A7D120077527D /* CountdownsWidgetExtension.entitlements */,
 				1B7DF9112E2418630071B353 /* Countdowns */,
 				1B7DF8EF2E2418310071B353 /* CountdownsWidget */,
 				1B7DF9402E24189E0071B353 /* Countdowns Watch Watch App */,
@@ -213,7 +200,6 @@
 			);
 			dependencies = (
 				1B68970729371D25004E6730 /* PBXTargetDependency */,
-				1BF3863F2AC519E500245931 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				1B7DF9112E2418630071B353 /* Countdowns */,
@@ -261,9 +247,6 @@
 				1B7DF9402E24189E0071B353 /* Countdowns Watch Watch App */,
 			);
 			name = "Countdowns Watch Watch App";
-			packageProductDependencies = (
-				1BF3864B2AC51BBF00245931 /* TMDb */,
-			);
 			productName = "Countdowns Watch Watch App";
 			productReference = 1BF386332AC519E400245931 /* Countdowns Watch Watch App.app */;
 			productType = "com.apple.product-type.application";
@@ -351,17 +334,12 @@
 /* Begin PBXTargetDependency section */
 		1B68970729371D25004E6730 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */;
-			targetProxy = 1B68970629371D25004E6730 /* PBXContainerItemProxy */;
-		};
-		1BF3863F2AC519E500245931 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
 			platformFilters = (
 				ios,
-				maccatalyst,
+				macos,
 			);
-			target = 1BF386322AC519E400245931 /* Countdowns Watch Watch App */;
-			targetProxy = 1BF3863E2AC519E500245931 /* PBXContainerItemProxy */;
+			target = 1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */;
+			targetProxy = 1B68970629371D25004E6730 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -522,7 +500,9 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Countdowns/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Calendars can be imported as events";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -542,13 +522,13 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
 				TVOS_DEPLOYMENT_TARGET = 18.0;
-				XROS_DEPLOYMENT_TARGET = 2.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
@@ -575,7 +555,9 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Countdowns/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Calendars can be imported as events";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -595,14 +577,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6,7";
 				TVOS_DEPLOYMENT_TARGET = 18.0;
-				XROS_DEPLOYMENT_TARGET = 2.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
@@ -611,7 +593,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = CountdownsWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CountdownsWidget/CountdownsWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_APP_SANDBOX = YES;
@@ -648,7 +630,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = CountdownsWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CountdownsWidget/CountdownsWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_APP_SANDBOX = YES;
@@ -818,11 +800,6 @@
 			productName = TMDb;
 		};
 		1B435A6D296F2E970077A10A /* TMDb */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1B435A69296F21630077A10A /* XCRemoteSwiftPackageReference "TMDb" */;
-			productName = TMDb;
-		};
-		1BF3864B2AC51BBF00245931 /* TMDb */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1B435A69296F21630077A10A /* XCRemoteSwiftPackageReference "TMDb" */;
 			productName = TMDb;

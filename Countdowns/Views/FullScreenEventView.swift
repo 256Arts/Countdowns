@@ -73,6 +73,7 @@ struct FullScreenEventView: View {
         }
         .scenePadding()
         .frame(idealWidth: .infinity, maxWidth: .infinity)
+        #if !os(visionOS)
         .background {
             if case .remote(let url) = event.icon {
                 AsyncImage(url: URL(string: url.absoluteString.replacingOccurrences(of: "/w185/", with: "/w500/"))!) { image in
@@ -84,35 +85,35 @@ struct FullScreenEventView: View {
                 .overlay(Material.thin)
                 .ignoresSafeArea()
             } else {
-                #if !os(visionOS)
                 ZStack {
                     event.colorName?.color
                     Color.black.opacity(0.75)
                 }
                 .ignoresSafeArea()
-                #endif
             }
         }
+        #endif
         .toolbar {
             if event.isEditable {
                 ToolbarItem(placement: .primaryAction) {
                     Button("Edit") {
                         showingEditor = true
                     }
+                    .popover(isPresented: $showingEditor, attachmentAnchor: .rect(.bounds), arrowEdge: .trailing) {
+                        #if os(macOS)
+                        EditCustomEventView(event: event)
+                            .frame(idealHeight: 400)
+                        #else
+                        NavigationStack {
+                            EditCustomEventView(event: event)
+                        }
+                        .frame(idealWidth: 360, idealHeight: 700)
+                        #endif
+                    }
                 }
             }
         }
         .preferredColorScheme(.dark)
-        .popover(isPresented: $showingEditor, attachmentAnchor: .rect(.bounds), arrowEdge: .trailing) {
-            #if os(macOS)
-            EditCustomEventView(event: event)
-                .frame(idealHeight: 400)
-            #else
-            NavigationStack {
-                EditCustomEventView(event: event)
-            }
-            #endif
-        }
     }
 }
 

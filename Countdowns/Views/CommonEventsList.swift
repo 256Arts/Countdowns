@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import StoreKit
 #if canImport(WidgetKit)
 import WidgetKit
 #endif
@@ -37,6 +38,7 @@ struct CommonEventsList: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.requestReview) private var requestReview
     @Query private var events: [Event]
     
     @State var searchString = ""
@@ -59,6 +61,8 @@ struct CommonEventsList: View {
                         Task { @MainActor in
                             await event.fetch()
                             modelContext.insert(event)
+                            // Increment add count and maybe ask for a review
+                            if UserDefaults.standard.incrementEventAddedCount() { requestReview() }
                             #if canImport(WidgetKit)
                             WidgetCenter.shared.reloadAllTimelines()
                             #endif

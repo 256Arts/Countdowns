@@ -16,11 +16,15 @@ struct UpcomingList: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var allEvents: [Event]
     
+    private var calendarService: CalendarService = .shared
+    
     @State var searchString = ""
     @State var showingNewCommonEvent = false
     @State var showingNewMovieTVEvent = false
     @State var showingNewDateEvent = false
+    @State var showingImportCalendar = false
     @State var showingEventSources = false
+    @State var isUpdatingCalendarEvents = false
     
     var results: [Event] {
         if searchString.isEmpty {
@@ -29,6 +33,7 @@ struct UpcomingList: View {
             allEvents.upcoming.filter({ $0.title?.localizedCaseInsensitiveContains(searchString) ?? false })
         }
     }
+    
     var hasEventsWithMissingDates: Bool {
         allEvents.contains(where: { $0.date == nil })
     }
@@ -39,20 +44,10 @@ struct UpcomingList: View {
                 EventRow(event: event)
             }
             .contextMenu {
-                Button("Delete", systemImage: "trash", role: .destructive) {
-                    modelContext.delete(event)
-                    #if canImport(WidgetKit)
-                    WidgetCenter.shared.reloadAllTimelines()
-                    #endif
-                }
+                deleteEventButton(event: event)
             }
             .swipeActions {
-                Button("Delete", systemImage: "trash", role: .destructive) {
-                    modelContext.delete(event)
-                    #if canImport(WidgetKit)
-                    WidgetCenter.shared.reloadAllTimelines()
-                    #endif
-                }
+                deleteEventButton(event: event)
             }
         }
         .toolbar {
@@ -60,6 +55,9 @@ struct UpcomingList: View {
                 Menu("Add", systemImage: "plus") {
                     Button("Common Event", systemImage: "star") {
                         showingNewCommonEvent = true
+                    }
+                    Button("Import Calendar", systemImage: "calendar") {
+                        showingImportCalendar = true
                     }
                     Button("Movie/TV Release", systemImage: "film") {
                         showingNewMovieTVEvent = true
@@ -121,6 +119,14 @@ struct UpcomingList: View {
             .frame(idealHeight: 400)
             #endif
         }
+        .sheet(isPresented: $showingImportCalendar) {
+            NavigationStack {
+                ImportCalendarView()
+            }
+            #if os(macOS)
+            .frame(idealHeight: 400)
+            #endif
+        }
         .sheet(isPresented: $showingEventSources) {
             NavigationStack {
                 EventsMissingDatesList()
@@ -131,6 +137,35 @@ struct UpcomingList: View {
         }
         .task {
             await refreshEvents()
+        }
+        .task {
+            for await _ in calendarService.calendarUpdates {
+                guard await calendarService.store.isFullAccessAuthorized else { return }
+                
+                await calendarService.regenerateCalendarEvents(modelContext: modelContext, allEvents: allEvents)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func deleteEventButton(event: Event) -> some View {
+        if case .calendar = event.dataSource {
+            Button("Remove Calendar", systemImage: "calendar.badge.minus", role: .destructive) {
+                let otherEventsFromThisCalendar = allEvents.filter { $0.dataSource == event.dataSource }
+                for event in otherEventsFromThisCalendar {
+                    modelContext.delete(event)
+                }
+                #if canImport(WidgetKit)
+                WidgetCenter.shared.reloadAllTimelines()
+                #endif
+            }
+        } else {
+            Button("Delete", systemImage: "trash", role: .destructive) {
+                modelContext.delete(event)
+                #if canImport(WidgetKit)
+                WidgetCenter.shared.reloadAllTimelines()
+                #endif
+            }
         }
     }
     
@@ -143,7 +178,10 @@ struct UpcomingList: View {
             }
             await taskGroup.waitForAll()
         }
+        
+        await calendarService.regenerateCalendarEvents(modelContext: modelContext, allEvents: allEvents)
     }
+    
 }
 
 #Preview {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 #if canImport(WidgetKit)
 import WidgetKit
 #endif
@@ -14,6 +15,7 @@ struct NewCustomEventView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) private var requestReview
     
     @State var title = ""
     @State var date: Date = .now
@@ -59,18 +61,20 @@ struct NewCustomEventView: View {
                         let end: Date? = endRepeat ? repeatEndDate : nil
                         return repeatYearly ? .recurrence(month: day.month!, day: day.day!, end: end) : nil
                     }()
-                    let icon: IconResource? = {
-                        if let symbol {
-                            return .symbolIcon(name: symbol.rawValue)
-                        } else {
-                            return nil
-                        }
-                    }()
+                    let icon: IconResource? = if let symbol {
+                        .symbolIcon(name: symbol.rawValue)
+                    } else {
+                        nil
+                    }
                     let event = Event(dataSource: dataSource, title: title, colorName: colorName, icon: icon, date: date, dateIsEstimate: false)
                     Task {
                         await event.fetch()
                     }
                     modelContext.insert(event)
+                    
+                    // Increment add count and maybe ask for a review
+                    if UserDefaults.standard.incrementEventAddedCount() { requestReview() }
+                    
                     #if canImport(WidgetKit)
                     WidgetCenter.shared.reloadAllTimelines()
                     #endif

@@ -16,6 +16,7 @@ final class Event: Equatable {
         case recurrence(month: Int, day: Int, end: Date?)
         case movie(id: Int)
         case tvShow(id: Int)
+        case calendar(id: String)
     }
     
     var dataSource: DataSource?
@@ -82,14 +83,16 @@ final class Event: Equatable {
         switch dataSource {
         case .recurrence(let month, let day, _):
             if month == 2, day == 29 {
-                return "Every ~4 years on \(DateFormatter().monthSymbols[month-1]) \(day)"
+                "Every ~4 years on \(DateFormatter().monthSymbols[month-1]) \(day)"
             } else {
-                return "Yearly on \(DateFormatter().monthSymbols[month-1]) \(day)"
+                "Yearly on \(DateFormatter().monthSymbols[month-1]) \(day)"
             }
         case .movie, .tvShow:
-            return "From the Web"
+            "From TMDB"
+        case .calendar:
+            "From Calendar"
         case nil:
-            return "Single Event"
+            "Single Event"
         }
     }
     
@@ -106,9 +109,9 @@ final class Event: Equatable {
     @Transient
     var daysUntilString: String {
         if let daysUntil {
-            return ((dateIsEstimate ?? false) ? "~" : "") + String(daysUntil)
+            ((dateIsEstimate ?? false) ? "~" : "") + String(daysUntil)
         } else {
-            return ""
+            ""
         }
     }
     
@@ -117,11 +120,11 @@ final class Event: Equatable {
     var isTemporaryEstimate: Bool {
         guard dateIsEstimate == true else { return false }
         
-        switch dataSource {
+        return switch dataSource {
         case .recurrence:
-            return false
+            false
         default:
-            return true
+            true
         }
     }
     
@@ -134,10 +137,10 @@ final class Event: Equatable {
         //  1 days away = 30 score
         // 30 days away = 1 score
         // 31 days away = 1 score
-        if let daysUntil, 0 < daysUntil {
-            return max(1, 31 - daysUntil)
+        return if let daysUntil, 0 < daysUntil {
+            max(1, 31 - daysUntil)
         } else {
-            return 0
+            0
         }
     }
     
@@ -158,6 +161,7 @@ final class Event: Equatable {
         }
     }
     
+    #if !os(watchOS)
     func fetch() async {
         switch dataSource {
         case .recurrence(let month, let day, let endDate):
@@ -194,16 +198,20 @@ final class Event: Equatable {
                 self.date = date
                 self.dateIsEstimate = false
             }
+        case .calendar:
+            // Do nothing. It is safer to regenerate all calendar events than to update them one-by-one
+            break
         case nil:
             break
         }
     }
+    #endif
     
     static func == (lhs: Event, rhs: Event) -> Bool {
         if let lhsDataSource = lhs.dataSource {
-            return lhsDataSource == rhs.dataSource && lhs.title == rhs.title
+            lhsDataSource == rhs.dataSource && lhs.title == rhs.title
         } else {
-            return lhs.title == rhs.title && lhs.date == rhs.date
+            lhs.title == rhs.title && lhs.date == rhs.date
         }
     }
     
