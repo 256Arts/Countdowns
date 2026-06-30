@@ -15,21 +15,32 @@ struct CountdownsApp: App {
         UserDefaults.standard.register()
     }
     
-    @State var selectedEvent: Event?
-    
+    @State private var navigation = AppNavigation.shared
+    @State private var showingAppStoreEvent = false
+
     var body: some Scene {
         WindowGroup {
             NavigationSplitView {
                 UpcomingList()
             } detail: {
                 NavigationStack {
-                    if let selectedEvent {
+                    if let selectedEvent = navigation.selectedEvent {
                         FullScreenEventView(event: selectedEvent)
                     } else {
                         Text("No Content Selected")
                             .font(.title)
                             .foregroundColor(.secondary)
                     }
+                }
+            }
+            .alert("Event Intro", isPresented: $showingAppStoreEvent) {
+                Button("OK", role: .close) { }
+            } message: {
+                Text("Now let's celebrate by adding the event through the \"+\" menu, and trying out the new features!")
+            }
+            .onOpenURL { url in
+                if url.path().contains("countdowns/appstoreevent") {
+                    showingAppStoreEvent = true
                 }
             }
         }
@@ -41,7 +52,7 @@ struct CountdownsApp: App {
         #if targetEnvironment(simulator) || (DEBUG && os(macOS))
         .modelContainer(previewContainer)
         #else
-        .modelContainer(for: Event.self)
+        .modelContainer(ModelContainer.shared)
         #endif
         #if os(macOS)
         .defaultSize(width: 500, height: 300)

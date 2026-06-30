@@ -1,0 +1,126 @@
+//
+//  EventEntity.swift
+//  Countdowns
+//
+//  Created by 256 Arts Developer on 2026-06-29.
+//
+
+import AppIntents
+import SwiftData
+
+/// An `Event` exposed to Siri, Spotlight, and Shortcuts.
+///
+/// Backed by SwiftData: the `id` is an encoded `PersistentIdentifier`, so the entity can be resolved
+/// back to its `Event` in the shared model container (see `EventStore`).
+struct EventEntity: AppEntity, Identifiable {
+
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Event")
+    static let defaultQuery = EventEntityQuery()
+
+    let id: String
+
+    @Property(title: "Title")
+    var title: String
+
+    @Property(title: "Date")
+    var date: Date?
+
+    @Property(title: "Days Until")
+    var daysUntil: Int?
+
+    init(id: String, title: String, date: Date?, daysUntil: Int?) {
+        self.id = id
+        self.title = title
+        self.date = date
+        self.daysUntil = daysUntil
+    }
+
+    var displayRepresentation: DisplayRepresentation {
+        let subtitle: String = if let daysUntil {
+            switch daysUntil {
+            case 0: "Today"
+            case 1: "Tomorrow"
+            case ..<0: "Past"
+            default: "in \(daysUntil) days"
+            }
+        } else if let date {
+            date.formatted(date: .abbreviated, time: .omitted)
+        } else {
+            ""
+        }
+        return DisplayRepresentation(title: "\(title)", subtitle: "\(subtitle)")
+    }
+}
+
+extension EventEntity {
+
+    @MainActor
+    init(_ event: Event) {
+        self.init(
+            id: event.persistentModelID.entityIDString ?? "",
+            title: event.title ?? "Untitled Event",
+            date: event.date,
+            daysUntil: event.daysUntil)
+    }
+}
+
+/// Resolves `EventEntity` values for Siri/Shortcuts by querying the shared SwiftData container.
+struct EventEntityQuery: EntityQuery {
+
+    @MainActor
+    func entities(for identifiers: [EventEntity.ID]) async throws -> [EventEntity] {
+        let wanted = Set(identifiers)
+        return try EventStore.upcomingEntities().filter { wanted.contains($0.id) }
+    }
+
+    @MainActor
+    func suggestedEntities() async throws -> [EventEntity] {
+        try EventStore.upcomingEntities()
+    }
+}
+
+extension EventEntityQuery: EntityStringQuery {
+
+    @MainActor
+    func entities(matching string: String) async throws -> [EventEntity] {
+        try EventStore.upcomingEntities().filter {
+            $0.title.localizedCaseInsensitiveContains(string)
+        }
+    }
+}
+
+/// Bridges App Intents to the shared SwiftData store.
+@MainActor
+enum EventStore {
+
+    static var context: ModelContext { ModelContainer.shared.mainContext }
+
+    static func upcomingEvents() throws -> [Event] {
+        try context.fetch(FetchDescriptor<Event>()).upcoming
+    }
+
+    static func upcomingEntities() throws -> [EventEntity] {
+        try upcomingEvents().map(EventEntity.init)
+    }
+
+    static func event(id: String) throws -> Event? {
+        guard let identifier = PersistentIdentifier(entityIDString: id) else { return nil }
+        return try context.fetch(FetchDescriptor<Event>()).first { $0.persistentModelID == identifier }
+    }
+}
+
+extension PersistentIdentifier {
+
+    /// A portable string form usable as an `AppEntity.ID`.
+    var entityIDString: String? {
+        try? JSONEncoder().encode(self).base64EncodedString()
+    }
+
+    init?(entityIDString string: String) {
+        guard let data = Data(base64Encoded: string),
+              let identifier = try? JSONDecoder().decode(PersistentIdentifier.self, from: data) else {
+            return nil
+        }
+        self = identifier
+    }
+}

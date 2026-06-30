@@ -6,6 +6,11 @@
 	<string>development</string>
 	<key>com.apple.developer.aps-environment</key>
 	<string>development</string>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>webcredentials:www.256arts.com</string>
+		<string>applinks:www.256arts.com</string>
+	</array>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
 		<string>iCloud.com.256arts.countdowns</string>
@@ -14,6 +19,8 @@
 	<array>
 		<string>CloudKit</string>
 	</array>
+	<key>com.apple.developer.private-cloud-compute</key>
+	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.com.256arts.countdowns</string>
