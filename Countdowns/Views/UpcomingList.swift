@@ -183,8 +183,11 @@ struct UpcomingList: View {
         }
         
         await calendarService.regenerateCalendarEvents(modelContext: modelContext, allEvents: allEvents)
+
+        // Donate the refreshed events to Spotlight so Siri can surface them.
+        try? await EventStore.indexEntities()
     }
-    
+
 }
 
 #Preview {

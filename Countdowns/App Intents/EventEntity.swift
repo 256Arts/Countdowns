@@ -6,13 +6,17 @@
 //
 
 import AppIntents
+import CoreSpotlight
 import SwiftData
 
 /// An `Event` exposed to Siri, Spotlight, and Shortcuts.
 ///
 /// Backed by SwiftData: the `id` is an encoded `PersistentIdentifier`, so the entity can be resolved
 /// back to its `Event` in the shared model container (see `EventStore`).
-struct EventEntity: AppEntity, Identifiable {
+///
+/// Conforms to `IndexedEntity` so events can be donated to the on-device Spotlight index
+/// (`EventStore.indexEntities`); without that, Siri and Spotlight can't surface individual countdowns.
+struct EventEntity: AppEntity, IndexedEntity, Identifiable {
 
     static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Event")
     static let defaultQuery = EventEntityQuery()
@@ -35,8 +39,9 @@ struct EventEntity: AppEntity, Identifiable {
         self.daysUntil = daysUntil
     }
 
-    var displayRepresentation: DisplayRepresentation {
-        let subtitle: String = if let daysUntil {
+    /// A short human-readable description of when this event occurs.
+    var subtitle: String {
+        if let daysUntil {
             switch daysUntil {
             case 0: "Today"
             case 1: "Tomorrow"
@@ -48,7 +53,19 @@ struct EventEntity: AppEntity, Identifiable {
         } else {
             ""
         }
-        return DisplayRepresentation(title: "\(title)", subtitle: "\(subtitle)")
+    }
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(title)", subtitle: "\(subtitle)")
+    }
+
+    /// Spotlight metadata used when the entity is indexed via `IndexedEntity`.
+    var attributeSet: CSSearchableItemAttributeSet {
+        let attributes = CSSearchableItemAttributeSet(contentType: .content)
+        attributes.title = title
+        attributes.contentDescription = subtitle
+        attributes.startDate = date
+        return attributes
     }
 }
 
@@ -133,6 +150,12 @@ enum EventStore {
     static func event(id: String) throws -> Event? {
         guard let identifier = PersistentIdentifier(entityIDString: id) else { return nil }
         return try context.fetch(FetchDescriptor<Event>()).first { $0.persistentModelID == identifier }
+    }
+
+    /// Donates the current upcoming events to the on-device Spotlight index so Siri and
+    /// Spotlight can surface them. Call after the event list changes (e.g. after a refresh).
+    static func indexEntities() async throws {
+        try await CSSearchableIndex.default().indexAppEntities(upcomingEntities())
     }
 }
 
