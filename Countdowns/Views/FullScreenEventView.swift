@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppIntents
 
 struct FullScreenEventView: View {
     
@@ -114,6 +115,11 @@ struct FullScreenEventView: View {
             }
         }
         .preferredColorScheme(.dark)
+        // Tell Siri which countdown is on screen, so "how many days until this?" resolves to it.
+        .userActivity("com.256arts.countdowns.viewing-event", element: event.asEntity()) { entity, activity in
+            activity.title = event.title
+            activity.appEntityIdentifier = .init(for: entity)
+        }
     }
 }
 

@@ -64,6 +64,33 @@ extension EventEntity {
     }
 }
 
+// Identity-based equality so `EventEntity` can scope a SwiftUI `.userActivity(_:element:_:)`.
+extension EventEntity: Hashable {
+
+    static func == (lhs: EventEntity, rhs: EventEntity) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+extension Event {
+
+    /// The stable identifier that ties this event's on-screen views to its `EventEntity`,
+    /// so Siri can answer questions about whichever countdown is currently visible.
+    var entityIdentifier: String {
+        persistentModelID.entityIDString ?? ""
+    }
+
+    /// This event as an `AppEntity` exposed to Siri, Spotlight, and Shortcuts.
+    @MainActor
+    func asEntity() -> EventEntity {
+        EventEntity(self)
+    }
+}
+
 /// Resolves `EventEntity` values for Siri/Shortcuts by querying the shared SwiftData container.
 struct EventEntityQuery: EntityQuery {
 

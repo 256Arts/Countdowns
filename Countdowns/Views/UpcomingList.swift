@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import AppIntents
 #if canImport(WidgetKit)
 import WidgetKit
 #endif
@@ -43,6 +44,8 @@ struct UpcomingList: View {
             NavigationLink(value: event) {
                 EventRow(event: event)
             }
+            // Tie each visible row to its entity so Siri is aware of the on-screen list.
+            .appEntityIdentifier(EntityIdentifier(for: EventEntity.self, identifier: event.entityIdentifier))
             .contextMenu {
                 deleteEventButton(event: event)
             }
