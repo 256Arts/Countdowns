@@ -105,7 +105,7 @@ struct CountdownsWidgetEntryView: View {
                         .widgetAccentable()
                 } else {
                     Text("No Countdowns")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             case .accessoryCircular:
                 VStack {
@@ -116,7 +116,7 @@ struct CountdownsWidgetEntryView: View {
                             .widgetAccentable()
                     } else {
                         Text("No Countdowns")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 .lineLimit(1)
@@ -125,7 +125,7 @@ struct CountdownsWidgetEntryView: View {
                 Grid(alignment: .leading) {
                     if entry.events.isEmpty {
                         Text("No Countdowns")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     } else {
                         ForEach(Array(entry.events.prefix(3))) { event in
                             GridRow {
@@ -151,7 +151,7 @@ struct CountdownsWidgetEntryView: View {
                                 if event.daysUntil != 0 {
                                     Text("days")
                                         .font(.system(size: 20))
-                                        .foregroundColor(.secondary)
+                                        .foregroundStyle(.secondary)
                                 }
                             }
                             
@@ -170,7 +170,7 @@ struct CountdownsWidgetEntryView: View {
                         }
                     } else {
                         Text("No Countdowns")
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 .containerBackground(containerBackgroundColor, for: .widget)
@@ -181,7 +181,7 @@ struct CountdownsWidgetEntryView: View {
                 #else
                 if entry.events.isEmpty {
                     Text("No Countdowns")
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .containerBackground(containerBackgroundColor, for: .widget)
                 } else if entry.events.first?.daysUntil == 0 {
                     CountdownWidgetFeaturedEvent(event: entry.events.first!)
@@ -277,7 +277,7 @@ struct CountdownWidgetEventCard: View {
                         .resizable()
                         .widgetAccentedRenderingMode(.accentedDesaturated)
                         .aspectRatio(contentMode: .fit)
-                        .cornerRadius(5)
+                        .clipShape(.rect(cornerRadius: 5))
                         .frame(maxWidth: 35, maxHeight: 52)
                 }
                 #else
@@ -286,7 +286,7 @@ struct CountdownWidgetEventCard: View {
                         .resizable()
                         .widgetAccentedRenderingMode(.accentedDesaturated)
                         .aspectRatio(contentMode: .fit)
-                        .cornerRadius(5)
+                        .clipShape(.rect(cornerRadius: 5))
                         .frame(maxWidth: 35, maxHeight: 52)
                 }
                 #endif
@@ -297,7 +297,7 @@ struct CountdownWidgetEventCard: View {
                     .font(.headline)
                 if let date = event.date {
                     Text(date, style: .date)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .widgetAccentable()
                 }
             }
@@ -337,14 +337,14 @@ struct CountdownWidgetFeaturedEvent: View {
                 backgroundImage?
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .cornerRadius(family == .systemMedium ? 0 : 5)
+                    .clipShape(.rect(cornerRadius: family == .systemMedium ? 0 : 5))
             }
             VStack(spacing: 10) {
                 Text(event.title ?? "")
                     .font(.system(size: 24, weight: .medium))
                 Text("Today")
                     .font(.title2)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             .multilineTextAlignment(.center)
             .padding()

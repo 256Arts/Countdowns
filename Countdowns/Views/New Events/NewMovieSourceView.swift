@@ -31,7 +31,7 @@ struct NewMovieSourceView: View {
                     Color.secondary
                 }
                 .aspectRatio(contentMode: .fit)
-                .cornerRadius(6)
+                .clipShape(.rect(cornerRadius: 6))
                 .frame(width: 40, height: 60)
                 
                 VStack(alignment: .leading) {
@@ -40,7 +40,7 @@ struct NewMovieSourceView: View {
                     if let date = media.releaseDate {
                         Text(date, style: .date)
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
                 

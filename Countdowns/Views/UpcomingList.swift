@@ -54,35 +54,31 @@ struct UpcomingList: View {
             }
         }
         .toolbar {
+            #if os(macOS)
             ToolbarItem(placement: .primaryAction) {
-                Menu("Add", systemImage: "plus") {
-                    Button("Common Event", systemImage: "star") {
-                        showingNewCommonEvent = true
-                    }
-                    Button("Import Calendar", systemImage: "calendar") {
-                        showingImportCalendar = true
-                    }
-                    Button("Movie/TV Release", systemImage: "film") {
-                        showingNewMovieTVEvent = true
-                    }
-                    Button("Custom", systemImage: "square.and.pencil") {
-                        showingNewDateEvent = true
-                    }
-                }
+                addMenu
             }
-            
-            #if !os(macOS)
-            ToolbarItemGroup(placement: .secondaryAction) {
+            #else
+            // Primary action stays pinned to the trailing edge and never overflows.
+            ToolbarItem(placement: .topBarPinnedTrailing) {
+                addMenu
+            }
+
+            // Secondary links always live in the trailing overflow menu.
+            ToolbarOverflowMenu {
                 CountdownsApp.links()
             }
-            
+
             if hasEventsWithMissingDates {
-                ToolbarItem(placement: .bottomBar) {
-                    Button("Events Missing Dates") {
+                // A contextual warning: shown in the bar when there's room, first to overflow when space is tight.
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Events Missing Dates", systemImage: "exclamationmark.triangle") {
                         showingEventSources = true
                     }
-                    .controlSize(.small)
                 }
+                #if os(iOS)
+                .visibilityPriority(.low)
+                #endif
             }
             #endif
         }
@@ -150,6 +146,24 @@ struct UpcomingList: View {
         }
     }
     
+    @ViewBuilder
+    private var addMenu: some View {
+        Menu("Add", systemImage: "plus") {
+            Button("Common Event", systemImage: "star") {
+                showingNewCommonEvent = true
+            }
+            Button("Import Calendar", systemImage: "calendar") {
+                showingImportCalendar = true
+            }
+            Button("Movie/TV Release", systemImage: "film") {
+                showingNewMovieTVEvent = true
+            }
+            Button("Custom", systemImage: "square.and.pencil") {
+                showingNewDateEvent = true
+            }
+        }
+    }
+
     @ViewBuilder
     private func deleteEventButton(event: Event) -> some View {
         if case .calendar = event.dataSource {

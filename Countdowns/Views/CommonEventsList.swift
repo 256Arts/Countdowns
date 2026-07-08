@@ -50,7 +50,7 @@ struct CommonEventsList: View {
                     Text(event.title ?? "")
                         .font(.title2)
                     Text(event.subtitle)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 
                 Spacer()

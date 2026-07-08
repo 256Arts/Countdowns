@@ -25,7 +25,7 @@ struct NewDateEstimateView: View {
             }
             Section {
                 Label("This estimated event will be shown until we find a confirmed release date to replace it.", systemImage: "info.circle")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .toolbar {

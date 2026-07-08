@@ -42,7 +42,7 @@ struct FullScreenEventView: View {
                     Color.secondary
                 }
                 .aspectRatio(contentMode: .fit)
-                .cornerRadius(20)
+                .clipShape(.rect(cornerRadius: 20))
                 .frame(minWidth: 200, idealWidth: 300, minHeight: 300, idealHeight: 450)
             case .preloaded, nil:
                 EmptyView()
@@ -55,12 +55,12 @@ struct FullScreenEventView: View {
                     if event.dateIsEstimate == true {
                         Text("Expected:")
                             .font(.headline)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                     Text(event.daysUntilString + " days")
                         .font(.largeTitle)
                     Text(date, style: .date)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                         .font(.title2)
                 }
             }
@@ -69,7 +69,7 @@ struct FullScreenEventView: View {
             
             if case .recurrence = event.dataSource {
                 Text("Repeats Yearly")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .scenePadding()

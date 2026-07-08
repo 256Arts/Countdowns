@@ -46,7 +46,7 @@ struct SymbolPicker: View {
         }
         .symbolVariant(.fill)
         .font(.system(size: symbolFontSize, weight: .medium))
-        .foregroundColor(Color.primary)
+        .foregroundStyle(Color.primary)
         .padding(.horizontal, -4)
         .padding(.vertical, 12)
     }

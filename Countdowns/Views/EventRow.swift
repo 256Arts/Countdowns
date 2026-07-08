@@ -38,7 +38,7 @@ struct EventRow: View {
                     Color.secondary
                 }
                 .aspectRatio(contentMode: .fit)
-                .cornerRadius(6)
+                .clipShape(.rect(cornerRadius: 6))
                 #if os(macOS)
                 .frame(width: 24, height: 36)
                 #else
@@ -53,7 +53,7 @@ struct EventRow: View {
                     .lineLimit(1)
                     .font(.title2)
                 Text(event.date ?? .distantFuture, style: .date)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }

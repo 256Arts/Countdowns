@@ -29,7 +29,7 @@ struct CountdownsApp: App {
                     } else {
                         Text("No Content Selected")
                             .font(.title)
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
