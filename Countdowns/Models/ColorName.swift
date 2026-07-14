@@ -1,10 +1,3 @@
-//
-//  ColorName.swift
-//  Countdowns
-//
-//  Created by Jayden Irwin on 2024-08-20.
-//
-
 import SwiftUI
 
 enum ColorName: String, Codable, CaseIterable, Identifiable {

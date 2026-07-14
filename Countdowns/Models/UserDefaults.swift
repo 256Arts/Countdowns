@@ -1,10 +1,3 @@
-//
-//  UserDefaults.swift
-//  Countdowns
-//
-//  Created by Jayden Irwin on 2025-10-03.
-//
-
 import Foundation
 
 extension UserDefaults {

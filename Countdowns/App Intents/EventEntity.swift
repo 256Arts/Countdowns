@@ -1,10 +1,3 @@
-//
-//  EventEntity.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2026-06-29.
-//
-
 import AppIntents
 import CoreSpotlight
 import SwiftData

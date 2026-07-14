@@ -1,10 +1,3 @@
-//
-//  Symbol.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2023-03-02.
-//
-
 import SwiftUI
 
 enum Symbol: String, Equatable, Hashable, CaseIterable, Identifiable {

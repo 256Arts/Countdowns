@@ -1,10 +1,3 @@
-//
-//  SymbolPicker.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2023-03-02.
-//
-
 import SwiftUI
 
 struct SymbolPicker: View {

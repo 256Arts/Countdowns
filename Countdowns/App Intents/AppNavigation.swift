@@ -1,10 +1,3 @@
-//
-//  AppNavigation.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2026-06-29.
-//
-
 import Foundation
 import Observation
 

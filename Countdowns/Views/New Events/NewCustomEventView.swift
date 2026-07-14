@@ -1,10 +1,3 @@
-//
-//  NewCustomEventView.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2022-12-06.
-//
-
 import SwiftUI
 import StoreKit
 #if canImport(WidgetKit)

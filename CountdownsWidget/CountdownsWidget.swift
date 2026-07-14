@@ -1,10 +1,3 @@
-//
-//  CountdownsWidget.swift
-//  CountdownsWidget
-//
-//  Created by 256 Arts Developer on 2022-11-30.
-//
-
 import WidgetKit
 import SwiftUI
 import SwiftData

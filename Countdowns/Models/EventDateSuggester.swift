@@ -1,10 +1,3 @@
-//
-//  EventDateSuggester.swift
-//  Countdowns
-//
-//  Created by Claude on 2026-06-26.
-//
-
 import Foundation
 #if canImport(FoundationModels)
 import FoundationModels

@@ -1,10 +1,3 @@
-//
-//  EventRow.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2023-10-08.
-//
-
 import SwiftUI
 
 struct EventRow: View {

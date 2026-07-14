@@ -1,10 +1,3 @@
-//
-//  NewDateEstimateView.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2023-01-16.
-//
-
 import SwiftUI
 #if canImport(WidgetKit)
 import WidgetKit

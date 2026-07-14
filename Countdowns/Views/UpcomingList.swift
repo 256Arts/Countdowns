@@ -1,10 +1,3 @@
-//
-//  UpcomingList.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2022-07-30.
-//
-
 import SwiftUI
 import SwiftData
 import AppIntents

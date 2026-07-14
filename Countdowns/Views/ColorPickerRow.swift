@@ -1,10 +1,3 @@
-//
-//  ColorPickerRow.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2023-03-28.
-//
-
 import SwiftUI
 
 struct ColorPickerRow: View {

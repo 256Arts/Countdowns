@@ -1,10 +1,3 @@
-//
-//  MediaDatabase.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2022-12-08.
-//
-
 import Foundation
 import TMDb
 

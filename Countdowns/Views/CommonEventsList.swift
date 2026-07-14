@@ -1,10 +1,3 @@
-//
-//  CommonEventsList.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2022-11-29.
-//
-
 import SwiftUI
 import SwiftData
 import StoreKit

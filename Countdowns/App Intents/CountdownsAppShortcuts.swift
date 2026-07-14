@@ -1,10 +1,3 @@
-//
-//  CountdownsAppShortcuts.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2026-06-29.
-//
-
 import AppIntents
 
 /// Predefined phrases that let Siri and Spotlight invoke the app's intents without any setup.

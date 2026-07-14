@@ -1,10 +1,3 @@
-//
-//  EventsMissingDatesList.swift
-//  Countdowns
-//
-//  Created by 256 Arts Developer on 2023-01-14.
-//
-
 import SwiftUI
 import SwiftData
 
