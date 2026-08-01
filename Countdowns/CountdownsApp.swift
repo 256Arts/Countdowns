@@ -3,16 +3,19 @@ import SwiftData
 
 @main
 struct CountdownsApp: App {
-    
+
+    /// Lets the macOS menu bar extra bring the main window forward.
+    static let mainWindowID = "main"
+
     init() {
         UserDefaults.standard.register()
     }
-    
+
     @State private var navigation = AppNavigation.shared
     @State private var showingAppStoreEvent = false
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: Self.mainWindowID) {
             NavigationSplitView {
                 UpcomingList()
             } detail: {
@@ -42,18 +45,30 @@ struct CountdownsApp: App {
                 Self.links()
             }
         }
-        #if targetEnvironment(simulator) || (DEBUG && os(macOS))
-        .modelContainer(previewContainer)
-        #else
-        .modelContainer(ModelContainer.shared)
-        #endif
+        .modelContainer(modelContainer)
         #if os(macOS)
         .defaultSize(width: 500, height: 300)
         #else
         .defaultSize(width: 700, height: 600)
         #endif
+
+        #if os(macOS)
+        MenuBarExtra {
+            MenuBarEventsMenu()
+        } label: {
+            MenuBarLabel()
+        }
+        .menuBarExtraStyle(.menu)
+        .modelContainer(modelContainer)
+        #endif
     }
-    
+
+    #if targetEnvironment(simulator) || (DEBUG && os(macOS))
+    private var modelContainer: ModelContainer { previewContainer }
+    #else
+    private var modelContainer: ModelContainer { .shared }
+    #endif
+
     #if DEBUG
     let previewContainer: ModelContainer = {
         let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
