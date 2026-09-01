@@ -52,26 +52,41 @@ struct UpcomingList: View {
                 addMenu
             }
             #else
-            // Primary action stays pinned to the trailing edge and never overflows.
-            ToolbarItem(placement: .topBarPinnedTrailing) {
-                addMenu
-            }
+            if #available(iOS 27, visionOS 27, *) {
+                // Primary action stays pinned to the trailing edge and never overflows.
+                ToolbarItem(placement: .topBarPinnedTrailing) {
+                    addMenu
+                }
 
-            // Secondary links always live in the trailing overflow menu.
-            ToolbarOverflowMenu {
-                CountdownsApp.links()
-            }
+                // Secondary links always live in the trailing overflow menu.
+                ToolbarOverflowMenu {
+                    CountdownsApp.links()
+                }
 
-            if hasEventsWithMissingDates {
-                // A contextual warning: shown in the bar when there's room, first to overflow when space is tight.
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Events Missing Dates", systemImage: "exclamationmark.triangle") {
-                        showingEventSources = true
+                if hasEventsWithMissingDates {
+                    // A contextual warning: shown in the bar when there's room, first to overflow when space is tight.
+                    ToolbarItem(placement: .topBarTrailing) {
+                        missingDatesButton
+                    }
+                    #if os(iOS)
+                    .visibilityPriority(.low)
+                    #endif
+                }
+            } else {
+                ToolbarItem(placement: .primaryAction) {
+                    addMenu
+                }
+
+                ToolbarItemGroup(placement: .secondaryAction) {
+                    CountdownsApp.links()
+                }
+
+                if hasEventsWithMissingDates {
+                    ToolbarItem(placement: .bottomBar) {
+                        missingDatesButton
+                            .controlSize(.small)
                     }
                 }
-                #if os(iOS)
-                .visibilityPriority(.low)
-                #endif
             }
             #endif
         }
@@ -139,6 +154,14 @@ struct UpcomingList: View {
         }
     }
     
+    #if !os(macOS)
+    private var missingDatesButton: some View {
+        Button("Events Missing Dates", systemImage: "exclamationmark.triangle") {
+            showingEventSources = true
+        }
+    }
+    #endif
+
     @ViewBuilder
     private var addMenu: some View {
         Menu("Add", systemImage: "plus") {

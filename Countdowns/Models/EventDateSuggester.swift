@@ -56,7 +56,7 @@ enum EventDateSuggester {
     /// Whether suggestions are currently available on this device (cloud or on-device).
     static var isAvailable: Bool {
         #if canImport(FoundationModels)
-        if PrivateCloudComputeLanguageModel().isAvailable {
+        if #available(iOS 27, macOS 27, visionOS 27, watchOS 27, *), PrivateCloudComputeLanguageModel().isAvailable {
             return true
         }
         return SystemLanguageModel.default.isAvailable
@@ -110,9 +110,11 @@ enum EventDateSuggester {
     /// Builds a session on Apple's Private Cloud Compute model when available, otherwise on the
     /// on-device model. Returns `nil` if neither is available.
     private static func makeSession(instructions: String) -> LanguageModelSession? {
-        let cloud = PrivateCloudComputeLanguageModel()
-        if cloud.isAvailable {
-            return LanguageModelSession(model: cloud) { instructions }
+        if #available(iOS 27, macOS 27, visionOS 27, watchOS 27, *) {
+            let cloud = PrivateCloudComputeLanguageModel()
+            if cloud.isAvailable {
+                return LanguageModelSession(model: cloud) { instructions }
+            }
         }
         guard SystemLanguageModel.default.isAvailable else { return nil }
         // Omit `model:` so the default-system-model initializer is chosen unambiguously
