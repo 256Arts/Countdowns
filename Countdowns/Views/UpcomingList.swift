@@ -37,6 +37,8 @@ struct UpcomingList: View {
             NavigationLink(value: event) {
                 EventRow(event: event)
             }
+            // Names the row for the App Store screenshot walk, which has to open a known countdown.
+            .accessibilityIdentifier("EventRow.\(event.title ?? "")")
             // Tie each visible row to its entity so Siri is aware of the on-screen list.
             .appEntityIdentifier(EntityIdentifier(for: EventEntity.self, identifier: event.entityIdentifier))
             .contextMenu {

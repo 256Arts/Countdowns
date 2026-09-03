@@ -9,6 +9,12 @@ struct CountdownsApp: App {
 
     init() {
         UserDefaults.standard.register()
+
+        #if os(macOS)
+        if ScreenshotMode.isActive {
+            ScreenshotMode.clearSavedWindowLayout()
+        }
+        #endif
     }
 
     @State private var navigation = AppNavigation.shared
@@ -18,6 +24,9 @@ struct CountdownsApp: App {
         WindowGroup(id: Self.mainWindowID) {
             NavigationSplitView {
                 UpcomingList()
+                    // The day count takes a fixed slice of every row, so at the default column
+                    // width an ordinary title like "Album Release" truncates.
+                    .navigationSplitViewColumnWidth(min: 380, ideal: 380, max: 500)
             } detail: {
                 NavigationStack {
                     if let selectedEvent = navigation.selectedEvent {
@@ -47,7 +56,13 @@ struct CountdownsApp: App {
         }
         .modelContainer(modelContainer)
         #if os(macOS)
-        .defaultSize(width: 500, height: 300)
+        // Wide enough that the sidebar's countdowns and the detail column both have room; 500x300
+        // left the split view too cramped to read either side.
+        .defaultSize(width: 900, height: 600)
+        #elseif os(visionOS)
+        // Below about a thousand points the split view collapses and the sidebar disappears behind
+        // the detail, so the list — the whole point of the app — is not on screen at launch.
+        .defaultSize(width: 1100, height: 700)
         #else
         .defaultSize(width: 700, height: 600)
         #endif
@@ -63,11 +78,18 @@ struct CountdownsApp: App {
         #endif
     }
 
-    #if targetEnvironment(simulator) || (DEBUG && os(macOS))
-    private var modelContainer: ModelContainer { previewContainer }
-    #else
-    private var modelContainer: ModelContainer { .shared }
-    #endif
+    private var modelContainer: ModelContainer {
+        // Screenshot runs get their own seeded in-memory store, on every platform and configuration,
+        // so a shot never shows the machine's real countdowns.
+        if ScreenshotMode.isActive {
+            return ScreenshotMode.container
+        }
+        #if targetEnvironment(simulator) || (DEBUG && os(macOS))
+        return previewContainer
+        #else
+        return .shared
+        #endif
+    }
 
     #if DEBUG
     let previewContainer: ModelContainer = {

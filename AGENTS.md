@@ -15,14 +15,29 @@ This is an Xcode project (`Countdowns.xcodeproj`) — there is no SPM manifest, 
 xcodebuild -project Countdowns.xcodeproj -scheme Countdowns build
 ```
 
-There is no test target, no linter config, and no test suite in this repository.
+There is no linter config and no unit test suite. The only tests are the App Store screenshot walk
+(see below).
 
 ### Targets
 
 - **Countdowns** — the main app.
 - **CountdownsWidgetExtension** — WidgetKit extension (home screen, lock screen accessory, and watch complications).
 - **Countdowns Watch Watch App** — standalone watchOS app.
+- **CountdownsUITests** — the App Store screenshot walk; run through the `Screenshots` scheme, never the `Countdowns` one.
 - **TMDb** — external SPM dependency ([adamayoung/TMDb](https://github.com/adamayoung/TMDb)), the only third-party package.
+
+### App Store screenshots
+
+`Scripts/screenshots.sh [iphone|ipad|mac|vision]` captures them; `--upload` sends them to App Store
+Connect. It is a thin wrapper onto the shared runner in `Apps/Scripts`, configured by
+`.screenshots.conf`. The app's half is `-screenshotMode`, which `CountdownsApp` reads to swap in
+`ScreenshotMode.container` — an in-memory, non-CloudKit store seeded with demo countdowns at fixed
+day offsets from today, so the day counts are identical on every run.
+
+Mac runs need developer mode enabled once (`sudo DevToolsSecurity -enable`), or macOS asks for
+authentication on every UI test launch and the run fails. Mac skips the sheet screenshots
+(`screencapture -l` photographs a single window and a sheet is its own window), and visionOS takes
+only the list shot (its sidebar never reaches the accessibility tree).
 
 `Countdowns/Models/Secrets.swift` (TMDB API key) is git-ignored — it must exist locally for the app to compile.
 

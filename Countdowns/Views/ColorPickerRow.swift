@@ -28,6 +28,12 @@ struct ColorPickerRow: View {
                 .onTapGesture {
                     selected = colorName
                 }
+                // A tap gesture on a bare circle is invisible to VoiceOver, so each swatch has to
+                // say which colour it is and that it can be picked.
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(colorName.displayName))
+                .accessibilityIdentifier("Color.\(colorName.rawValue)")
+                .accessibilityAddTraits(colorName == selected ? [.isButton, .isSelected] : .isButton)
             }
         }
         .padding(.horizontal, -4)

@@ -35,6 +35,12 @@ struct SymbolPicker: View {
                 .onTapGesture {
                     selected = symbol
                 }
+                // A tap gesture on a shape is invisible to VoiceOver, so each swatch has to say
+                // what it is and that it can be picked.
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(symbol.displayName))
+                .accessibilityIdentifier("Symbol.\(symbol.rawValue)")
+                .accessibilityAddTraits(symbol == selected ? [.isButton, .isSelected] : .isButton)
             }
         }
         .symbolVariant(.fill)

@@ -5,6 +5,21 @@ enum ColorName: String, Codable, CaseIterable, Identifiable {
     
     var id: Self { self }
     
+    /// What VoiceOver reads for the swatch in `ColorPickerRow`.
+    var displayName: LocalizedStringResource {
+        switch self {
+        case .white: "White"
+        case .gray: "Gray"
+        case .black: "Black"
+        case .red: "Red"
+        case .green: "Green"
+        case .blue: "Blue"
+        case .yellow: "Yellow"
+        case .purple: "Purple"
+        case .orange: "Orange"
+        }
+    }
+
     var color: Color {
         switch self {
         case .white: .white
