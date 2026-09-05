@@ -29,10 +29,13 @@ There is no linter config and no unit test suite. The only tests are the App Sto
 ### App Store screenshots
 
 `Scripts/screenshots.sh [iphone|ipad|mac|vision]` captures them; `--upload` sends them to App Store
-Connect. It is a thin wrapper onto the shared runner in `Apps/Scripts`, configured by
-`.screenshots.conf`. The app's half is `-screenshotMode`, which `CountdownsApp` reads to swap in
-`ScreenshotMode.container` — an in-memory, non-CloudKit store seeded with demo countdowns at fixed
-day offsets from today, so the day counts are identical on every run.
+Connect. It is a thin wrapper onto the shared runner in `Repos/Scripts`, configured by
+`.screenshots.conf`. Shots land in `Raw Assets/Screenshots/` as `Phone 6.9 1.png`, `Pad 13 1.png`,
+`Mac 1.png`, `Vision 1.png` — a symlink out to iCloud, so nothing lands in the repo — beside the
+`Old (Manual)/` archive of the hand-made ones. The app's half is `-screenshotMode`, which
+`CountdownsApp` reads to swap in `ScreenshotMode.container` — an in-memory, non-CloudKit store
+seeded with demo countdowns at fixed day offsets from today, so the day counts are identical on
+every run.
 
 Mac runs need developer mode enabled once (`sudo DevToolsSecurity -enable`), or macOS asks for
 authentication on every UI test launch and the run fails. Mac skips the sheet screenshots
