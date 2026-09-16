@@ -1,4 +1,7 @@
 import XCTest
+#if canImport(UIKit)
+import UIKit
+#endif
 
 /// Drives the app through the screens that become App Store screenshots and attaches each one to the
 /// result bundle, where the shared `screenshots` runner collects them.
@@ -10,6 +13,13 @@ final class ScreenshotTests: XCTestCase {
 
     private var app: XCUIApplication!
 
+    /// Whether the walk turned the device on its side, which the capture has to undo.
+    ///
+    /// Tracked here rather than read back from `XCUIDevice.shared.orientation`, which a simulator
+    /// answers from a device that is not being held and reports as portrait however the UI is laid
+    /// out — so the capture believed every shot was already upright.
+    private var isLandscape = false
+
     func testCaptureAppStoreScreenshots() throws {
         continueAfterFailure = false
         app = XCUIApplication()
@@ -18,6 +28,18 @@ final class ScreenshotTests: XCTestCase {
 
         #if os(macOS)
         openWindowIfNeeded()
+        #endif
+
+        #if os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            // The iPad listing opens with a hand-made widget shot that is landscape, and a store
+            // gallery that changes shape between slots looks like a mistake. Landscape is the better
+            // half of the trade anyway: it is the shape a 13" iPad is held in, and the one that
+            // gives the split view's two columns room.
+            XCUIDevice.shared.orientation = .landscapeLeft
+            isLandscape = true
+            settle()
+        }
         #endif
 
         #if os(visionOS)
@@ -36,33 +58,58 @@ final class ScreenshotTests: XCTestCase {
             return XCTFail("seeded content never appeared")
         }
         settle()
-        capture("01-upcoming")
+        // The captures are named in listing order, not walk order: the runner files them by sorted
+        // attachment name, so the walk is free to take them in whatever order needs the fewest
+        // steps. Slot 1 of the iPhone and iPad listings is the hand-made widget shot, which no run
+        // takes — see MANUAL_SHOTS in .screenshots.conf.
+        //
+        // The list earns a shot of its own only where it is the whole screen. A split view keeps it
+        // in the sidebar of every other shot the walk takes, so the iPad and the Mac would be
+        // spending a slot on something their other shots already show. visionOS is the exception
+        // that keeps this shot: it is the only one that platform can take.
+        #if os(visionOS)
+        capture("03-upcoming")
+        #elseif os(iOS)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            capture("03-upcoming")
+        }
+        #endif
 
-        // The sheets come before the detail screen so the walk never has to navigate back: the back
-        // button sits in a different column per platform, and picking the wrong one silently leaves
-        // the walk somewhere it cannot find the toolbar. They are skipped on the Mac, where
-        // `screencapture -l` photographs one window and a sheet is its own window — the shot would
-        // arrive without the app around it.
-        #if !os(macOS) && !os(visionOS)
+        // The sheet comes first so the walk reaches it without navigating back — the list's toolbar
+        // is only on the list. The Mac takes it too: macOS hangs a sheet off its parent window, so
+        // the `screencapture -l` of one photographs the pair. A popover is not attached that way,
+        // which is why the editor shot below is the one the Mac still cannot take.
+        #if !os(visionOS)
         openAddMenu()
-        activate(element("Common Event"), "the Common Event menu item")
+        activate(element("Import Calendar"), "the Import Calendar menu item")
         settle()
-        capture("03-common-events")
-        activate(element("Done"), "the Common Events Done button")
-        settle()
-
-        openAddMenu()
-        activate(element("Custom"), "the Custom menu item")
-        settle()
-        capture("04-new-event")
-        activate(element("Cancel"), "the New Event Cancel button")
+        // Pick one, so the shot shows the screen mid-decision rather than untouched with its Import
+        // button greyed out.
+        activate(element("Calendar.Family"), "the Family calendar")
+        settle(seconds: 1)
+        capture("05-import-calendar")
+        activate(element("Cancel"), "the Import Calendar Cancel button")
         settle()
         #endif
 
         #if !os(visionOS)
+        activate(element("EventRow.The Chronos Project"), "the movie countdown")
+        settle()
+        capture("02-movie")
+        #endif
+
+        // The editor belongs on a countdown the user made. The demo's movie is a plain countdown
+        // wearing a poster and so offers an Edit button, but a real TMDB release does not
+        // (`Event.isEditable`) — taking the shot there would advertise a button the app withholds
+        // from exactly the screen in the picture. The Mac's editor shot is hand-made instead
+        // (MAC_MANUAL_SHOTS), so the walk leaves that slot alone.
+        #if !os(macOS) && !os(visionOS)
+        returnToList()
         activate(seeded, "the birthday countdown")
         settle()
-        capture("02-event")
+        activate(element("Edit"), "the Edit button")
+        settle()
+        capture("04-edit")
         #endif
     }
 
@@ -96,13 +143,18 @@ final class ScreenshotTests: XCTestCase {
     // MARK: - Driving
 
     /// Looks the element up by accessibility identifier *or* label, through the types it can turn up
-    /// as: a countdown row is a button on one platform and a cell on another, and a menu item is a
-    /// `MenuItem` on the Mac and a `Button` on iOS.
+    /// as: a countdown row is a button on one platform and a cell on another, a menu item is a
+    /// `MenuItem` on the Mac and a `Button` on iOS, and a row of an inline `Picker` is a `RadioButton`
+    /// on the Mac where iOS gives a cell.
+    ///
+    /// `staticTexts` comes after all of those on purpose. A row's label matches its text as readily
+    /// as the control around it, and clicking the text does nothing — which is silent, since the
+    /// click lands somewhere real and only the screenshot shows nothing was selected.
     ///
     /// `element(boundBy: 0)` rather than `firstMatch`, which can short-circuit resolution and report
     /// `exists == false` for an element the same query plainly matches.
     private func element(_ name: String) -> XCUIElement {
-        let queries = [app.buttons, app.cells, app.menuItems, app.staticTexts, app.otherElements]
+        let queries = [app.buttons, app.cells, app.radioButtons, app.menuItems, app.staticTexts, app.otherElements]
         for query in queries {
             for candidate in [query.matching(identifier: name).element(boundBy: 0),
                               query.matching(NSPredicate(format: "label == %@", name)).element(boundBy: 0)]
@@ -123,6 +175,19 @@ final class ScreenshotTests: XCTestCase {
         #else
         element.tap()
         #endif
+    }
+
+    /// Leaves the detail screen, so the walk can open a different countdown.
+    ///
+    /// Only a stack pushed one — a split view has the list beside the detail the whole time, and
+    /// tapping what it offers as a back button there would collapse the sidebar instead. Whether a
+    /// row is still reachable is the reliable way to tell the two apart, and it needs no knowledge of
+    /// which toolbar item sits where on which platform.
+    private func returnToList() {
+        guard !element("EventRow.Mom's Birthday").isHittable else { return }
+
+        activate(app.navigationBars.buttons.element(boundBy: 0), "the back button")
+        settle()
     }
 
     /// The `+` toolbar menu, which every "add an event" sheet hangs off.
@@ -153,9 +218,39 @@ final class ScreenshotTests: XCTestCase {
         captureExternally(named: name)
         #else
         // The simulator's screen already *is* the store's canvas, at the exact required pixel size.
-        attach(XCTAttachment(screenshot: XCUIScreen.main.screenshot()), named: name)
+        attach(upright(XCUIScreen.main.screenshot()), named: name)
         #endif
     }
+
+    #if os(iOS)
+
+    /// The screenshot, turned the way the device is being held.
+    ///
+    /// `XCUIScreen.main.screenshot()` photographs the *physical* screen, so a device the walk rotated
+    /// comes back as a portrait buffer carrying its quarter turn as orientation metadata — and the
+    /// PNG `XCTAttachment(screenshot:)` writes is that raw buffer, content on its side. Nothing
+    /// downstream straightens it: the runner files whatever it is handed, and the store would publish
+    /// a picture readable only sideways.
+    ///
+    /// Redrawing is what bakes the metadata into the pixels. `UIImage.size` is already the turned
+    /// size and `draw(at:)` already honours the orientation, so a canvas of the image's own size and
+    /// a plain draw is the whole rotation — turning it by hand as well would only turn it back.
+    private func upright(_ screenshot: XCUIScreenshot) -> XCTAttachment {
+        guard isLandscape else {
+            return XCTAttachment(screenshot: screenshot)
+        }
+
+        let image = screenshot.image
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = image.scale   // keep the pixel count the store checks against
+        format.opaque = true
+        let rotated = UIGraphicsImageRenderer(size: image.size, format: format).image { _ in
+            image.draw(at: .zero)
+        }
+        return XCTAttachment(image: rotated)
+    }
+
+    #endif
 
     private func attach(_ attachment: XCTAttachment, named name: String) {
         attachment.name = name

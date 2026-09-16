@@ -24,11 +24,12 @@ There is no linter config and no unit test suite. The only tests are the App Sto
 - **CountdownsWidgetExtension** — WidgetKit extension (home screen, lock screen accessory, and watch complications).
 - **Countdowns Watch Watch App** — standalone watchOS app.
 - **CountdownsUITests** — the App Store screenshot walk; run through the `Screenshots` scheme, never the `Countdowns` one.
+- **CountdownsWatchUITests** — the same, for the watch app, through `Screenshots Watch` (a UI test bundle binds to one app).
 - **TMDb** — external SPM dependency ([adamayoung/TMDb](https://github.com/adamayoung/TMDb)), the only third-party package.
 
 ### App Store screenshots
 
-`Scripts/screenshots.sh [iphone|ipad|mac|vision]` captures them; `--upload` sends them to App Store
+`Scripts/screenshots.sh [iphone|ipad|mac|vision|watch]` captures them; `--upload` sends them to App Store
 Connect. It is a thin wrapper onto the shared runner in `Repos/Scripts`, configured by
 `.screenshots.conf`. Shots land in `Raw Assets/Screenshots/` as `Phone 6.9 1.png`, `Pad 13 1.png`,
 `Mac 1.png`, `Vision 1.png` — a symlink out to iCloud, so nothing lands in the repo — beside the
@@ -37,10 +38,33 @@ Connect. It is a thin wrapper onto the shared runner in `Repos/Scripts`, configu
 seeded with demo countdowns at fixed day offsets from today, so the day counts are identical on
 every run.
 
+Slot 1 of the iPhone and iPad listings is the hand-made widget shot (`IPHONE_MANUAL_SHOTS`), which a
+run leaves alone; the walk fills the slots after it. The iPad walk rotates the simulator to
+landscape, to match that shot and because it suits a 13" split view — and the capture rotates the
+image back, since `XCUIScreen.main.screenshot()` returns the physical, still-portrait screen.
+
+The seed includes one fake movie release, *The Chronos Project*, whose poster
+(`Countdowns/Preview Content/ChronosProjectPoster.jpg`) is a development asset — present in the
+builds that take screenshots, stripped from the archive. Invented rather than real so no studio's
+artwork ends up in the store listing. `ScreenshotMode.demoCalendars` does the same for the Import
+Calendar shot: in-memory `EKCalendar`s, so the run never meets the permission prompt. The watch app
+has no launch argument to read: on a simulator it always uses `ScreenshotMode.container`, since the
+real store has nothing to show there.
+
+Only the iPhone spends a slot on the list by itself. Everywhere else the split view keeps it in the
+sidebar of every other shot — except visionOS, whose one shot it is.
+
 Mac runs need developer mode enabled once (`sudo DevToolsSecurity -enable`), or macOS asks for
-authentication on every UI test launch and the run fails. Mac skips the sheet screenshots
-(`screencapture -l` photographs a single window and a sheet is its own window), and visionOS takes
-only the list shot (its sidebar never reaches the accessibility tree).
+authentication on every UI test launch and the run fails. The Mac takes the sheet shot — macOS hangs
+a sheet off its parent window, so one `screencapture -l` photographs the pair — but not the popover,
+which is a window of its own and comes back without the app around it; that shot is hand-made, in
+slot 2. visionOS takes only the list shot (its sidebar never reaches the accessibility tree).
+
+Watch runs need the shared runner's `-sdk watchsimulator`: this watch app is paired to the phone
+(`INFOPLIST_KEY_WKCompanionAppBundleIdentifier`), which leaves its scheme's platform ambiguous
+enough that xcodebuild builds for the watchOS *device* and then looks for the products under
+watchsimulator. The status bar keeps the run's real time — `simctl status_bar` is unsupported on
+watchOS, so 9:41 cannot be forced there.
 
 `Countdowns/Models/Secrets.swift` (TMDB API key) is git-ignored — it must exist locally for the app to compile.
 

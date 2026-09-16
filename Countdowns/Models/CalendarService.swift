@@ -95,8 +95,16 @@ final class CalendarService {
     
     var allCalendars: [EKCalendar] {
         get async {
-            await store.allCalendars
+            ScreenshotMode.isActive ? ScreenshotMode.demoCalendars : await store.allCalendars
         }
+    }
+
+    /// Confirms Calendar access, which a screenshot run's stand-in calendars do not need — and could
+    /// not obtain anyway, since no one is there to answer the prompt.
+    func verifyAuthorizationStatus() async throws -> Bool {
+        guard !ScreenshotMode.isActive else { return true }
+
+        return try await store.verifyAuthorizationStatus()
     }
     
     func generateUpcomingEvents(calendarID: String, colorName: ColorName?, icon: IconResource?) async throws -> [Event] {

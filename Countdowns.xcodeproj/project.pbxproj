@@ -29,6 +29,13 @@
 			remoteGlobalIDString = 1B3BF5C7289567C300E87899;
 			remoteInfo = Countdowns;
 		};
+		1BAA00082E90000000000008 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B3BF5C0289567C300E87899 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BF386322AC519E400245931;
+			remoteInfo = "Countdowns Watch Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,6 +65,7 @@
 		1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CountdownsWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BF386332AC519E400245931 /* Countdowns Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Countdowns Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BDFCE9A2E73C33800479A13 /* CountdownsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountdownsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BAA00022E90000000000002 /* CountdownsWatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountdownsWatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -88,6 +96,7 @@
 				Models/ColorName.swift,
 				Models/Event.swift,
 				Models/IconResource.swift,
+				Models/ScreenshotMode.swift,
 				Models/Symbol.swift,
 				Models/UserDefaults.swift,
 			);
@@ -151,6 +160,11 @@
 			path = CountdownsUITests;
 			sourceTree = "<group>";
 		};
+		1BAA00032E90000000000003 /* CountdownsWatchUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CountdownsWatchUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +192,11 @@
 			files = (
 			);
 		};
+		1BAA00052E90000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -188,6 +207,7 @@
 				1B7DF8EF2E2418310071B353 /* CountdownsWidget */,
 				1B7DF9402E24189E0071B353 /* Countdowns Watch Watch App */,
 				1BDFCE9B2E73C33800479A13 /* CountdownsUITests */,
+				1BAA00032E90000000000003 /* CountdownsWatchUITests */,
 				1B6896DF29371BF0004E6730 /* Frameworks */,
 				1B3BF5C9289567C300E87899 /* Products */,
 			);
@@ -200,6 +220,7 @@
 				1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */,
 				1BDFCE9A2E73C33800479A13 /* CountdownsUITests.xctest */,
 				1BF386332AC519E400245931 /* Countdowns Watch Watch App.app */,
+				1BAA00022E90000000000002 /* CountdownsWatchUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -304,6 +325,29 @@
 			productReference = 1BDFCE9A2E73C33800479A13 /* CountdownsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		1BAA00012E90000000000001 /* CountdownsWatchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BAA00092E90000000000009 /* Build configuration list for PBXNativeTarget "CountdownsWatchUITests" */;
+			buildPhases = (
+				1BAA00042E90000000000004 /* Sources */,
+				1BAA00052E90000000000005 /* Frameworks */,
+				1BAA00062E90000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BAA00072E90000000000007 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1BAA00032E90000000000003 /* CountdownsWatchUITests */,
+			);
+			name = CountdownsWatchUITests;
+			packageProductDependencies = (
+			);
+			productName = CountdownsWatchUITests;
+			productReference = 1BAA00022E90000000000002 /* CountdownsWatchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -327,6 +371,10 @@
 					1BF386322AC519E400245931 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					1BAA00012E90000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 1BF386322AC519E400245931;
+					};
 				};
 			};
 			buildConfigurationList = 1B3BF5C3289567C300E87899 /* Build configuration list for PBXProject "Countdowns" */;
@@ -349,6 +397,7 @@
 				1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */,
 				1BDFCE992E73C33800479A13 /* CountdownsUITests */,
 				1BF386322AC519E400245931 /* Countdowns Watch Watch App */,
+				1BAA00012E90000000000001 /* CountdownsWatchUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -370,6 +419,11 @@
 			);
 		};
 		1BDFCE982E73C33800479A13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		1BAA00062E90000000000006 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -397,6 +451,11 @@
 			files = (
 			);
 		};
+		1BAA00042E90000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -413,6 +472,11 @@
 			isa = PBXTargetDependency;
 			target = 1B3BF5C7289567C300E87899 /* Countdowns */;
 			targetProxy = 1BDFCE9E2E73C33800479A13 /* PBXContainerItemProxy */;
+		};
+		1BAA00072E90000000000007 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BF386322AC519E400245931 /* Countdowns Watch Watch App */;
+			targetProxy = 1BAA00082E90000000000008 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -879,6 +943,49 @@
 			};
 			name = Release;
 		};
+		1BAA000A2E9000000000000A /* Debug configuration for PBXNativeTarget "CountdownsWatchUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.watchuitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Countdowns Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1BAA000B2E9000000000000B /* Release configuration for PBXNativeTarget "CountdownsWatchUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.watchuitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Countdowns Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -919,6 +1026,15 @@
 			buildConfigurations = (
 				1BDFCEA12E73C33800479A13 /* Debug configuration for PBXNativeTarget "CountdownsUITests" */,
 				1BDFCEA22E73C33800479A13 /* Release configuration for PBXNativeTarget "CountdownsUITests" */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1BAA00092E90000000000009 /* Build configuration list for PBXNativeTarget "CountdownsWatchUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BAA000A2E9000000000000A /* Debug configuration for PBXNativeTarget "CountdownsWatchUITests" */,
+				1BAA000B2E9000000000000B /* Release configuration for PBXNativeTarget "CountdownsWatchUITests" */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

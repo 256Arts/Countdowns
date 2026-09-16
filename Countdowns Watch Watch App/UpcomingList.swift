@@ -3,16 +3,11 @@ import SwiftData
 
 struct UpcomingList: View {
     
-    #if targetEnvironment(simulator)
-    private let allEvents: [Event] = [
-        Event(dataSource: nil, title: "Halloween", colorName: .purple, icon: .symbolIcon(name: "theatermasks"), date: Calendar.current.date(byAdding: .day, value: 20, to: .now), dateIsEstimate: false),
-        Event(dataSource: nil, title: "Dune: Part Two", colorName: .orange, icon: .symbolIcon(name: "film"), date: Calendar.current.date(byAdding: .day, value: 34, to: .now), dateIsEstimate: false),
-        Event(dataSource: nil, title: "Star Wars Day", colorName: .yellow, icon: .symbolIcon(name: "sparkles"), date: Calendar.current.date(byAdding: .day, value: 100, to: .now), dateIsEstimate: false)
-    ]
-    #else
+    // A simulator used to get a hardcoded list here, because the real query has nothing to find
+    // there. The app now hands the simulator a seeded store instead, so this is the one code path —
+    // which is also the path the App Store screenshot is taken through.
     @Query private var allEvents: [Event]
-    #endif
-    
+
     var body: some View {
         if allEvents.upcoming.isEmpty {
             Text("No Countdowns")

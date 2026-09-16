@@ -35,6 +35,9 @@ struct ImportCalendarView: View {
                                 .foregroundStyle(Color(calendar.cgColor))
                         }
                         .tag(calendar as EKCalendar?)
+                        // Named for the screenshot walk, which otherwise matches a calendar called
+                        // "Family" against the symbol named "family" further down the same screen.
+                        .accessibilityIdentifier("Calendar.\(calendar.title)")
                     }
                 }
                 .pickerStyle(.inline)
@@ -97,7 +100,7 @@ struct ImportCalendarView: View {
     
     private func loadCalendars() async {
         do {
-            _ = try await calendarService.store.verifyAuthorizationStatus()
+            _ = try await calendarService.verifyAuthorizationStatus()
             self.allCalendars = await calendarService.allCalendars
         } catch {
             self.error = error as? EventStoreError
