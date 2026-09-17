@@ -38,6 +38,8 @@ struct CountdownsApp: App {
                     }
                 }
             }
+            // A screenshot run hangs what it seeded here, where the walk can read it back.
+            .screenshotModeStatus()
             .alert("Event Intro", isPresented: $showingAppStoreEvent) {
                 Button("OK", role: .close) { }
             } message: {

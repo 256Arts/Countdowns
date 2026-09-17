@@ -32,15 +32,63 @@ enum ScreenshotMode {
         return container
     }()
 
+    // MARK: - Saying what happened
+
+    /// What this launch seeded, in one line, for the walk and for the shared runner.
+    ///
+    /// A failed walk otherwise reports only "seeded content never appeared", which is equally true
+    /// of a store that never seeded, a screen that never opened, and an identifier renamed last
+    /// week. The walk reads this out of the accessibility tree before its first shot and prints it
+    /// on any miss, and the fixed prefix makes it greppable in the build log.
+    private(set) static var status = "the seed has not run"
+
+    private static func report(_ line: String) {
+        status = line
+        print("SCREENSHOT MODE: \(line)")
+    }
+
+    /// Whether `context` is the throwaway store this mode promises, checked before the first insert.
+    ///
+    /// The damage a screenshot run can do is writing demo countdowns into the user's own — and by
+    /// the time anybody notices, CloudKit has synced them. So the seed stops at the door rather than
+    /// afterwards, and says which half of the contract failed.
+    @MainActor
+    private static func verify(_ context: ModelContext) -> Bool {
+        let configurations = context.container.configurations
+        let onDisk = configurations.filter { !$0.isStoredInMemoryOnly }
+        guard onDisk.isEmpty else {
+            report("""
+                REFUSED — the container is on disk (\(onDisk.map(\.name).joined(separator: ", "))), \
+                so seeding would write demo countdowns into real ones. Build it with \
+                ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none).
+                """)
+            return false
+        }
+        let synced = configurations.filter { $0.cloudKitContainerIdentifier != nil }
+        guard synced.isEmpty else {
+            report("""
+                REFUSED — the container still syncs with CloudKit \
+                (\(synced.compactMap(\.cloudKitContainerIdentifier).joined(separator: ", "))), so the \
+                real account's countdowns would arrive in the store being photographed. Add \
+                cloudKitDatabase: .none.
+                """)
+            return false
+        }
+        return true
+    }
+
     /// Fills `context` with content worth photographing, and picks the countdown the Mac and iPad
     /// detail column opens on — that pane otherwise reads "No Content Selected", since nothing but
     /// an App Intent ever sets the selection.
     @MainActor
     static func seed(_ context: ModelContext) {
+        guard verify(context) else { return }
+
         let events = demoEvents()
         for event in events {
             context.insert(event)
         }
+        report("ready — in-memory store, no CloudKit; seeded \(events.count) countdowns")
         #if !os(watchOS)
         // Not the row the walk taps, so the split view's two halves show different countdowns.
         // The watch has one screen and no selection to make.
@@ -151,4 +199,29 @@ enum ScreenshotMode {
         }
     }
     #endif
+}
+
+extension View {
+
+    /// Carries `ScreenshotMode.status` into the accessibility tree, where the walk reads it.
+    ///
+    /// Nothing on a normal launch; on a screenshot run, a one-point transparent label — present to
+    /// XCUITest, invisible in the shot. It is how the walk can tell a seed that never ran from a
+    /// screen that never opened, neither of which the app can report any other way: a simulator
+    /// app's `print` does not reach the build log, and there is no file path both the app and the
+    /// runner can write.
+    @ViewBuilder
+    func screenshotModeStatus() -> some View {
+        if ScreenshotMode.isActive {
+            overlay(alignment: .topLeading) {
+                Text(ScreenshotMode.status)
+                    .font(.system(size: 1))
+                    .opacity(0.001)
+                    .accessibilityIdentifier("ScreenshotMode.Status")
+                    .allowsHitTesting(false)
+            }
+        } else {
+            self
+        }
+    }
 }

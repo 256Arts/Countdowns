@@ -6,6 +6,7 @@ struct Countdowns_Watch_Watch_AppApp: App {
     var body: some Scene {
         WindowGroup {
             UpcomingList()
+                .screenshotModeStatus()
         }
         #if targetEnvironment(simulator)
         // A simulator has no paired phone and no iCloud data to sync down, so the real store leaves

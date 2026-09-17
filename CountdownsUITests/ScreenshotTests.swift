@@ -53,9 +53,14 @@ final class ScreenshotTests: XCTestCase {
         // one repeats yearly, so its detail screen has the "Repeats Yearly" line to show as well.
         let seeded = element("EventRow.Mom's Birthday")
         #endif
+        checkSeedIsThrowaway()
         guard seeded.waitForExistence(timeout: 30) else {
             attach(XCTAttachment(string: app.debugDescription), named: "element-tree")
-            return XCTFail("seeded content never appeared")
+            return XCTFail("""
+                never found the seeded countdown in 30s on \(Self.platform), \(Self.device).
+                The app reported: \(seedStatus)
+                The screen at the time is attached as element-tree.
+                """)
         }
         settle()
         // The captures are named in listing order, not walk order: the runner files them by sorted
@@ -111,6 +116,56 @@ final class ScreenshotTests: XCTestCase {
         settle()
         capture("04-edit")
         #endif
+    }
+
+    // MARK: - The seed
+
+    /// What the app said it seeded, read out of the accessibility tree.
+    ///
+    /// The app hangs `ScreenshotMode.status` on its root view (`.screenshotModeStatus()`). A walk
+    /// that cannot find it is running against a build that has not adopted that modifier, which is
+    /// worth saying plainly rather than reporting as an empty seed.
+    private var seedStatus: String {
+        let label = app.descendants(matching: .any)["ScreenshotMode.Status"]
+        guard label.waitForExistence(timeout: 30) else {
+            return "no ScreenshotMode.Status element — add .screenshotModeStatus() to the app's root view"
+        }
+        // A SwiftUI `Text` reaches XCUITest as the element's *value* on macOS and as its *label* on
+        // iOS, so take whichever is filled in rather than betting on one.
+        if let value = label.value as? String, !value.isEmpty { return value }
+        return label.label
+    }
+
+    /// Stops the walk when the app did not seed the throwaway store.
+    ///
+    /// `ScreenshotMode.seed` refuses to write to a store that is on disk or still synced with
+    /// CloudKit, because a screenshot run that reached the real store writes demo countdowns into
+    /// the user's own. The walk that followed would then photograph an empty app and fail on a
+    /// missing row, which says nothing about why. Read the reason instead, before the first shot.
+    private func checkSeedIsThrowaway() {
+        let status = seedStatus
+        print("SCREENSHOT MODE: \(status)")
+        guard status.hasPrefix("ready") else {
+            attach(XCTAttachment(string: app.debugDescription), named: "element-tree")
+            return XCTFail("the app did not seed a throwaway store, so there is nothing to photograph — \(status)")
+        }
+    }
+
+    private static var platform: String {
+        #if os(macOS)
+        "macOS"
+        #elseif targetEnvironment(macCatalyst)
+        "Mac Catalyst"
+        #elseif os(visionOS)
+        "visionOS"
+        #else
+        UIDevice.current.userInterfaceIdiom == .pad ? "iPadOS" : "iOS"
+        #endif
+    }
+
+    /// Which simulator this was, for a failure read days after the run's own log is gone.
+    private static var device: String {
+        ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] ?? "this machine"
     }
 
     #if os(macOS)
