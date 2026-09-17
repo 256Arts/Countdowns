@@ -86,7 +86,7 @@ struct CountdownsApp: App {
         if ScreenshotMode.isActive {
             return ScreenshotMode.container
         }
-        #if targetEnvironment(simulator) || (DEBUG && os(macOS))
+        #if (targetEnvironment(simulator) || os(macOS)) && DEBUG
         return previewContainer
         #else
         return .shared
