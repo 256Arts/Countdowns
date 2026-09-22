@@ -38,10 +38,17 @@ Connect. It is a thin wrapper onto the shared runner in `Repos/Scripts`, configu
 seeded with demo countdowns at fixed day offsets from today, so the day counts are identical on
 every run.
 
-Slot 1 of the iPhone and iPad listings is the hand-made widget shot (`IPHONE_MANUAL_SHOTS`), which a
-run leaves alone; the walk fills the slots after it. The iPad walk rotates the simulator to
-landscape, to match that shot and because it suits a 13" split view — and the capture rotates the
-image back, since `XCUIScreen.main.screenshot()` returns the physical, still-portrait screen.
+Slot 1 of every listing is the widget shot, made by the run rather than by hand: launched
+`-screenshotMode -widgetShots`, `WidgetShots` (beside `ScreenshotMode`) draws the widgets on the
+iPhone and the menu bar extra on the Mac as tiles, and the shared `widget-screenshots` lays them on a
+wallpaper (`WIDGET_SHOTS` in `.screenshots.conf`). The app target compiles `CountdownsWidget/` for
+this, so each family is its own view (`CountdownsSmallWidget`, `CountdownsRectangularAccessory`…) —
+`widgetFamily` cannot be set outside WidgetKit. The menu bar's `.menu`-style extra is an `NSMenu`,
+which nothing can render off-screen, so `WidgetShots` draws a look-alike of `MenuBarEventsMenu`;
+keep the two in step.
+
+The iPad walk rotates the simulator to landscape, because it suits a 13" split view — and the
+capture rotates the image back, since `XCUIScreen.main.screenshot()` returns the physical, still-portrait screen.
 
 The seed includes one fake movie release, *The Chronos Project*, whose poster
 (`Countdowns/Preview Content/ChronosProjectPoster.jpg`) is a development asset — present in the
@@ -58,7 +65,7 @@ Mac runs need developer mode enabled once (`sudo DevToolsSecurity -enable`), or 
 authentication on every UI test launch and the run fails. The Mac takes the sheet shot — macOS hangs
 a sheet off its parent window, so one `screencapture -l` photographs the pair — but not the popover,
 which is a window of its own and comes back without the app around it; that shot is hand-made, in
-slot 2. visionOS takes only the list shot (its sidebar never reaches the accessibility tree).
+slot 2, after the widget shot. visionOS takes only the list shot (its sidebar never reaches the accessibility tree).
 
 Watch runs need the shared runner's `-sdk watchsimulator`: this watch app is paired to the phone
 (`INFOPLIST_KEY_WKCompanionAppBundleIdentifier`), which leaves its scheme's platform ambiguous

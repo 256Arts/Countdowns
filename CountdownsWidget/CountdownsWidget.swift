@@ -90,83 +90,20 @@ struct CountdownsWidgetEntryView: View {
     var body: some View {
         Group {
             switch family {
-            #if !os(macOS)
+            #if os(iOS) || os(watchOS)
             case .accessoryInline:
-                if let event = entry.events.first {
-                    let days = event.daysUntil == 0 ? "🎉" : "\(event.daysUntilString)d •"
-                    Text("\(days) \(event.title ?? "")")
-                        .widgetAccentable()
-                } else {
-                    Text("No Countdowns")
-                        .foregroundStyle(.secondary)
-                }
+                CountdownsInlineAccessory(events: entry.events)
             case .accessoryCircular:
-                VStack {
-                    if let event = entry.events.first {
-                        Text(event.daysUntil == 0 ? "🎉" : "\(event.daysUntilString)d")
-                            .font(.title)
-                        Text(event.title ?? "")
-                            .widgetAccentable()
-                    } else {
-                        Text("No Countdowns")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .lineLimit(1)
-                .containerBackground(containerBackgroundColor, for: .widget)
+                CountdownsCircularAccessory(events: entry.events)
+                    .containerBackground(containerBackgroundColor, for: .widget)
             case .accessoryRectangular:
-                Grid(alignment: .leading) {
-                    if entry.events.isEmpty {
-                        Text("No Countdowns")
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(Array(entry.events.prefix(3))) { event in
-                            GridRow {
-                                Text("\(event.daysUntilString)d")
-                                    .gridColumnAlignment(.trailing)
-                                Text(event.title ?? "")
-                                    .lineLimit(1)
-                                    .widgetAccentable()
-                            }
-                        }
-                    }
-                }
-                .containerBackground(containerBackgroundColor, for: .widget)
+                CountdownsRectangularAccessory(events: entry.events)
+                    .containerBackground(containerBackgroundColor, for: .widget)
             #endif
             #if !os(watchOS)
             case .systemSmall:
-                Group {
-                    if let event = entry.events.first {
-                        VStack(alignment: .leading) {
-                            HStack(alignment: .firstTextBaseline) {
-                                Text(event.daysUntil == 0 ? "Today" : event.daysUntilString)
-                                    .font(.system(size: 46))
-                                if event.daysUntil != 0 {
-                                    Text("days")
-                                        .font(.system(size: 20))
-                                        .foregroundStyle(.secondary)
-                                }
-                            }
-                            
-                            Text(event.title ?? "")
-                                .font(.system(size: 28))
-                                .lineLimit(2)
-                        }
-                        .frame(idealWidth: .infinity, maxWidth: .infinity, idealHeight: .infinity, maxHeight: .infinity, alignment: .leading)
-                        .overlay(alignment: .topTrailing) {
-                            if case .symbolIcon(let name) = event.icon {
-                                Image(systemName: name)
-                                    .imageScale(.large)
-                                    .symbolVariant(.fill)
-                                    .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
-                            }
-                        }
-                    } else {
-                        Text("No Countdowns")
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .containerBackground(containerBackgroundColor, for: .widget)
+                CountdownsSmallWidget(events: entry.events)
+                    .containerBackground(containerBackgroundColor, for: .widget)
             #endif
             default:
                 #if os(watchOS)
@@ -179,29 +116,145 @@ struct CountdownsWidgetEntryView: View {
                 } else if entry.events.first?.daysUntil == 0 {
                     CountdownWidgetFeaturedEvent(event: entry.events.first!)
                 } else {
-                    GeometryReader { geometry in
-                        VStack(spacing: family == .systemMedium ? 0 : 8) {
-                            ForEach(entry.events.indices) { index in
-                                CountdownWidgetEventCard(event: entry.events[index])
-                                    .scaleEffect(rowScale(index: index))
-                                    .frame(height: CountdownWidgetEventCard.height * rowScale(index: index))
-                                    .zIndex(Double(10 - index))
-                            }
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxHeight: .infinity, alignment: .top)
-                    }
-                    .containerBackground(containerBackgroundColor, for: .widget)
+                    CountdownsListWidget(events: entry.events, isMedium: family == .systemMedium)
+                        .containerBackground(containerBackgroundColor, for: .widget)
                 }
                 #endif
             }
         }
         .accentColor(Color("AccentColor"))
     }
-    
-    #if !os(watchOS)
+}
+
+// MARK: - Families
+
+// One view per family, rather than cases of the entry view's switch, so the app can draw them too:
+// `widgetFamily` is read-only outside WidgetKit, and the app renders these for its App Store shots.
+
+#if os(iOS) || os(watchOS)
+struct CountdownsInlineAccessory: View {
+
+    let events: [Event]
+
+    var body: some View {
+        if let event = events.first {
+            let days = event.daysUntil == 0 ? "🎉" : "\(event.daysUntilString)d •"
+            Text("\(days) \(event.title ?? "")")
+                .widgetAccentable()
+        } else {
+            Text("No Countdowns")
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+struct CountdownsCircularAccessory: View {
+
+    let events: [Event]
+
+    var body: some View {
+        VStack {
+            if let event = events.first {
+                Text(event.daysUntil == 0 ? "🎉" : "\(event.daysUntilString)d")
+                    .font(.title)
+                Text(event.title ?? "")
+                    .widgetAccentable()
+            } else {
+                Text("No Countdowns")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .lineLimit(1)
+    }
+}
+
+struct CountdownsRectangularAccessory: View {
+
+    let events: [Event]
+
+    var body: some View {
+        Grid(alignment: .leading) {
+            if events.isEmpty {
+                Text("No Countdowns")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(Array(events.prefix(3))) { event in
+                    GridRow {
+                        Text("\(event.daysUntilString)d")
+                            .gridColumnAlignment(.trailing)
+                        Text(event.title ?? "")
+                            .lineLimit(1)
+                            .widgetAccentable()
+                    }
+                }
+            }
+        }
+    }
+}
+#endif
+
+#if !os(watchOS)
+struct CountdownsSmallWidget: View {
+
+    let events: [Event]
+
+    var body: some View {
+        if let event = events.first {
+            VStack(alignment: .leading) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(event.daysUntil == 0 ? "Today" : event.daysUntilString)
+                        .font(.system(size: 46))
+                    if event.daysUntil != 0 {
+                        Text("days")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Text(event.title ?? "")
+                    .font(.system(size: 28))
+                    .lineLimit(2)
+            }
+            .frame(idealWidth: .infinity, maxWidth: .infinity, idealHeight: .infinity, maxHeight: .infinity, alignment: .leading)
+            .overlay(alignment: .topTrailing) {
+                if case .symbolIcon(let name) = event.icon {
+                    Image(systemName: name)
+                        .imageScale(.large)
+                        .symbolVariant(.fill)
+                        .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
+                }
+            }
+        } else {
+            Text("No Countdowns")
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+#endif
+
+#if !os(watchOS)
+struct CountdownsListWidget: View {
+
+    let events: [Event]
+    let isMedium: Bool
+
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing: isMedium ? 0 : 8) {
+                ForEach(events.indices, id: \.self) { index in
+                    CountdownWidgetEventCard(event: events[index])
+                        .scaleEffect(rowScale(index: index))
+                        .frame(height: CountdownWidgetEventCard.height * rowScale(index: index))
+                        .zIndex(Double(10 - index))
+                }
+            }
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxHeight: .infinity, alignment: .top)
+        }
+    }
+
     func rowScale(index: Int) -> CGFloat {
-        if family == .systemMedium {
+        if isMedium {
             switch index {
             case 0:
                 return 1
@@ -229,10 +282,8 @@ struct CountdownsWidgetEntryView: View {
             }
         }
     }
-    #endif
 }
 
-#if !os(watchOS)
 struct CountdownWidgetEventCard: View {
     
     static let height: CGFloat = 56
@@ -405,7 +456,7 @@ let previewEvents = [
     Event(dataSource: nil, title: "Super Big Long Celebration Party", colorName: nil, icon: .symbolIcon(name: "star"), date: .now.addingTimeInterval(9999999), dateIsEstimate: false)
 ]
 
-#if !os(macOS)
+#if os(iOS) || os(watchOS)
 #Preview("Inline", as: WidgetFamily.accessoryInline) {
     CountdownsWidget()
 } timeline: {

@@ -76,6 +76,16 @@
 			);
 			target = 1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */;
 		};
+		1BAA00102E90000000000010 /* Exceptions for "CountdownsWidget" folder in "Countdowns" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				CountdownsWidgetBundle.swift,
+				CountdownsWidgetExtension.entitlements,
+				Info.plist,
+			);
+			target = 1B3BF5C7289567C300E87899 /* Countdowns */;
+		};
 		1B7DF9352E2418630071B353 /* Exceptions for "Countdowns" folder in "CountdownsWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -130,6 +140,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				1B7DF8F42E2418310071B353 /* Exceptions for "CountdownsWidget" folder in "CountdownsWidgetExtension" target */,
+				1BAA00102E90000000000010 /* Exceptions for "CountdownsWidget" folder in "Countdowns" target */,
 			);
 			path = CountdownsWidget;
 			sourceTree = "<group>";
@@ -254,6 +265,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				1B7DF9112E2418630071B353 /* Countdowns */,
+				1B7DF8EF2E2418310071B353 /* CountdownsWidget */,
 			);
 			name = Countdowns;
 			packageProductDependencies = (

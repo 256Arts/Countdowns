@@ -9,6 +9,7 @@ struct CountdownsApp: App {
 
     init() {
         UserDefaults.standard.register()
+        WidgetShots.renderIfRequested()
 
         #if os(macOS)
         if ScreenshotMode.isActive {
