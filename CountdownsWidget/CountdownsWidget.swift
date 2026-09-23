@@ -70,22 +70,9 @@ struct SimpleEntry: TimelineEntry {
 
 struct CountdownsWidgetEntryView: View {
     
-    #if os(watchOS)
-    let containerBackgroundLightColor = Color.black
-    #elseif canImport(UIKit)
-    let containerBackgroundLightColor = Color(uiColor: .systemGroupedBackground)
-    #else
-    let containerBackgroundLightColor = Color(nsColor: .windowBackgroundColor)
-    #endif
-    
-    var containerBackgroundColor: Color {
-        colorScheme == .light ? containerBackgroundLightColor : .init(white: 0, opacity: 0.5)
-    }
-    
     var entry: Provider.Entry
     
     @Environment(\.widgetFamily) var family
-    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         Group {
@@ -95,15 +82,15 @@ struct CountdownsWidgetEntryView: View {
                 CountdownsInlineAccessory(events: entry.events)
             case .accessoryCircular:
                 CountdownsCircularAccessory(events: entry.events)
-                    .containerBackground(containerBackgroundColor, for: .widget)
+                    .containerBackground(.fill.tertiary, for: .widget)
             case .accessoryRectangular:
                 CountdownsRectangularAccessory(events: entry.events)
-                    .containerBackground(containerBackgroundColor, for: .widget)
+                    .containerBackground(.fill.tertiary, for: .widget)
             #endif
             #if !os(watchOS)
             case .systemSmall:
                 CountdownsSmallWidget(events: entry.events)
-                    .containerBackground(containerBackgroundColor, for: .widget)
+                    .containerBackground(.fill.tertiary, for: .widget)
             #endif
             default:
                 #if os(watchOS)
@@ -112,12 +99,12 @@ struct CountdownsWidgetEntryView: View {
                 if entry.events.isEmpty {
                     Text("No Countdowns")
                         .foregroundStyle(.secondary)
-                        .containerBackground(containerBackgroundColor, for: .widget)
+                        .containerBackground(.fill.tertiary, for: .widget)
                 } else if entry.events.first?.daysUntil == 0 {
                     CountdownWidgetFeaturedEvent(event: entry.events.first!)
                 } else {
                     CountdownsListWidget(events: entry.events, isMedium: family == .systemMedium)
-                        .containerBackground(containerBackgroundColor, for: .widget)
+                        .containerBackground(CountdownsListWidget.containerBackground, for: .widget)
                 }
                 #endif
             }
@@ -138,8 +125,8 @@ struct CountdownsInlineAccessory: View {
 
     var body: some View {
         if let event = events.first {
-            let days = event.daysUntil == 0 ? "🎉" : "\(event.daysUntilString)d •"
-            Text("\(days) \(event.title ?? "")")
+            let title = event.title ?? ""
+            Text(event.daysUntil == 0 ? "🎉 \(title)" : "\(title) in \(event.daysUntilString)d")
                 .widgetAccentable()
         } else {
             Text("No Countdowns")
@@ -234,6 +221,14 @@ struct CountdownsSmallWidget: View {
 
 #if !os(watchOS)
 struct CountdownsListWidget: View {
+
+    /// Opaque grouped grey rather than the system's gradient, which the stacked cards blend into in
+    /// dark mode.
+    #if canImport(UIKit)
+    static let containerBackground = Color(uiColor: .systemGroupedBackground)
+    #else
+    static let containerBackground = Color(nsColor: .windowBackgroundColor)
+    #endif
 
     let events: [Event]
     let isMedium: Bool

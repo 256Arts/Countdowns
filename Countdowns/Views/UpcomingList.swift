@@ -18,6 +18,7 @@ struct UpcomingList: View {
     @State var showingNewDateEvent = false
     @State var showingImportCalendar = false
     @State var showingEventSources = false
+    @State var showingSettings = false
     @State var isUpdatingCalendarEvents = false
     
     var results: [Event] {
@@ -60,8 +61,9 @@ struct UpcomingList: View {
                     addMenu
                 }
 
-                // Secondary links always live in the trailing overflow menu.
+                // Settings and the secondary links always live in the trailing overflow menu.
                 ToolbarOverflowMenu {
+                    settingsButton
                     CountdownsApp.links()
                 }
 
@@ -80,6 +82,7 @@ struct UpcomingList: View {
                 }
 
                 ToolbarItemGroup(placement: .secondaryAction) {
+                    settingsButton
                     CountdownsApp.links()
                 }
 
@@ -144,6 +147,13 @@ struct UpcomingList: View {
             .frame(idealHeight: 400)
             #endif
         }
+        #if !os(macOS)
+        .sheet(isPresented: $showingSettings) {
+            NavigationStack {
+                SettingsView()
+            }
+        }
+        #endif
         .task {
             await refreshEvents()
         }
@@ -157,6 +167,12 @@ struct UpcomingList: View {
     }
     
     #if !os(macOS)
+    private var settingsButton: some View {
+        Button("Settings", systemImage: "gearshape") {
+            showingSettings = true
+        }
+    }
+
     private var missingDatesButton: some View {
         Button("Events Missing Dates", systemImage: "exclamationmark.triangle") {
             showingEventSources = true

@@ -67,16 +67,16 @@ enum WidgetShots {
     private static func renderWidgets() {
         let events = events
 
-        // The widget's own container backgrounds: grouped grey in light, black at half strength
-        // over the wallpaper in dark.
-        for (look, scheme, color) in [("Light", ColorScheme.light, Color(uiColor: .systemGroupedBackground)),
-                                      ("Dark", .dark, Color.black.opacity(0.5))] {
-            func home(_ content: some View, _ size: CGSize, _ name: String) {
-                save(tile(content, size, scheme, color), "Home Screen/\(name) \(look)")
+        // Each widget's own container background: `.fill.tertiary`, the system default, for the
+        // small one, and the list's own grouped grey.
+        for (look, scheme, background) in [("Light", ColorScheme.light, lightContainerBackground),
+                                           ("Dark", .dark, darkContainerBackground)] {
+            func home(_ content: some View, _ size: CGSize, _ name: String, _ background: some ShapeStyle) {
+                save(tile(content, size, scheme, background), "Home Screen/\(name) \(look)")
             }
-            home(CountdownsSmallWidget(events: events), small, "Small")
-            home(CountdownsListWidget(events: events, isMedium: true), medium, "Medium")
-            home(CountdownsListWidget(events: events, isMedium: false), large, "Large")
+            home(CountdownsSmallWidget(events: events), small, "Small", background)
+            home(CountdownsListWidget(events: events, isMedium: true), medium, "Medium", CountdownsListWidget.containerBackground)
+            home(CountdownsListWidget(events: events, isMedium: false), large, "Large", CountdownsListWidget.containerBackground)
         }
 
         save(lock(CountdownsCircularAccessory(events: events), circular), "Lock Screen/Circular")
@@ -101,8 +101,10 @@ enum WidgetShots {
             HStack(spacing: 16) {
                 CountdownsRectangularAccessory(events: events)
                     .frame(width: rectangular.width, height: rectangular.height)
+                    .background(accessoryBackdrop, in: .rect(cornerRadius: 16, style: .continuous))
                 CountdownsCircularAccessory(events: events)
                     .frame(width: circular.width, height: circular.height)
+                    .background(accessoryBackdrop, in: .circle)
             }
         }
         .frame(width: medium.width)
@@ -110,12 +112,26 @@ enum WidgetShots {
         .environment(\.colorScheme, .dark)
     }
 
+    /// Behind each accessory, the way the Lock Screen sets one off from the wallpaper. The system
+    /// blurs and dims what is under it; nothing here has the wallpaper to blur — the composer lays
+    /// the tile on it afterwards — so this is a light, dark scrim that keeps the white text legible
+    /// over a bright wallpaper.
+    private static let accessoryBackdrop = Color(white: 0.2, opacity: 0.35)
+
+    /// The small widget's backgrounds. `.fill.tertiary` is a flat fill wherever SwiftUI draws it
+    /// itself, so the vertical gradient WidgetKit gives it is spelled out here — and opaque, since
+    /// the material behind a widget blurs the wallpaper far past the point it still shows through.
+    private static let lightContainerBackground = LinearGradient(
+        colors: [Color(white: 0.97), Color(white: 0.91)], startPoint: .top, endPoint: .bottom)
+    private static let darkContainerBackground = LinearGradient(
+        colors: [Color(white: 0.18), Color(white: 0.08)], startPoint: .top, endPoint: .bottom)
+
     /// A Home Screen tile: the widget's own padding and a continuous-corner card.
-    private static func tile(_ content: some View, _ size: CGSize, _ scheme: ColorScheme, _ color: Color) -> some View {
+    private static func tile(_ content: some View, _ size: CGSize, _ scheme: ColorScheme, _ background: some ShapeStyle) -> some View {
         content
             .padding(16)
             .frame(width: size.width, height: size.height)
-            .background(color)
+            .background(background)
             .clipShape(.rect(cornerRadius: 24, style: .continuous))
             .accentColor(Color("AccentColor"))
             .environment(\.colorScheme, scheme)

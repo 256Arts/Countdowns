@@ -6,6 +6,8 @@ struct FullScreenEventView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    @AppStorage(UserDefaults.Key.countdownFormat) private var countdownFormat = CountdownFormat.default
+    
     @State private var showingEditor = false
     
     @Bindable var event: Event
@@ -50,8 +52,15 @@ struct FullScreenEventView: View {
                             .font(.headline)
                             .foregroundStyle(.secondary)
                     }
-                    Text(event.daysUntilString + " days")
-                        .font(.largeTitle)
+                    // Minutes and seconds go stale the moment they are drawn, so a format that
+                    // reaches that far redraws itself on a timer.
+                    if let interval = countdownFormat.refreshInterval {
+                        TimelineView(.periodic(from: .now, by: interval)) { context in
+                            countdownText(now: context.date)
+                        }
+                    } else {
+                        countdownText(now: .now)
+                    }
                     Text(date, style: .date)
                         .foregroundStyle(.secondary)
                         .font(.title2)
@@ -113,6 +122,14 @@ struct FullScreenEventView: View {
             activity.title = event.title
             activity.appEntityIdentifier = .init(for: entity)
         }
+    }
+    
+    private func countdownText(now: Date) -> some View {
+        Text(event.countdownString(format: countdownFormat, now: now))
+            .font(.largeTitle)
+            .lineLimit(1)
+            .allowsTightening(true)
+            .minimumScaleFactor(0.5)
     }
 }
 

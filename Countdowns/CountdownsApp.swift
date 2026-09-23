@@ -78,6 +78,12 @@ struct CountdownsApp: App {
         }
         .menuBarExtraStyle(.menu)
         .modelContainer(modelContainer)
+
+        // Every other platform reaches the same screen from the list's toolbar.
+        Settings {
+            SettingsView()
+                .frame(width: 400)
+        }
         #endif
     }
 
