@@ -72,7 +72,7 @@ final class Event: Equatable {
     }
     
     @Transient
-    var subtitle: String {
+    var subtitle: LocalizedStringResource {
         switch dataSource {
         case .recurrence(let month, let day, _):
             if month == 2, day == 29 {

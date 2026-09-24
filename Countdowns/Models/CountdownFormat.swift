@@ -8,7 +8,7 @@ enum CountdownUnit: String, CaseIterable, Identifiable, Sendable {
 
     var id: Self { self }
 
-    var name: String {
+    var name: LocalizedStringResource {
         switch self {
         case .year: "Years"
         case .month: "Months"

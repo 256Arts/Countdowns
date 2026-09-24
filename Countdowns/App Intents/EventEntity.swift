@@ -33,7 +33,7 @@ struct EventEntity: AppEntity, IndexedEntity, Identifiable {
     }
 
     /// A short human-readable description of when this event occurs.
-    var subtitle: String {
+    var subtitle: LocalizedStringResource {
         if let daysUntil {
             switch daysUntil {
             case 0: "Today"
@@ -42,7 +42,7 @@ struct EventEntity: AppEntity, IndexedEntity, Identifiable {
             default: "in \(daysUntil) days"
             }
         } else if let date {
-            date.formatted(date: .abbreviated, time: .omitted)
+            "\(date.formatted(date: .abbreviated, time: .omitted))"
         } else {
             ""
         }
@@ -56,7 +56,7 @@ struct EventEntity: AppEntity, IndexedEntity, Identifiable {
     var attributeSet: CSSearchableItemAttributeSet {
         let attributes = CSSearchableItemAttributeSet(contentType: .content)
         attributes.title = title
-        attributes.contentDescription = subtitle
+        attributes.contentDescription = String(localized: subtitle)
         attributes.startDate = date
         return attributes
     }

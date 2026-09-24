@@ -1,0 +1,248 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Create a countdown in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Einen Countdown in ${applicationName} erstellen",
+              "Einen Countdown zu ${applicationName} hinzufügen",
+              "Einen neuen Countdown in ${applicationName} starten"
+            ]
+          }
+        },
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Create a countdown in ${applicationName}",
+              "Add a countdown to ${applicationName}",
+              "Start a new countdown in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Crear una cuenta atrás en ${applicationName}",
+              "Añadir una cuenta atrás a ${applicationName}",
+              "Iniciar una nueva cuenta atrás en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Créer un compte à rebours dans ${applicationName}",
+              "Ajouter un compte à rebours à ${applicationName}",
+              "Démarrer un nouveau compte à rebours dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "${applicationName}でカウントダウンを作成",
+              "${applicationName}にカウントダウンを追加",
+              "${applicationName}で新しいカウントダウンを開始"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "在${applicationName}中创建倒计时",
+              "在${applicationName}中添加倒计时",
+              "在${applicationName}中开始新的倒计时"
+            ]
+          }
+        }
+      }
+    },
+    "How many days until ${target} in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Wie viele Tage bis ${target} in ${applicationName}",
+              "Tage bis ${target} in ${applicationName}"
+            ]
+          }
+        },
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "How many days until ${target} in ${applicationName}",
+              "Days until ${target} in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Cuántos días faltan para ${target} en ${applicationName}",
+              "Días hasta ${target} en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Combien de jours avant ${target} dans ${applicationName}",
+              "Jours avant ${target} dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "${applicationName}で${target}まであと何日か",
+              "${applicationName}での${target}までの日数"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "在${applicationName}中，距${target}还有多少天",
+              "在${applicationName}中距${target}的天数"
+            ]
+          }
+        }
+      }
+    },
+    "Open ${target} in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "${target} in ${applicationName} öffnen",
+              "${target} in ${applicationName} anzeigen"
+            ]
+          }
+        },
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Open ${target} in ${applicationName}",
+              "Show ${target} in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Abrir ${target} en ${applicationName}",
+              "Mostrar ${target} en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Ouvrir ${target} dans ${applicationName}",
+              "Afficher ${target} dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "${applicationName}で${target}を開く",
+              "${applicationName}で${target}を表示"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "在${applicationName}中打开${target}",
+              "在${applicationName}中显示${target}"
+            ]
+          }
+        }
+      }
+    },
+    "Show my upcoming events in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "de" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Meine bevorstehenden Ereignisse in ${applicationName} anzeigen",
+              "Was ist mein nächster Countdown in ${applicationName}"
+            ]
+          }
+        },
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show my upcoming events in ${applicationName}",
+              "What's my next countdown in ${applicationName}"
+            ]
+          }
+        },
+        "es" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Mostrar mis próximos eventos en ${applicationName}",
+              "Cuál es mi próxima cuenta atrás en ${applicationName}"
+            ]
+          }
+        },
+        "fr" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "Afficher mes événements à venir dans ${applicationName}",
+              "Quel est mon prochain compte à rebours dans ${applicationName}"
+            ]
+          }
+        },
+        "ja" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "${applicationName}で今後のイベントを表示",
+              "${applicationName}での次のカウントダウンは？"
+            ]
+          }
+        },
+        "zh-Hans" : {
+          "stringSet" : {
+            "state" : "machine_translated",
+            "values" : [
+              "在${applicationName}中显示我即将到来的事件",
+              "在${applicationName}中我的下一个倒计时是什么"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
