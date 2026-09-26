@@ -31,15 +31,7 @@ final class ScreenshotTests: XCTestCase {
         #endif
 
         #if os(iOS)
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            // The iPad listing opens with a hand-made widget shot that is landscape, and a store
-            // gallery that changes shape between slots looks like a mistake. Landscape is the better
-            // half of the trade anyway: it is the shape a 13" iPad is held in, and the one that
-            // gives the split view's two columns room.
-            XCUIDevice.shared.orientation = .landscapeLeft
-            isLandscape = true
-            settle()
-        }
+        turnToRequestedOrientation()
         #endif
 
         #if os(visionOS)
@@ -250,6 +242,19 @@ final class ScreenshotTests: XCTestCase {
         activate(element("Add"), "the Add menu")
         settle(seconds: 1)
     }
+
+    #if os(iOS)
+    /// Turns the device the way the runner asked (`IPAD_ORIENTATION`, landscape by default on iPad).
+    ///
+    /// After `launch()`, not before: a rotation set before the app is up is silently dropped, and
+    /// the set comes back portrait. The runner checks every shot's shape, so that fails the run.
+    private func turnToRequestedOrientation() {
+        guard ProcessInfo.processInfo.environment["SCREENSHOT_ORIENTATION"] == "landscape" else { return }
+        XCUIDevice.shared.orientation = .landscapeLeft
+        isLandscape = true
+        settle()
+    }
+    #endif
 
     /// Animations and async content have no element to wait on, so the shots pause instead.
     private func settle(seconds: TimeInterval = 2) {

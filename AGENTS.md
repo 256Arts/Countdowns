@@ -47,7 +47,7 @@ this, so each family is its own view (`CountdownsSmallWidget`, `CountdownsRectan
 which nothing can render off-screen, so `WidgetShots` draws a look-alike of `MenuBarEventsMenu`;
 keep the two in step.
 
-The iPad walk rotates the simulator to landscape, because it suits a 13" split view — and the
+The iPad walk rotates the simulator to landscape (the runner's `IPAD_ORIENTATION` default) — and the
 capture rotates the image back, since `XCUIScreen.main.screenshot()` returns the physical, still-portrait screen.
 
 The seed includes one fake movie release, *The Chronos Project*, whose poster
