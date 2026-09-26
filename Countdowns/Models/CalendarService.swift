@@ -68,10 +68,21 @@ actor CalendarStore {
         eventStore.calendar(withIdentifier: identifier)
     }
     
-    func fetchUpcomingEvents(calendar: EKCalendar, endDate: Date) -> [EKEvent] {
+    func fetchUpcomingOccurrences(calendarID: String, endDate: Date) throws -> [CalendarOccurrence] {
+        guard let calendar = eventStore.calendar(withIdentifier: calendarID) else { throw CalendarService.ServiceError.calendarNotFound }
         guard isFullAccessAuthorized else { return [] }
         let predicate = eventStore.predicateForEvents(withStart: .now, end: endDate, calendars: [calendar])
-        return eventStore.events(matching: predicate)
+        return eventStore.events(matching: predicate).map { event in
+            // Occurrences of a recurring event share an identifier, so the original occurrence date
+            // tells them apart — and stays put when a single occurrence is moved.
+            let identifier = event.calendarItemExternalIdentifier ?? event.eventIdentifier ?? ""
+            let occurrenceDate = event.occurrenceDate ?? event.startDate ?? .distantPast
+            return CalendarOccurrence(
+                id: "\(identifier)|\(occurrenceDate.timeIntervalSinceReferenceDate)",
+                title: event.title,
+                date: event.startDate
+            )
+        }
     }
 }
 
@@ -107,45 +118,61 @@ final class CalendarService {
         return try await store.verifyAuthorizationStatus()
     }
     
-    func generateUpcomingEvents(calendarID: String, colorName: ColorName?, icon: IconResource?) async throws -> [Event] {
-        guard let calendar = await store.calendar(withIdentifier: calendarID) else { throw ServiceError.calendarNotFound }
-        
-        let endDate = Date.now.addingTimeInterval(3 * 365 * 24 * 60 * 60)
-        return await store.fetchUpcomingEvents(calendar: calendar, endDate: endDate).map { event in
-            Event(
-                dataSource: .calendar(id: calendar.calendarIdentifier),
-                title: event.title,
-                colorName: colorName,
-                icon: icon,
-                date: event.startDate,
-                dateIsEstimate: false
-            )
-        }
-    }
-    
+    /// Brings each synced calendar's events in line with Calendar, touching only what changed.
+    ///
+    /// Events are matched by `calendarItemID` rather than deleted and reinserted, so an unchanged
+    /// calendar writes nothing to CloudKit. Two devices that both insert the same new occurrence
+    /// produce a duplicate once their stores merge; the next pass keeps one and deletes the rest.
     func regenerateCalendarEvents(modelContext: ModelContext, allEvents: [Event]) async {
         guard !isUpdatingCalendarEvents else { return }
         
         isUpdatingCalendarEvents = true
+        let endDate = Date.now.addingTimeInterval(3 * 365 * 24 * 60 * 60)
         for info in allEvents.syncedCalendars {
-            do {
-                let oldEvents = allEvents.filter { $0.dataSource == .calendar(id: info.id) }
-                for oldEvent in oldEvents {
-                    modelContext.delete(oldEvent)
+            guard let occurrences = try? await store.fetchUpcomingOccurrences(calendarID: info.id, endDate: endDate) else { continue }
+            
+            var existingEvents: [String: Event] = [:]
+            for event in allEvents where event.dataSource == .calendar(id: info.id) && !event.isDeleted {
+                // Events without an ID predate matching (or are the import placeholder): replace them once
+                guard let id = event.calendarItemID, existingEvents[id] == nil else {
+                    modelContext.delete(event)
+                    continue
                 }
-                let newEvents = try await generateUpcomingEvents(
-                    calendarID: info.id,
-                    colorName: info.colorName,
-                    icon: info.icon
-                )
-                for newEvent in newEvents {
-                    modelContext.insert(newEvent)
+                existingEvents[id] = event
+            }
+            
+            for occurrence in occurrences {
+                if let event = existingEvents.removeValue(forKey: occurrence.id) {
+                    if event.title != occurrence.title { event.title = occurrence.title }
+                    if event.date != occurrence.date { event.date = occurrence.date }
+                } else {
+                    let event = Event(
+                        dataSource: .calendar(id: info.id),
+                        title: occurrence.title,
+                        colorName: info.colorName,
+                        icon: info.icon,
+                        date: occurrence.date,
+                        dateIsEstimate: false
+                    )
+                    event.calendarItemID = occurrence.id
+                    modelContext.insert(event)
                 }
-            } catch { }
+            }
+            for staleEvent in existingEvents.values {
+                modelContext.delete(staleEvent)
+            }
         }
         isUpdatingCalendarEvents = false
     }
     
+}
+
+/// One upcoming occurrence of a Calendar event, copied out of the `CalendarStore` actor.
+struct CalendarOccurrence: Sendable {
+    /// Stable across launches and devices: the event's external identifier plus its occurrence date.
+    let id: String
+    let title: String
+    let date: Date
 }
 
 struct SyncedCalendarInfo {

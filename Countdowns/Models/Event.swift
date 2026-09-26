@@ -19,6 +19,8 @@ final class Event: Equatable {
     
     var date: Date?
     var dateIsEstimate: Bool? //= false
+    /// For `.calendar` events: the `CalendarOccurrence.id` this event mirrors
+    var calendarItemID: String?
     
     init(dataSource: DataSource?, title: String, colorName: ColorName?, icon: IconResource?, date: Date?, dateIsEstimate: Bool?) {
         self.dataSource = dataSource

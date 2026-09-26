@@ -102,7 +102,7 @@ Key derived/transient logic lives in computed `@Transient` properties: `daysUnti
 ### External services
 
 - **MediaDatabase** (`Countdowns/Models/MediaDatabase.swift`) — singleton wrapper over the TMDb SDK. Search filters out already-released movies; TV "release date" is the earliest future season air date.
-- **CalendarService** (`Countdowns/Models/CalendarService.swift`) — `@MainActor @Observable` singleton fronting an `actor CalendarStore` that owns the `EKEventStore`. Requires **full** calendar access (write-only is rejected with an `.upgrade` error). `regenerateCalendarEvents` deletes and recreates all `.calendar` events for each synced calendar (within a 3-year window) rather than diffing. It listens for `.EKEventStoreChanged` notifications in `UpcomingList`'s `.task` to stay in sync.
+- **CalendarService** (`Countdowns/Models/CalendarService.swift`) — `@MainActor @Observable` singleton fronting an `actor CalendarStore` that owns the `EKEventStore`. Requires **full** calendar access (write-only is rejected with an `.upgrade` error). `regenerateCalendarEvents` diffs each synced calendar's `.calendar` events (within a 3-year window) against Calendar by `Event.calendarItemID` — external identifier plus occurrence date — so unchanged events are never rewritten to CloudKit, and it deletes extra copies sharing an ID (cross-device duplicates). It listens for `.EKEventStoreChanged` notifications in `UpcomingList`'s `.task` to stay in sync.
 
 ### UI structure
 
