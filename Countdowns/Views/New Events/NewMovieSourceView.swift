@@ -16,53 +16,59 @@ struct NewMovieSourceView: View {
     @State var results: [Media] = []
     
     var body: some View {
-        List(results) { media in
-            HStack(spacing: 12) {
-                AsyncImage(url: media.posterURL) { image in
-                    image.resizable()
-                } placeholder: {
-                    Color.secondary
-                }
-                .aspectRatio(contentMode: .fit)
-                .clipShape(.rect(cornerRadius: 6))
-                .frame(width: 40, height: 60)
+        List {
+            Section {
+                ForEach(results) { media in
+                    HStack(spacing: 12) {
+                        AsyncImage(url: media.posterURL) { image in
+                            image.resizable()
+                        } placeholder: {
+                            Color.secondary
+                        }
+                        .aspectRatio(contentMode: .fit)
+                        .clipShape(.rect(cornerRadius: 6))
+                        .frame(width: 40, height: 60)
                 
-                VStack(alignment: .leading) {
-                    Text(media.title)
-                        .lineLimit(2)
-                    if let date = media.releaseDate {
-                        Text(date, style: .date)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                
-                Spacer()
-                
-                if !events.contains(where: { $0.dataSource == media.dataSource }) {
-                    Button("Add") {
-                        let icon: IconResource = {
-                            if let url = media.posterURL {
-                                return .remote(url)
-                            } else {
-                                return .symbolIcon(name: media.isMovie ? "film" : "tv")
+                        VStack(alignment: .leading) {
+                            Text(media.title)
+                                .lineLimit(2)
+                            if let date = media.releaseDate {
+                                Text(date, style: .date)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
                             }
-                        }()
-                        modelContext.insert(
-                            Event(dataSource: media.dataSource, title: media.title, colorName: nil, icon: icon, date: media.releaseDate, dateIsEstimate: false))
+                        }
+                
+                        Spacer()
+                
+                        if !events.contains(where: { $0.dataSource == media.dataSource }) {
+                            Button("Add") {
+                                let icon: IconResource = {
+                                    if let url = media.posterURL {
+                                        return .remote(url)
+                                    } else {
+                                        return .symbolIcon(name: media.isMovie ? "film" : "tv")
+                                    }
+                                }()
+                                modelContext.insert(
+                                    Event(dataSource: media.dataSource, title: media.title, colorName: nil, icon: icon, date: media.releaseDate, dateIsEstimate: false))
                         
-                        // Increment add count and maybe ask for a review via SwiftUI modifier
-                        if UserDefaults.standard.incrementEventAddedCount() { requestReview() }
+                                // Increment add count and maybe ask for a review via SwiftUI modifier
+                                if UserDefaults.standard.incrementEventAddedCount() { requestReview() }
                         
-                        #if canImport(WidgetKit)
-                        WidgetCenter.shared.reloadAllTimelines()
-                        #endif
-                        dismiss()
+                                #if canImport(WidgetKit)
+                                WidgetCenter.shared.reloadAllTimelines()
+                                #endif
+                                dismiss()
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .buttonBorderShape(.capsule)
+                            .fontWeight(.bold)
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.capsule)
-                    .fontWeight(.bold)
                 }
+            } footer: {
+                TMDBAttribution()
             }
         }
         .navigationTitle("New Movie/TV Event")

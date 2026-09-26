@@ -42,6 +42,10 @@ struct SettingsView: View {
             } footer: {
                 Text("The most units shown together. Short names are used when several share a line.")
             }
+
+            Section("Data Sources") {
+                TMDBAttribution()
+            }
         }
         .formStyle(.grouped)
         .navigationTitle("Settings")
