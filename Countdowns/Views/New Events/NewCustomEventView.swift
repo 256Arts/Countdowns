@@ -89,7 +89,7 @@ struct NewCustomEventView: View {
                     } else {
                         nil
                     }
-                    let event = Event(dataSource: dataSource, title: title, colorName: colorName, icon: icon, date: date, dateIsEstimate: false)
+                    let event = Event(dataSource: dataSource, title: title, colorName: colorName, icon: icon, date: date, dateIsEstimate: isEstimate)
                     Task {
                         await event.fetch()
                     }
