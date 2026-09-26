@@ -7,6 +7,9 @@ struct SettingsView: View {
     #endif
 
     @AppStorage(UserDefaults.Key.countdownFormat) private var format = CountdownFormat.default
+    @AppStorage(UserDefaults.Key.notifyOnEventDay) private var notifyOnEventDay = false
+    @AppStorage(UserDefaults.Key.notifyDayBefore) private var notifyDayBefore = false
+    @State private var notificationsDenied = false
 
     /// A fixed sample far enough out that every unit has something to show, so the preview changes
     /// only when the settings below it do.
@@ -43,6 +46,29 @@ struct SettingsView: View {
                 Text("The most units shown together. Short names are used when several share a line.")
             }
 
+            Section {
+                Toggle("On the Day", isOn: $notifyOnEventDay)
+                Toggle("The Day Before", isOn: $notifyDayBefore)
+                    .disabled(!notifyOnEventDay)
+            } header: {
+                Text("Notifications")
+            } footer: {
+                if notificationsDenied {
+                    Text("Allow notifications for Countdowns in Settings.")
+                } else {
+                    Text("Delivered at \(deliveryTime, format: .dateTime.hour().minute()).")
+                }
+            }
+            .onChange(of: notifyOnEventDay) { _, isOn in
+                guard isOn else { return }
+                Task {
+                    notificationsDenied = !(await NotificationScheduler.requestAuthorization())
+                    if notificationsDenied {
+                        notifyOnEventDay = false
+                    }
+                }
+            }
+
             Section("Data Sources") {
                 TMDBAttribution()
             }
@@ -58,6 +84,10 @@ struct SettingsView: View {
             }
         }
         #endif
+    }
+
+    private var deliveryTime: Date {
+        Calendar.autoupdatingCurrent.date(bySettingHour: NotificationScheduler.deliveryHour, minute: 0, second: 0, of: .now) ?? .now
     }
 
     private func binding(for unit: CountdownUnit) -> Binding<Bool> {

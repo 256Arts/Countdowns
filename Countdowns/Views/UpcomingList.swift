@@ -10,6 +10,9 @@ struct UpcomingList: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var allEvents: [Event]
     
+    @AppStorage(UserDefaults.Key.notifyOnEventDay) private var notifyOnEventDay = false
+    @AppStorage(UserDefaults.Key.notifyDayBefore) private var notifyDayBefore = false
+
     private var calendarService: CalendarService = .shared
     
     @State var searchString = ""
@@ -29,6 +32,10 @@ struct UpcomingList: View {
         }
     }
     
+    var notificationPlan: NotificationScheduler.Plan {
+        NotificationScheduler.Plan(events: allEvents, onEventDay: notifyOnEventDay, dayBefore: notifyDayBefore)
+    }
+
     var hasEventsWithMissingDates: Bool {
         allEvents.contains(where: { $0.date == nil })
     }
@@ -156,6 +163,10 @@ struct UpcomingList: View {
         #endif
         .task {
             await refreshEvents()
+        }
+        // Every add, edit, delete, refresh, and sync lands in the query, so one reschedule here covers them all.
+        .task(id: notificationPlan) {
+            await NotificationScheduler.reschedule(notificationPlan)
         }
         .task {
             for await _ in calendarService.calendarUpdates {

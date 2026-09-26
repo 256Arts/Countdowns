@@ -95,6 +95,8 @@ Key derived/transient logic lives in computed `@Transient` properties: `daysUnti
 
 `UpcomingList.refreshEvents()` fans `fetch()` out across all events with a `TaskGroup`, then calls `CalendarService.regenerateCalendarEvents`. This runs on `.task` and `.refreshable`.
 
+Notifications (opt-in in Settings) are rescheduled wholesale by `NotificationScheduler` from a `.task(id:)` in `UpcomingList` keyed on the query's events — so mutation sites never need to call it.
+
 ### Icons
 
 `IconResource` (`symbolIcon` / `remote` / `preloaded`) is a transient layer over the persisted `iconURL: String`. The getter in `Event.icon` infers the kind from the string: contains `/` → remote URL, otherwise an SF Symbol name. `preloadedIconData` holds downloaded image bytes (TMDB posters) for offline/widget rendering; `preloadImage(large:)` swaps the TMDB poster size in the URL (`/w185/` → `/w500/` or `/w92/`).

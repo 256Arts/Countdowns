@@ -5,6 +5,8 @@ extension UserDefaults {
     enum Key {
         static let eventDataSourcesAdded = "eventDataSourcesAdded"
         static let countdownFormat = "countdownFormat"
+        static let notifyOnEventDay = "notifyOnEventDay"
+        static let notifyDayBefore = "notifyDayBefore"
     }
     
     func register() {
