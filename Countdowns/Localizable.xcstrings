@@ -747,6 +747,40 @@
         }
       }
     },
+    "Applies to every event from this calendar." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Gilt für alle Ereignisse aus diesem Kalender."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Se aplica a todos los eventos de este calendario."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "S’applique à tous les événements de ce calendrier."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "このカレンダーのすべてのイベントに適用されます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "应用于此日历中的所有事件。"
+          }
+        }
+      }
+    },
     "Bed" : {
       "localizations" : {
         "de" : {
