@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Event: Equatable {
+final class Event {
     
     /// Used to update the event date
     enum DataSource: Equatable, Codable {
@@ -202,16 +202,13 @@ final class Event: Equatable {
     }
     #endif
     
-    static func == (lhs: Event, rhs: Event) -> Bool {
-        if let lhsDataSource = lhs.dataSource {
-            lhsDataSource == rhs.dataSource && lhs.title == rhs.title
+    /// Whether both events describe the same occasion, e.g. to tell if a common event is already added. Not `==`, which is model identity.
+    func isSameSource(as other: Event) -> Bool {
+        if let dataSource {
+            dataSource == other.dataSource && title == other.title
         } else {
-            lhs.title == rhs.title && lhs.date == rhs.date
+            title == other.title && date == other.date
         }
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
     }
 }
 

@@ -48,8 +48,9 @@ struct CommonEventsList: View {
                 
                 Spacer()
                 
-                Button(events.contains(event) ? "Added" : "Add", systemImage: events.contains(event) ? "checkmark" : "plus") {
-                    let existingEvents = events.filter({ $0 == event })
+                let isAdded = events.contains(where: { $0.isSameSource(as: event) })
+                Button(isAdded ? "Added" : "Add", systemImage: isAdded ? "checkmark" : "plus") {
+                    let existingEvents = events.filter({ $0.isSameSource(as: event) })
                     if existingEvents.isEmpty {
                         Task { @MainActor in
                             await event.fetch()
