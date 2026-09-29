@@ -1,0 +1,10 @@
+
+Countdowns/Models/Secrets.swift
+
+build/
+
+# Xcode state, build products, agent scratchpad, macOS
+xcuserdata/
+DerivedData/
+.context/
+.DS_Store

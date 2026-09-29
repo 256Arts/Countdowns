@@ -1,0 +1,124 @@
+# AGENTS.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Overview
+
+Countdowns is a multiplatform SwiftUI app (iOS, macOS, watchOS, visionOS) that shows a list of upcoming events counting down the days until each. Events come from several sources: built-in common holidays/observances, TMDB movie/TV release dates, imported system calendars, and manually entered custom dates. It is shipped by 256 Arts ([github.com/256Arts/Countdowns](https://github.com/256Arts/Countdowns)).
+
+## Building & Running
+
+This is an Xcode project (`Countdowns.xcodeproj`) — there is no SPM manifest, Makefile, or CI config. Build and run via Xcode, or from the CLI:
+
+```sh
+# Build the main app (pass a -destination appropriate for the target platform)
+xcodebuild -project Countdowns.xcodeproj -scheme Countdowns build
+```
+
+```sh
+# Unit tests (Swift Testing, CountdownsTests — date math and CountdownFormat)
+xcodebuild test -project Countdowns.xcodeproj -scheme Countdowns -destination 'platform=iOS Simulator,name=iPhone 17 Pro Max'
+```
+
+Every target is in the Swift 6 language mode. `@Model` events are not `Sendable`: keep them on the main actor and
+send only values (URLs, `DataSource`s) into task groups. There is no linter config. Date logic takes an injectable `now`/`calendar` (`daysUntil(from:)`,
+`Event.nextOccurrence`, `upcoming(from:)`) so tests never mock `Date`.
+
+### Targets
+
+- **Countdowns** — the main app.
+- **CountdownsWidgetExtension** — WidgetKit extension (home screen, lock screen accessory, and watch complications).
+- **Countdowns Watch Watch App** — standalone watchOS app.
+- **CountdownsTests** — unit tests, hosted in the app; run through the `Countdowns` scheme.
+- **CountdownsUITests** — the App Store screenshot walk; run through the `Screenshots` scheme, never the `Countdowns` one.
+- **CountdownsWatchUITests** — the same, for the watch app, through `Screenshots Watch` (a UI test bundle binds to one app).
+- **TMDb** — external SPM dependency ([adamayoung/TMDb](https://github.com/adamayoung/TMDb)), the only third-party package.
+
+### App Store screenshots
+
+`Scripts/screenshots.sh [iphone|ipad|mac|vision|watch]` captures them; `--upload` sends them to App Store
+Connect. It is a thin wrapper onto the shared runner in `Repos/Scripts`, configured by
+`.screenshots.conf`. Shots land in `Raw Assets/Screenshots/` as `Phone 6.9 1.png`, `Pad 13 1.png`,
+`Mac 1.png`, `Vision 1.png` — a symlink out to iCloud, so nothing lands in the repo — beside the
+`Old (Manual)/` archive of the hand-made ones. The app's half is `-screenshotMode`, which
+`CountdownsApp` reads to swap in `ScreenshotMode.container` — an in-memory, non-CloudKit store
+seeded with demo countdowns at fixed day offsets from today, so the day counts are identical on
+every run.
+
+Slot 1 of every listing is the widget shot, made by the run rather than by hand: launched
+`-screenshotMode -widgetShots`, `WidgetShots` (beside `ScreenshotMode`) draws the widgets on the
+iPhone and the menu bar extra on the Mac as tiles, and the shared `widget-screenshots` lays them on a
+wallpaper (`WIDGET_SHOTS` in `.screenshots.conf`). The app target compiles `CountdownsWidget/` for
+this, so each family is its own view (`CountdownsSmallWidget`, `CountdownsRectangularAccessory`…) —
+`widgetFamily` cannot be set outside WidgetKit. The menu bar's `.menu`-style extra is an `NSMenu`,
+which nothing can render off-screen, so `WidgetShots` draws a look-alike of `MenuBarEventsMenu`;
+keep the two in step.
+
+The iPad walk rotates the simulator to landscape (the runner's `IPAD_ORIENTATION` default) — and the
+capture rotates the image back, since `XCUIScreen.main.screenshot()` returns the physical, still-portrait screen.
+
+The seed includes one fake movie release, *The Chronos Project*, whose poster
+(`Countdowns/Preview Content/ChronosProjectPoster.jpg`) is a development asset — present in the
+builds that take screenshots, stripped from the archive. Invented rather than real so no studio's
+artwork ends up in the store listing. `ScreenshotMode.demoCalendars` does the same for the Import
+Calendar shot: made-up `CalendarSummary`s, so the run never meets the permission prompt. The watch app
+has no launch argument to read: on a simulator it always uses `ScreenshotMode.container`, since the
+real store has nothing to show there.
+
+Only the iPhone spends a slot on the list by itself. Everywhere else the split view keeps it in the
+sidebar of every other shot — except visionOS, whose one shot it is.
+
+Mac runs need developer mode enabled once (`sudo DevToolsSecurity -enable`), or macOS asks for
+authentication on every UI test launch and the run fails. The Mac takes the sheet shot — macOS hangs
+a sheet off its parent window, so one `screencapture -l` photographs the pair — but not the popover,
+which is a window of its own and comes back without the app around it; that shot is hand-made, in
+slot 2, after the widget shot. visionOS takes only the list shot (its sidebar never reaches the accessibility tree).
+
+Watch runs need the shared runner's `-sdk watchsimulator`: this watch app is paired to the phone
+(`INFOPLIST_KEY_WKCompanionAppBundleIdentifier`), which leaves its scheme's platform ambiguous
+enough that xcodebuild builds for the watchOS *device* and then looks for the products under
+watchsimulator. The status bar keeps the run's real time — `simctl status_bar` is unsupported on
+watchOS, so 9:41 cannot be forced there.
+
+`Countdowns/Models/Secrets.swift` (TMDB API key) is git-ignored — it must exist locally for the app to compile. On Xcode Cloud, `ci_scripts/ci_post_clone.sh` writes it from the shared `TMDB_API_KEY` secret.
+
+## Architecture
+
+### Data model & persistence
+
+`Event` (`Countdowns/Models/Event.swift`) is the single SwiftData `@Model`. Persistence is **SwiftData backed by CloudKit** (container `iCloud.com.256arts.countdowns`), so all `@Model` stored properties must be optional or have defaults (a CloudKit requirement) — note every property on `Event` is optional.
+
+`Event` carries an optional `DataSource` enum that drives how its date is kept up to date:
+- `.recurrence(month, day, end)` — yearly events (handles Feb 29 leap years).
+- `.movie(id)` / `.tvShow(id)` — TMDB-sourced; **not user-editable** (`isEditable == false`).
+- `.calendar(id)` — mirrored from a system `EKCalendar`.
+- `nil` — a one-off single event.
+
+Key derived/transient logic lives in computed `@Transient` properties: `daysUntil`, `relevanceScore` (used for widget timeline relevance — do **not** sort by it, since 30+ days collapse to the same value), `subtitle`, and `isTemporaryEstimate`. The `[Event].upcoming` extension is the canonical "what to show" filter+sort (relevance > 0, sorted by `daysUntil`).
+
+### Refresh / fetch flow
+
+`Event.fetch()` (`@MainActor`, excluded on watchOS via `#if !os(watchOS)`) mutates the event's date in place based on its `DataSource`: it advances recurrences to the next occurrence (`advanceRecurrence()`, which the watch list calls on its own), and pulls release dates for movies/TV via `Event.fetchRelease(for:)`, a `Sendable` lookup that takes only the `DataSource`. Calendar events are deliberately **not** updated one-by-one here — instead the whole calendar is regenerated (see below).
+
+`UpcomingList.refreshEvents()` fans `fetchRelease(for:)` out across all events with a `TaskGroup` and applies the results on the main actor, deletes events that `hasPassedForGood()` (past one-offs and released movies the day after, ended recurrences — never TV shows or estimates), then calls `CalendarService.regenerateCalendarEvents`. This runs on `.task` and `.refreshable`.
+
+Notifications (opt-in in Settings) are rescheduled wholesale by `NotificationScheduler` from a `.task(id:)` in `UpcomingList` keyed on the query's events — so mutation sites never need to call it.
+
+### Icons
+
+`IconResource` (`symbolIcon` / `remote` / `preloaded`) is a transient layer over the persisted `iconURL: String`. The getter in `Event.icon` infers the kind from the string: contains `/` → remote URL, otherwise an SF Symbol name. `preloadedIconData` holds downloaded image bytes (TMDB posters) for offline/widget rendering; `preloadImage(large:)` swaps the TMDB poster size in the URL (`/w185/` → `/w500/` or `/w92/`).
+
+### External services
+
+- **MediaDatabase** (`Countdowns/Models/MediaDatabase.swift`) — singleton wrapper over the TMDb SDK. Search filters out already-released movies; TV "release date" is the earliest future season air date.
+- **CalendarService** (`Countdowns/Models/CalendarService.swift`) — `@MainActor @Observable` singleton fronting an `actor CalendarStore` that owns the `EKEventStore`. Requires **full** calendar access (write-only is rejected with an `.upgrade` error). `regenerateCalendarEvents` diffs each synced calendar's `.calendar` events (within a 3-year window) against Calendar by `Event.calendarItemID` — external identifier plus occurrence date — so unchanged events are never rewritten to CloudKit, and it deletes extra copies sharing an ID (cross-device duplicates). It listens for `.EKEventStoreChanged` notifications in `UpcomingList`'s `.task` to stay in sync.
+
+### UI structure
+
+- App entry is `CountdownsApp.swift`: a `NavigationSplitView` with `UpcomingList` as sidebar and `FullScreenEventView` as detail. In `DEBUG` on simulator/macOS it swaps in an in-memory `previewContainer` seeded from `CommonEventsList`.
+- `Countdowns/Views/` holds the list/row/detail/picker views; `Countdowns/Views/New Events/` holds the "add event" sheets (common, movie/TV, custom, import calendar, date estimate), launched from the `+` toolbar menu in `UpcomingList`.
+- The widget (`CountdownsWidget/CountdownsWidget.swift`) builds its own `ModelContext` against the same CloudKit container and renders different layouts per `WidgetFamily`. Call `WidgetCenter.shared.reloadAllTimelines()` (guarded by `#if canImport(WidgetKit)`) after mutating events so widgets refresh — see the delete buttons in `UpcomingList`.
+
+### Cross-platform conventions
+
+The codebase is heavily conditionally compiled. Common guards: `#if os(macOS)` / `os(watchOS)` / `os(visionOS)` for platform-specific UI and behavior, `#if canImport(UIKit)` vs the AppKit branch for `UIImage`/`NSImage` and system colors, and `#if canImport(WidgetKit)` around widget reloads. The widget has its own view code; the watch app has its own `UpcomingList` but compiles the main app's `EventRow` and `FullScreenEventView` (watch sizing and the phone-only edit/Siri bits are `#if os(watchOS)`), listed in the watch target's membership exceptions in the pbxproj. When touching shared model code, keep the watchOS exclusions in mind: `Event.fetch()` is off the watch (TMDb), but its network-free `advanceRecurrence()` runs there.

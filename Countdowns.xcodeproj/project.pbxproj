@@ -1,0 +1,1219 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 90;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1B435A6B296F21630077A10A /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 1B435A6A296F21630077A10A /* TMDb */; };
+		1B435A6E296F2E970077A10A /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = 1B435A6D296F2E970077A10A /* TMDb */; };
+		1B6896FC29371D24004E6730 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B6896E029371BF0004E6730 /* WidgetKit.framework */; };
+		1B6896FD29371D24004E6730 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B6896E229371BF0004E6730 /* SwiftUI.framework */; };
+		1B68970829371D25004E6730 /* CountdownsWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1BAA00272E90000000000027 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B3BF5C0289567C300E87899 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1B3BF5C7289567C300E87899;
+			remoteInfo = Countdowns;
+		};
+		1B68970629371D25004E6730 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B3BF5C0289567C300E87899 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1B6896FA29371D24004E6730;
+			remoteInfo = CountdownsWidgetExtension;
+		};
+		1BDFCE9E2E73C33800479A13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B3BF5C0289567C300E87899 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1B3BF5C7289567C300E87899;
+			remoteInfo = Countdowns;
+		};
+		1BAA00082E90000000000008 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1B3BF5C0289567C300E87899 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1BF386322AC519E400245931;
+			remoteInfo = "Countdowns Watch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1B6896F529371BF2004E6730 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				1B68970829371D25004E6730 /* CountdownsWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+		1BF386412AC519E500245931 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolder = Product;
+			files = (
+			);
+			name = "Embed Watch Content";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1BAA00212E90000000000021 /* CountdownsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountdownsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B3BF5C8289567C300E87899 /* Countdowns.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Countdowns.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1B6896E029371BF0004E6730 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		1B6896E229371BF0004E6730 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CountdownsWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BF386332AC519E400245931 /* Countdowns Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Countdowns Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BDFCE9A2E73C33800479A13 /* CountdownsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountdownsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BAA00022E90000000000002 /* CountdownsWatchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountdownsWatchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1B7DF8F42E2418310071B353 /* Exceptions for "CountdownsWidget" folder in "CountdownsWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */;
+		};
+		1BAA00102E90000000000010 /* Exceptions for "CountdownsWidget" folder in "Countdowns" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				CountdownsWidgetBundle.swift,
+				CountdownsWidgetExtension.entitlements,
+				Info.plist,
+				InfoPlist.xcstrings,
+				Localizable.xcstrings,
+			);
+			target = 1B3BF5C7289567C300E87899 /* Countdowns */;
+		};
+		1B7DF9352E2418630071B353 /* Exceptions for "Countdowns" folder in "CountdownsWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Models/ColorName.swift,
+				Models/Event.swift,
+				Models/IconResource.swift,
+				Models/MediaDatabase.swift,
+				"Models/ModelContainer+Shared.swift",
+				Models/Secrets.swift,
+				Models/Symbol.swift,
+				Models/UserDefaults.swift,
+			);
+			target = 1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */;
+		};
+		1B7DF9362E2418630071B353 /* Exceptions for "Countdowns" folder in "Countdowns Watch Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				App.icon,
+				Models/ColorName.swift,
+				Models/CountdownFormat.swift,
+				Models/Event.swift,
+				Models/IconResource.swift,
+				Models/ScreenshotMode.swift,
+				Models/Symbol.swift,
+				Models/UserDefaults.swift,
+				Views/EventRow.swift,
+				Views/FullScreenEventView.swift,
+			);
+			target = 1BF386322AC519E400245931 /* Countdowns Watch Watch App */;
+		};
+		1B7DF9462E2419590071B353 /* Exceptions for "Countdowns" folder in "Countdowns" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 1B3BF5C7289567C300E87899 /* Countdowns */;
+		};
+		1B7DF9472E24196C0071B353 /* Exceptions for "Countdowns Watch Watch App" folder in "Countdowns Watch Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Countdowns-Watch-Watch-App-Info.plist",
+			);
+			target = 1BF386322AC519E400245931 /* Countdowns Watch Watch App */;
+		};
+		1BDFCE9C2E73C33800479A13 /* Exceptions for "CountdownsUITests" folder in "CountdownsUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				UITests.entitlements,
+			);
+			target = 1BDFCE992E73C33800479A13 /* CountdownsUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		1BAA00222E90000000000022 /* CountdownsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CountdownsTests;
+			sourceTree = "<group>";
+		};
+		1B7DF8EF2E2418310071B353 /* CountdownsWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1B7DF8F42E2418310071B353 /* Exceptions for "CountdownsWidget" folder in "CountdownsWidgetExtension" target */,
+				1BAA00102E90000000000010 /* Exceptions for "CountdownsWidget" folder in "Countdowns" target */,
+			);
+			path = CountdownsWidget;
+			sourceTree = "<group>";
+		};
+		1B7DF9112E2418630071B353 /* Countdowns */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1B7DF9462E2419590071B353 /* Exceptions for "Countdowns" folder in "Countdowns" target */,
+				1B7DF9352E2418630071B353 /* Exceptions for "Countdowns" folder in "CountdownsWidgetExtension" target */,
+				1B7DF9362E2418630071B353 /* Exceptions for "Countdowns" folder in "Countdowns Watch Watch App" target */,
+			);
+			path = Countdowns;
+			sourceTree = "<group>";
+		};
+		1B7DF9402E24189E0071B353 /* Countdowns Watch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1B7DF9472E24196C0071B353 /* Exceptions for "Countdowns Watch Watch App" folder in "Countdowns Watch Watch App" target */,
+			);
+			path = "Countdowns Watch Watch App";
+			sourceTree = "<group>";
+		};
+		1BDFCE9B2E73C33800479A13 /* CountdownsUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1BDFCE9C2E73C33800479A13 /* Exceptions for "CountdownsUITests" folder in "CountdownsUITests" target */,
+			);
+			path = CountdownsUITests;
+			sourceTree = "<group>";
+		};
+		1BAA00032E90000000000003 /* CountdownsWatchUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CountdownsWatchUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1BAA00242E90000000000024 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		1B3BF5C5289567C300E87899 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				1B435A6B296F21630077A10A /* TMDb in Frameworks */,
+			);
+		};
+		1B6896F829371D24004E6730 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				1B6896FD29371D24004E6730 /* SwiftUI.framework in Frameworks */,
+				1B435A6E296F2E970077A10A /* TMDb in Frameworks */,
+				1B6896FC29371D24004E6730 /* WidgetKit.framework in Frameworks */,
+			);
+		};
+		1BF386302AC519E400245931 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		1BDFCE972E73C33800479A13 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+		1BAA00052E90000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1B3BF5BF289567C300E87899 = {
+			isa = PBXGroup;
+			children = (
+				1B7DF9112E2418630071B353 /* Countdowns */,
+				1B7DF8EF2E2418310071B353 /* CountdownsWidget */,
+				1B7DF9402E24189E0071B353 /* Countdowns Watch Watch App */,
+				1BDFCE9B2E73C33800479A13 /* CountdownsUITests */,
+				1BAA00032E90000000000003 /* CountdownsWatchUITests */,
+				1BAA00222E90000000000022 /* CountdownsTests */,
+				1B6896DF29371BF0004E6730 /* Frameworks */,
+				1B3BF5C9289567C300E87899 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1B3BF5C9289567C300E87899 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1B3BF5C8289567C300E87899 /* Countdowns.app */,
+				1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */,
+				1BDFCE9A2E73C33800479A13 /* CountdownsUITests.xctest */,
+				1BAA00212E90000000000021 /* CountdownsTests.xctest */,
+				1BF386332AC519E400245931 /* Countdowns Watch Watch App.app */,
+				1BAA00022E90000000000002 /* CountdownsWatchUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1B6896DF29371BF0004E6730 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1B6896E029371BF0004E6730 /* WidgetKit.framework */,
+				1B6896E229371BF0004E6730 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1BAA00202E90000000000020 /* CountdownsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BAA00282E90000000000028 /* Build configuration list for PBXNativeTarget "CountdownsTests" */;
+			buildPhases = (
+				1BAA00232E90000000000023 /* Sources */,
+				1BAA00242E90000000000024 /* Frameworks */,
+				1BAA00252E90000000000025 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BAA00262E90000000000026 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1BAA00222E90000000000022 /* CountdownsTests */,
+			);
+			name = CountdownsTests;
+			packageProductDependencies = (
+			);
+			productName = CountdownsTests;
+			productReference = 1BAA00212E90000000000021 /* CountdownsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1B3BF5C7289567C300E87899 /* Countdowns */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1B3BF5D7289567C500E87899 /* Build configuration list for PBXNativeTarget "Countdowns" */;
+			buildPhases = (
+				1B3BF5C4289567C300E87899 /* Sources */,
+				1B3BF5C5289567C300E87899 /* Frameworks */,
+				1B3BF5C6289567C300E87899 /* Resources */,
+				1B6896F529371BF2004E6730 /* Embed Foundation Extensions */,
+				1BF386412AC519E500245931 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1B68970729371D25004E6730 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1B7DF9112E2418630071B353 /* Countdowns */,
+				1B7DF8EF2E2418310071B353 /* CountdownsWidget */,
+			);
+			name = Countdowns;
+			packageProductDependencies = (
+				1B435A6A296F21630077A10A /* TMDb */,
+			);
+			productName = Countdowns;
+			productReference = 1B3BF5C8289567C300E87899 /* Countdowns.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1B68970929371D25004E6730 /* Build configuration list for PBXNativeTarget "CountdownsWidgetExtension" */;
+			buildPhases = (
+				1B6896F729371D24004E6730 /* Sources */,
+				1B6896F829371D24004E6730 /* Frameworks */,
+				1B6896F929371D24004E6730 /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				1B7DF8EF2E2418310071B353 /* CountdownsWidget */,
+			);
+			name = CountdownsWidgetExtension;
+			packageProductDependencies = (
+				1B435A6D296F2E970077A10A /* TMDb */,
+			);
+			productName = CountdownsWidgetExtension;
+			productReference = 1B6896FB29371D24004E6730 /* CountdownsWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		1BF386322AC519E400245931 /* Countdowns Watch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BF386442AC519E500245931 /* Build configuration list for PBXNativeTarget "Countdowns Watch Watch App" */;
+			buildPhases = (
+				1BF3862F2AC519E400245931 /* Sources */,
+				1BF386302AC519E400245931 /* Frameworks */,
+				1BF386312AC519E400245931 /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				1B7DF9402E24189E0071B353 /* Countdowns Watch Watch App */,
+			);
+			name = "Countdowns Watch Watch App";
+			productName = "Countdowns Watch Watch App";
+			productReference = 1BF386332AC519E400245931 /* Countdowns Watch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1BDFCE992E73C33800479A13 /* CountdownsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BDFCEA02E73C33800479A13 /* Build configuration list for PBXNativeTarget "CountdownsUITests" */;
+			buildPhases = (
+				1BDFCE962E73C33800479A13 /* Sources */,
+				1BDFCE972E73C33800479A13 /* Frameworks */,
+				1BDFCE982E73C33800479A13 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BDFCE9D2E73C33800479A13 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1BDFCE9B2E73C33800479A13 /* CountdownsUITests */,
+			);
+			name = CountdownsUITests;
+			packageProductDependencies = (
+			);
+			productName = CountdownsUITests;
+			productReference = 1BDFCE9A2E73C33800479A13 /* CountdownsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		1BAA00012E90000000000001 /* CountdownsWatchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BAA00092E90000000000009 /* Build configuration list for PBXNativeTarget "CountdownsWatchUITests" */;
+			buildPhases = (
+				1BAA00042E90000000000004 /* Sources */,
+				1BAA00052E90000000000005 /* Frameworks */,
+				1BAA00062E90000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1BAA00072E90000000000007 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				1BAA00032E90000000000003 /* CountdownsWatchUITests */,
+			);
+			name = CountdownsWatchUITests;
+			packageProductDependencies = (
+			);
+			productName = CountdownsWatchUITests;
+			productReference = 1BAA00022E90000000000002 /* CountdownsWatchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1B3BF5C0289567C300E87899 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					1BAA00202E90000000000020 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 1B3BF5C7289567C300E87899;
+					};
+					1B3BF5C7289567C300E87899 = {
+						CreatedOnToolsVersion = 14.0;
+					};
+					1B6896FA29371D24004E6730 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					1BDFCE992E73C33800479A13 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 1B3BF5C7289567C300E87899;
+					};
+					1BF386322AC519E400245931 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					1BAA00012E90000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 1BF386322AC519E400245931;
+					};
+				};
+			};
+			buildConfigurationList = 1B3BF5C3289567C300E87899 /* Build configuration list for PBXProject "Countdowns" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+				ja,
+				de,
+				fr,
+				es,
+			);
+			mainGroup = 1B3BF5BF289567C300E87899;
+			packageReferences = (
+				1B435A69296F21630077A10A /* XCRemoteSwiftPackageReference "TMDb" */,
+			);
+			preferredProjectObjectVersion = 90;
+			productRefGroup = 1B3BF5C9289567C300E87899 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1B3BF5C7289567C300E87899 /* Countdowns */,
+				1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */,
+				1BAA00202E90000000000020 /* CountdownsTests */,
+				1BDFCE992E73C33800479A13 /* CountdownsUITests */,
+				1BF386322AC519E400245931 /* Countdowns Watch Watch App */,
+				1BAA00012E90000000000001 /* CountdownsWatchUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1BAA00252E90000000000025 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		1B3BF5C6289567C300E87899 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		1B6896F929371D24004E6730 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		1BF386312AC519E400245931 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		1BDFCE982E73C33800479A13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		1BAA00062E90000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1BAA00232E90000000000023 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		1B3BF5C4289567C300E87899 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		1B6896F729371D24004E6730 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		1BF3862F2AC519E400245931 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		1BDFCE962E73C33800479A13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		1BAA00042E90000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1BAA00262E90000000000026 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1B3BF5C7289567C300E87899 /* Countdowns */;
+			targetProxy = 1BAA00272E90000000000027 /* PBXContainerItemProxy */;
+		};
+		1B68970729371D25004E6730 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				macos,
+			);
+			target = 1B6896FA29371D24004E6730 /* CountdownsWidgetExtension */;
+			targetProxy = 1B68970629371D25004E6730 /* PBXContainerItemProxy */;
+		};
+		1BDFCE9D2E73C33800479A13 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1B3BF5C7289567C300E87899 /* Countdowns */;
+			targetProxy = 1BDFCE9E2E73C33800479A13 /* PBXContainerItemProxy */;
+		};
+		1BAA00072E90000000000007 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1BF386322AC519E400245931 /* Countdowns Watch Watch App */;
+			targetProxy = 1BAA00082E90000000000008 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1BAA00292E90000000000029 /* Debug configuration for PBXNativeTarget "CountdownsTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				"TEST_HOST[sdk=iphone*]" = "$(BUILT_PRODUCTS_DIR)/Countdowns.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Countdowns";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Countdowns.app/Contents/MacOS/Countdowns";
+				"TEST_HOST[sdk=xr*]" = "$(BUILT_PRODUCTS_DIR)/Countdowns.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Countdowns";
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1BAA002A2E9000000000002A /* Release configuration for PBXNativeTarget "CountdownsTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				"TEST_HOST[sdk=iphone*]" = "$(BUILT_PRODUCTS_DIR)/Countdowns.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Countdowns";
+				"TEST_HOST[sdk=macosx*]" = "$(BUILT_PRODUCTS_DIR)/Countdowns.app/Contents/MacOS/Countdowns";
+				"TEST_HOST[sdk=xr*]" = "$(BUILT_PRODUCTS_DIR)/Countdowns.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Countdowns";
+				XROS_DEPLOYMENT_TARGET = 26.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		1B3BF5D5289567C500E87899 /* Debug configuration for PBXProject "Countdowns" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "xrsimulator xros watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1B3BF5D6289567C500E87899 /* Release configuration for PBXProject "Countdowns" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = VA3SY54YU8;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "xrsimulator xros watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		1B3BF5D8289567C500E87899 /* Debug configuration for PBXNativeTarget "Countdowns" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = App;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Countdowns/Countdowns.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=xros*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Countdowns/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Countdowns/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Calendars can be imported as events";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				TVOS_DEPLOYMENT_TARGET = 18.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1B3BF5D9289567C500E87899 /* Release configuration for PBXNativeTarget "Countdowns" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = App;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Countdowns/Countdowns.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=xros*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Countdowns/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Countdowns/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Calendars can be imported as events";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				TVOS_DEPLOYMENT_TARGET = 18.0;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		1B68970A29371D25004E6730 /* Debug configuration for PBXNativeTarget "CountdownsWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CountdownsWidget/CountdownsWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CountdownsWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CountdownsWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1B68970B29371D25004E6730 /* Release configuration for PBXNativeTarget "CountdownsWidgetExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CountdownsWidget/CountdownsWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CountdownsWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CountdownsWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx watchos watchsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,4";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		1BF386422AC519E500245931 /* Debug configuration for PBXNativeTarget "Countdowns Watch Watch App" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = App;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Countdowns Watch Watch App/Countdowns Watch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_ASSET_PATHS = "\"Countdowns Watch Watch App/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Countdowns Watch Watch App/Countdowns-Watch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Countdowns;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.256arts.countdowns;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1BF386432AC519E500245931 /* Release configuration for PBXNativeTarget "Countdowns Watch Watch App" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = App;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Countdowns Watch Watch App/Countdowns Watch Watch App.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_ASSET_PATHS = "\"Countdowns Watch Watch App/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Countdowns Watch Watch App/Countdowns-Watch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Countdowns;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.256arts.countdowns;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		1BDFCEA12E73C33800479A13 /* Debug configuration for PBXNativeTarget "CountdownsUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_ENTITLEMENTS = CountdownsUITests/UITests.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=xros*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				TEST_TARGET_NAME = Countdowns;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1BDFCEA22E73C33800479A13 /* Release configuration for PBXNativeTarget "CountdownsUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				CODE_SIGN_ENTITLEMENTS = CountdownsUITests/UITests.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=xros*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6,7";
+				TEST_TARGET_NAME = Countdowns;
+				XROS_DEPLOYMENT_TARGET = 26.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		1BAA000A2E9000000000000A /* Debug configuration for PBXNativeTarget "CountdownsWatchUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.watchuitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Countdowns Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		1BAA000B2E9000000000000B /* Release configuration for PBXNativeTarget "CountdownsWatchUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.256arts.countdowns.watchuitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Countdowns Watch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1BAA00282E90000000000028 /* Build configuration list for PBXNativeTarget "CountdownsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BAA00292E90000000000029 /* Debug configuration for PBXNativeTarget "CountdownsTests" */,
+				1BAA002A2E9000000000002A /* Release configuration for PBXNativeTarget "CountdownsTests" */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1B3BF5C3289567C300E87899 /* Build configuration list for PBXProject "Countdowns" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B3BF5D5289567C500E87899 /* Debug configuration for PBXProject "Countdowns" */,
+				1B3BF5D6289567C500E87899 /* Release configuration for PBXProject "Countdowns" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		1B3BF5D7289567C500E87899 /* Build configuration list for PBXNativeTarget "Countdowns" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B3BF5D8289567C500E87899 /* Debug configuration for PBXNativeTarget "Countdowns" */,
+				1B3BF5D9289567C500E87899 /* Release configuration for PBXNativeTarget "Countdowns" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		1B68970929371D25004E6730 /* Build configuration list for PBXNativeTarget "CountdownsWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1B68970A29371D25004E6730 /* Debug configuration for PBXNativeTarget "CountdownsWidgetExtension" */,
+				1B68970B29371D25004E6730 /* Release configuration for PBXNativeTarget "CountdownsWidgetExtension" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		1BF386442AC519E500245931 /* Build configuration list for PBXNativeTarget "Countdowns Watch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BF386422AC519E500245931 /* Debug configuration for PBXNativeTarget "Countdowns Watch Watch App" */,
+				1BF386432AC519E500245931 /* Release configuration for PBXNativeTarget "Countdowns Watch Watch App" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		1BDFCEA02E73C33800479A13 /* Build configuration list for PBXNativeTarget "CountdownsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BDFCEA12E73C33800479A13 /* Debug configuration for PBXNativeTarget "CountdownsUITests" */,
+				1BDFCEA22E73C33800479A13 /* Release configuration for PBXNativeTarget "CountdownsUITests" */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1BAA00092E90000000000009 /* Build configuration list for PBXNativeTarget "CountdownsWatchUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BAA000A2E9000000000000A /* Debug configuration for PBXNativeTarget "CountdownsWatchUITests" */,
+				1BAA000B2E9000000000000B /* Release configuration for PBXNativeTarget "CountdownsWatchUITests" */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1B435A69296F21630077A10A /* XCRemoteSwiftPackageReference "TMDb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamayoung/TMDb";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1B435A6A296F21630077A10A /* TMDb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B435A69296F21630077A10A /* XCRemoteSwiftPackageReference "TMDb" */;
+			productName = TMDb;
+		};
+		1B435A6D296F2E970077A10A /* TMDb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B435A69296F21630077A10A /* XCRemoteSwiftPackageReference "TMDb" */;
+			productName = TMDb;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 1B3BF5C0289567C300E87899 /* Project object */;
+}
