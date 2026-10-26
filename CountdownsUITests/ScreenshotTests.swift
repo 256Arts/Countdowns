@@ -233,7 +233,7 @@ final class ScreenshotTests: XCTestCase {
     private func returnToList() {
         guard !element("EventRow.Mom's Birthday").isHittable else { return }
 
-        activate(app.navigationBars.buttons.element(boundBy: 0), "the back button")
+        activate(backButton, "the back button")
         settle()
     }
 
@@ -354,4 +354,12 @@ final class ScreenshotTests: XCTestCase {
     }
 
     #endif
+
+    /// The navigation bar's back button — on the iPhone Duo's outer screen it sits in a strip outside
+    /// the bar, identified only as "BackButton".
+    private var backButton: XCUIElement {
+        let duo = app.buttons["BackButton"]
+        return duo.exists ? duo : app.navigationBars.buttons.element(boundBy: 0)
+    }
 }
+
