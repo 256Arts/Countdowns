@@ -65,14 +65,14 @@ Calendar shot: made-up `CalendarSummary`s, so the run never meets the permission
 has no launch argument to read: on a simulator it always uses `ScreenshotMode.container`, since the
 real store has nothing to show there.
 
-Only the iPhone spends a slot on the list by itself. Everywhere else the split view keeps it in the
-sidebar of every other shot — except visionOS, whose one shot it is.
+Only the iPhone and visionOS spend a slot on the list by itself — visionOS forces a compact size
+class, so it is a stack like the iPhone. Everywhere else the split view keeps it in the sidebar.
 
 Mac runs need developer mode enabled once (`sudo DevToolsSecurity -enable`), or macOS asks for
 authentication on every UI test launch and the run fails. The Mac takes the sheet shot — macOS hangs
 a sheet off its parent window, so one `screencapture -l` photographs the pair — but not the popover,
 which is a window of its own and comes back without the app around it; that shot is hand-made, in
-slot 2, after the widget shot. visionOS takes only the list shot (its sidebar never reaches the accessibility tree).
+slot 2, after the widget shot.
 
 Watch runs need the shared runner's `-sdk watchsimulator`: this watch app is paired to the phone
 (`INFOPLIST_KEY_WKCompanionAppBundleIdentifier`), which leaves its scheme's platform ambiguous

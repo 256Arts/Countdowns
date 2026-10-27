@@ -34,17 +34,9 @@ final class ScreenshotTests: XCTestCase {
         turnToRequestedOrientation()
         #endif
 
-        #if os(visionOS)
-        // visionOS puts the sidebar in an ornament whose rows never reach the accessibility tree, so
-        // the walk has nothing to drive there. It waits on the seeded selection in the detail column
-        // instead and takes the one shot; `simctl io screenshot` captures the ornament along with
-        // the window, so the list is in the picture either way.
-        let seeded = element("Flight to Tokyo")
-        #else
         // A seeded countdown. Waiting on it means the capture cannot beat the data on screen; this
         // one repeats yearly, so its detail screen has the "Repeats Yearly" line to show as well.
         let seeded = element("EventRow.Mom's Birthday")
-        #endif
         checkSeedIsThrowaway()
         guard seeded.waitForExistence(timeout: 30) else {
             attach(XCTAttachment(string: app.debugDescription), named: "element-tree")
@@ -62,8 +54,8 @@ final class ScreenshotTests: XCTestCase {
         //
         // The list earns a shot of its own only where it is the whole screen. A split view keeps it
         // in the sidebar of every other shot the walk takes, so the iPad and the Mac would be
-        // spending a slot on something their other shots already show. visionOS is the exception
-        // that keeps this shot: it is the only one that platform can take.
+        // spending a slot on something their other shots already show. visionOS collapses to a stack
+        // (a compact size class in `CountdownsApp`), so like the iPhone its list is a screen of its own.
         #if os(visionOS)
         capture("03-upcoming")
         #elseif os(iOS)
@@ -76,7 +68,6 @@ final class ScreenshotTests: XCTestCase {
         // is only on the list. The Mac takes it too: macOS hangs a sheet off its parent window, so
         // the `screencapture -l` of one photographs the pair. A popover is not attached that way,
         // which is why the editor shot below is the one the Mac still cannot take.
-        #if !os(visionOS)
         openAddMenu()
         activate(element("Import Calendar"), "the Import Calendar menu item")
         settle()
@@ -87,20 +78,17 @@ final class ScreenshotTests: XCTestCase {
         capture("05-import-calendar")
         activate(element("Cancel"), "the Import Calendar Cancel button")
         settle()
-        #endif
 
-        #if !os(visionOS)
         activate(element("EventRow.The Chronos Project"), "the movie countdown")
         settle()
         capture("02-movie")
-        #endif
 
         // The editor belongs on a countdown the user made. The demo's movie is a plain countdown
         // wearing a poster and so offers an Edit button, but a real TMDB release does not
         // (`Event.isEditable`) — taking the shot there would advertise a button the app withholds
         // from exactly the screen in the picture. The Mac's editor shot is hand-made instead
         // (MAC_MANUAL_SHOTS), so the walk leaves that slot alone.
-        #if !os(macOS) && !os(visionOS)
+        #if !os(macOS)
         returnToList()
         activate(seeded, "the birthday countdown")
         settle()
