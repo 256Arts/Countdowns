@@ -190,30 +190,41 @@ struct CountdownsSmallWidget: View {
 
     var body: some View {
         if let event = events.first {
-            VStack(alignment: .leading) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(event.daysUntil == 0 ? "Today" : event.daysUntilString)
-                        .font(.system(size: 46))
-                    if event.daysUntil != 0 {
-                        Text("days")
-                            .font(.system(size: 20))
-                            .foregroundStyle(.secondary)
-                    }
+            let tint = event.colorName?.color ?? Color.accentColor
+            VStack(alignment: .leading, spacing: 0) {
+                if case .symbolIcon(let name) = event.icon {
+                    Image(systemName: name)
+                        .font(.title2)
+                        .symbolVariant(.fill)
+                        .foregroundStyle(tint.gradient)
+                        .widgetAccentable()
+                }
+
+                Spacer(minLength: 4)
+
+                if event.daysUntil == 0 {
+                    Text("Today")
+                        .font(.system(size: 40, weight: .bold, design: .rounded))
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                } else {
+                    Text(event.daysUntilString)
+                        .font(.system(size: 56, weight: .bold, design: .rounded))
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                        .contentTransition(.numericText())
+                    Text("days")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase)
                 }
 
                 Text(event.title ?? "")
-                    .font(.system(size: 28))
+                    .font(.headline)
                     .lineLimit(2)
+                    .padding(.top, 4)
             }
-            .frame(idealWidth: .infinity, maxWidth: .infinity, idealHeight: .infinity, maxHeight: .infinity, alignment: .leading)
-            .overlay(alignment: .topTrailing) {
-                if case .symbolIcon(let name) = event.icon {
-                    Image(systemName: name)
-                        .imageScale(.large)
-                        .symbolVariant(.fill)
-                        .foregroundStyle(event.colorName?.color.gradient ?? Color.accentColor.gradient)
-                }
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         } else {
             Text("No Countdowns")
                 .foregroundStyle(.secondary)
