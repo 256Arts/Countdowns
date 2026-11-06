@@ -9,6 +9,9 @@ struct CountdownsApp: App {
     static let mainWindowID = "main"
 
     init() {
+        #if DEBUG
+        CloudKitSchemaInitializer.runIfRequested(containerID: "iCloud.com.256arts.countdowns", types: [Event.self])
+        #endif
         UserDefaults.standard.register()
         WidgetShots.renderIfRequested()
         UNUserNotificationCenter.current().delegate = NotificationScheduler.delegate
